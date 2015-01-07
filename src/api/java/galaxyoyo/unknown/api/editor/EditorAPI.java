@@ -1,5 +1,7 @@
 package galaxyoyo.unknown.api.editor;
 
+import galaxyoyo.unknown.editor.Editor;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -78,7 +80,7 @@ public class EditorAPI
 		}
 	}
 	
-	public static void open()
+	public static Editor open()
 	{
 		JFileChooser jfc = createJFC();
 		File file = null;
@@ -90,17 +92,16 @@ public class EditorAPI
 			System.out.println(file);
 		}
 		
-		open(file);
+		return open(file);
 	}
 	
-	public static void open(File f)
+	public static Editor open(File f)
 	{
-		System.out.println(f);
+		byte[] bytes = null;
 		try
 		{
 			BufferedInputStream bis = new BufferedInputStream(new FileInputStream(f));
-			byte[] bytes = new byte[(int) f.length()];
-			System.out.println(bis);
+			bytes = new byte[(int) f.length()];
 			while (bis.read(bytes) != -1);
 			for (byte b : bytes)
 			{
@@ -112,9 +113,12 @@ public class EditorAPI
 		{
 			e.printStackTrace();
 		}
+		
+		return open(bytes);
 	}
 
-	public static void open(byte[] bytes)
+	public static Editor open(byte[] bytes)
 	{
+		return new Editor(bytes);
 	}
 }

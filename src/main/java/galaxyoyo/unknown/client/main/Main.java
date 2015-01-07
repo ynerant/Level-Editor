@@ -4,6 +4,7 @@
 package galaxyoyo.unknown.client.main;
 
 import galaxyoyo.unknown.api.editor.EditorAPI;
+import galaxyoyo.unknown.api.editor.sprites.SpriteRegister;
 import galaxyoyo.unknown.frame.MainFrame;
 
 import java.awt.Color;
@@ -102,6 +103,8 @@ public class Main
 				LOGGER.setLevel(Level.ALL);
 			}
 		}
+		
+		SpriteRegister.refreshAllSprites();
 		
 		if (set.has(edit))
 		{
