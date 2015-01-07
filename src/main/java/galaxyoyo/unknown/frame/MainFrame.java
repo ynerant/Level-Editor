@@ -3,9 +3,14 @@
  */
 package galaxyoyo.unknown.frame;
 
+import galaxyoyo.unknown.frame.listeners.EditMapsListener;
+
 import java.awt.Dimension;
 
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
@@ -29,7 +34,16 @@ public class MainFrame extends JFrame
 	 */
 	private static MainFrame INSTANCE;
 	
+	/**
+	 * Logger de la classe
+	 * @see LogManager#getLogger(String)
+	 */
 	private static Logger LOGGER = (Logger) LogManager.getLogger("MainFrame");
+	
+	private JMenuBar menuBar = new JMenuBar();
+	private JMenu fichier = new JMenu("Fichier");
+	private JMenu editer = new JMenu("\u00c9diter");
+	private JMenuItem editMaps = new JMenuItem("Cartes");
 
 	/**
 	 * Constructeur
@@ -38,13 +52,22 @@ public class MainFrame extends JFrame
 	private MainFrame()
 	{
 		super ();
-		LOGGER.info("D\u00e9marrage du jeu ...");
+		LOGGER.info("Initialisation de la fen\u00eatre");
 		this.setTitle("WHAT IS THE NAME PLEASE");
 		this.setPreferredSize(new Dimension(1000, 800));
 		this.setSize(800, 700);
 		this.setLocationRelativeTo(null);
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		
+		menuBar.add(fichier);
+		
+		editMaps.addActionListener(new EditMapsListener());
+		editer.add(editMaps);
+		
+		menuBar.add(editer);
+		
+		this.setJMenuBar(menuBar);
 	}
 	
 	/**

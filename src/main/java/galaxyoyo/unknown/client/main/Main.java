@@ -122,7 +122,7 @@ public class Main
 	 */
 	private static void launchEditMode()
 	{
-		System.out.println("Lancement de l'\u00e9diteurde monde ...");
+		System.out.println("Lancement de l'\u00e9diteur de monde ...");
 	}
 	
 	/**
