@@ -19,14 +19,30 @@ import org.apache.logging.log4j.core.layout.PatternLayout;
 /**
  * @author galaxyoyo
  * Class principale qui lance le jeu
+ * @see #main(String...)
  */
 public class Main
 {
+	/**
+	 * Variable disant si le jeu est en d&eacute;bogage ou non. S'active en ins&eacute;rant l'argument --debug dans le lancement.
+	 * @see #isInDebugMode()
+	 * @see #main(String...)
+	 * @since 0.1-aplha
+	 */
 	private static boolean DEBUG;
+	
+	/**
+	 * Variable disant si le jeu est lanc&eacute; en d&eacute;veloppement ou non.
+	 * @see #isInDevelopmentMode()
+	 * @see #main(String...)
+	 * @since 0.1-aplha
+	 */
 	private static boolean DEV;
 	
 	/**
-	 * @param args arguments du jeu. Possibilit\u00e9s :<br>&nbsp;&nbsp;&nbsp;&nbsp;<strong>--edit</strong> lancera un \u00e9diteur<br>&nbsp;&nbsp;&nbsp;&nbsp;<strong>--help</strong> lance l'aide affichant toutes les options possibles
+	 * @param args arguments du jeu. Possibilit&eacute;s :<br>&nbsp;&nbsp;&nbsp;&nbsp;<strong>--edit</strong> lancera un &eacute;diteur<br>&nbsp;&nbsp;&nbsp;&nbsp;<strong>--help</strong> lance l'aide affichant toutes les options possibles
+	 * @see #launchEditMode()
+	 * @since 0.1-alpha
 	 */
 	public static void main(String ... args)
 	{
@@ -82,16 +98,32 @@ public class Main
 		}
 	}
 	
+	/**
+	 * Permet de lancer l'&eacute;diteur de carte
+	 * @see #main(String...)
+	 * @since 0.1-aplha
+	 */
 	private static void launchEditMode()
 	{
 		System.out.println("Lancement de l'\u00e9diteurde monde ...");
 	}
-
-	public static boolean isDebugMode()
+	
+	/**
+	 * Accesseur disant si le jeu est en d&eacute;bogage ou non. S'active en ins&eacute;rant l'argument --debug dans le lancement.
+	 * @see #DEBUG
+	 * @since 0.1-aplha
+	 */
+	public static boolean isInDebugMode()
 	{
 		return DEBUG;
 	}
 	
+
+	/**
+	 * Accesseur disant si le jeu est lanc&eacute; en d&eacute;veloppement ou non.
+	 * @see #DEV
+	 * @since 0.1-alpha
+	 */
 	public static boolean isInDevelopmentMode()
 	{
 		return DEV;
