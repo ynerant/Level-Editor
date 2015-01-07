@@ -11,12 +11,12 @@ import java.awt.event.ActionListener;
 /**
  * @author galaxyoyo
  */
-public class EditMapsListener implements ActionListener
+public class CreateMapListener implements ActionListener
 {
 	/**
 	 * 
 	 */
-	public EditMapsListener()
+	public CreateMapListener()
 	{
 	}
 

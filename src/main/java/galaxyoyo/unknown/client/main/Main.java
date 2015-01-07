@@ -5,7 +5,14 @@ package galaxyoyo.unknown.client.main;
 
 import galaxyoyo.unknown.frame.MainFrame;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
@@ -123,6 +130,68 @@ public class Main
 	private static void launchEditMode()
 	{
 		System.out.println("Lancement de l'\u00e9diteur de monde ...");
+		int baseWidth;
+		int baseHeight;
+		int width;
+		int height;
+		while (true)
+		{
+			try
+			{
+				baseWidth = Integer.parseInt(JOptionPane.showInputDialog("Veuillez entrez le nombre de cases longueur de votre carte :")) * 16;
+				if (baseWidth <= 0)
+					throw new NumberFormatException();
+				break;
+			}
+			catch (NumberFormatException ex)
+			{
+				continue;
+			}
+		}
+		
+		while (true)
+		{
+			try
+			{
+				baseHeight = Integer.parseInt(JOptionPane.showInputDialog("Veuillez entrez le nombre de cases hauteur de votre carte :")) * 16;
+				if (baseHeight <= 0)
+					throw new NumberFormatException();
+				break;
+			}
+			catch (NumberFormatException ex)
+			{
+				continue;
+			}
+		}
+		
+		width = baseWidth + ((int) baseWidth / 16) + 1;
+		height = baseHeight + ((int) baseHeight / 16) + 1;
+		
+		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+		Graphics2D g = image.createGraphics();
+		g.setColor(Color.white);
+		g.fillRect(0, 0, width, height);
+		g.setColor(Color.black);
+		g.drawLine(0, 0, width, 0);
+		g.drawLine(0, 0, 0, height);
+		for (int x = 17; x <= width; x += 17)
+		{
+			g.drawLine(x, 0, x, height);
+		}
+		
+		for (int y = 17; y <= height; y += 17)
+		{
+			g.drawLine(0, y, width, y);
+		}
+		
+		try
+		{
+			ImageIO.write(image, "png", new File("img.png"));
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
 	}
 	
 	/**
