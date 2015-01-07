@@ -3,6 +3,7 @@
  */
 package galaxyoyo.unknown.client.main;
 
+import galaxyoyo.unknown.editor.Editor;
 import galaxyoyo.unknown.frame.MainFrame;
 
 import java.awt.Color;
@@ -182,6 +183,13 @@ public class Main
 		for (int y = 17; y <= height; y += 17)
 		{
 			g.drawLine(0, y, width, y);
+		}
+		
+		Byte[] bytes = Editor.toBytes(baseWidth, baseHeight);
+		
+		for (byte b : bytes)
+		{
+			System.err.print(b);
 		}
 		
 		try
