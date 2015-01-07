@@ -3,7 +3,7 @@
  */
 package galaxyoyo.unknown.client.main;
 
-import galaxyoyo.unknown.editor.Editor;
+import galaxyoyo.unknown.api.editor.EditorAPI;
 import galaxyoyo.unknown.frame.MainFrame;
 
 import java.awt.Color;
@@ -185,12 +185,18 @@ public class Main
 			g.drawLine(0, y, width, y);
 		}
 		
-		Byte[] bytes = Editor.toBytes(baseWidth, baseHeight);
+		Byte[] Bytes = EditorAPI.toBytes(baseWidth, baseHeight);
 		
-		for (byte b : bytes)
+		byte[] bytes = new byte[Bytes.length];
+		
+		for (int i = 0; i < Bytes.length; ++i)
 		{
-			System.err.print(b);
+			bytes[i] = Bytes[i];
 		}
+		
+		EditorAPI.saveAs(bytes);
+		
+		EditorAPI.open(bytes);
 		
 		try
 		{

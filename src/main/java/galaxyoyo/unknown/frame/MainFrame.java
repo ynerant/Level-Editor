@@ -4,6 +4,7 @@
 package galaxyoyo.unknown.frame;
 
 import galaxyoyo.unknown.frame.listeners.CreateMapListener;
+import galaxyoyo.unknown.frame.listeners.OpenMapListener;
 
 import java.awt.Dimension;
 
@@ -45,7 +46,7 @@ public class MainFrame extends JFrame
 	private JMenu editer = new JMenu("\u00c9diter");
 	private JMenu editMaps = new JMenu("Cartes");
 	private JMenuItem createMap = new JMenuItem("Cr\u00e9er");
-	private JMenuItem editMap = new JMenuItem("\u00c9diter");
+	private JMenuItem openMap = new JMenuItem("Ouvrir");
 
 	/**
 	 * Constructeur
@@ -66,7 +67,8 @@ public class MainFrame extends JFrame
 		
 		createMap.addActionListener(new CreateMapListener());
 		editMaps.add(createMap);
-		editMaps.add(editMap);
+		openMap.addActionListener(new OpenMapListener());
+		editMaps.add(openMap);
 		editer.add(editMaps);
 		
 		menuBar.add(editer);

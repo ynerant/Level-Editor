@@ -1,17 +1,11 @@
-/**
- * @author galaxyoyo
- */
 package galaxyoyo.unknown.frame.listeners;
 
-import galaxyoyo.unknown.client.main.Main;
+import galaxyoyo.unknown.api.editor.EditorAPI;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-/**
- * @author galaxyoyo
- */
-public class CreateMapListener implements ActionListener
+public class OpenMapListener implements ActionListener
 {
 	/* !CodeTemplates.overridecomment.nonjd!
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
@@ -19,6 +13,6 @@ public class CreateMapListener implements ActionListener
 	@Override
 	public void actionPerformed(ActionEvent event)
 	{
-		Main.main("--edit", Main.isInDebugMode() ? " --debug true" : "");
+		EditorAPI.open();
 	}
 }
