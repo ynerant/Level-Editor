@@ -1,7 +1,9 @@
 /**
- * 
+ * @author galaxyoyo
  */
 package galaxyoyo.unknown.client.main;
+
+import galaxyoyo.unknown.frame.MainFrame;
 
 import java.io.IOException;
 
@@ -17,8 +19,8 @@ import org.apache.logging.log4j.core.appender.FileAppender;
 import org.apache.logging.log4j.core.layout.PatternLayout;
 
 /**
- * @author galaxyoyo
  * Class principale qui lance le jeu
+ * @author galaxyoyo
  * @see #main(String...)
  */
 public class Main
@@ -50,7 +52,9 @@ public class Main
 		
 		Logger LOGGER = (Logger) LogManager.getRootLogger();
 		ConsoleAppender console = ConsoleAppender.newBuilder().setLayout(PatternLayout.newBuilder().withPattern("[%d{dd/MM/yyyy}] [%d{HH:mm:ss}] [%t] [%c] [%p] %m%n").build()).setName("Console").build();
-		FileAppender file = FileAppender.createAppender("Console.log", "false", "false", "File", "true", "true", "true", "8192", console.getLayout(), null, "false", "false", null);
+		FileAppender file = FileAppender.createAppender("Console.log", "false", "false", "File", "true", "true", "true", "8192", PatternLayout.newBuilder().withPattern("[%d{dd/MM/yyyy}] [%d{HH:mm:ss}] [%t] [%c] [%p] %m%n").build(), null, "false", "false", null);
+		console.start();
+		file.start();
 		LOGGER.addAppender(console);
 		LOGGER.addAppender(file);
 		LOGGER.setLevel(Level.INFO);
@@ -87,7 +91,7 @@ public class Main
 			
 			if (DEBUG)
 			{
-				LOGGER.setLevel(Level.DEBUG);
+				LOGGER.setLevel(Level.ALL);
 			}
 		}
 		
@@ -96,11 +100,24 @@ public class Main
 			launchEditMode();
 			return;
 		}
+		
+		launchFrame();
 	}
 	
 	/**
+	 * Lance la fen&ecirc;tre principale
+	 * @see #main(String...)
+	 * @see #launchEditMode()
+	 */
+	private static void launchFrame()
+	{
+		MainFrame.getInstance().setVisible(true);
+	}
+
+	/**
 	 * Permet de lancer l'&eacute;diteur de carte
 	 * @see #main(String...)
+	 * @see #launchFrame()
 	 * @since 0.1-aplha
 	 */
 	private static void launchEditMode()
