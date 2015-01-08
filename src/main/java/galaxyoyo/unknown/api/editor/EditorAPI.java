@@ -32,7 +32,7 @@ public class EditorAPI
 			}
 		}
 		
-		return RawMap.create(cases);
+		return RawMap.create(cases, width, height);
 	}
 	
 	private static Gson createGson()

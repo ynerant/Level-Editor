@@ -13,11 +13,16 @@ import java.util.List;
 public class Map
 {
 	private final EditorFrame frame;
+	private int width;
+	private int height;
 	private List<Case> cases = new ArrayList<Case>();
 	private java.util.Map<Point, Case> casesMap = new HashMap<Point, Case>();
 	
 	public Map(RawMap raw)
 	{
+		this.width = raw.getWidth();
+		this.height = raw.getHeight();
+		
 		for (RawCase rc : raw.getCases())
 		{
 			cases.add(Case.create(rc.getPosX(), rc.getPosY(), SpriteRegister.getCategory(rc.getCoucheOne().getPrimaryIndex()).get(rc.getCoucheOne().getSecondaryIndex()), SpriteRegister.getCategory(rc.getCoucheTwo().getPrimaryIndex()).get(rc.getCoucheTwo().getSecondaryIndex()), SpriteRegister.getCategory(rc.getCoucheThree().getPrimaryIndex()).get(rc.getCoucheThree().getSecondaryIndex())));
@@ -31,6 +36,16 @@ public class Map
 	public EditorFrame getFrame()
 	{
 		return frame;
+	}
+	
+	public int getWidth()
+	{
+		return width;
+	}
+	
+	public int getHeight()
+	{
+		return height;
 	}
 	
 	public Case getCase(int x, int y)
