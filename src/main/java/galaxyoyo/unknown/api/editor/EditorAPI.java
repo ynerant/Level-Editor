@@ -1,12 +1,12 @@
 package galaxyoyo.unknown.api.editor;
 
-import galaxyoyo.unknown.editor.Editor;
+import galaxyoyo.unknown.editor.Map;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,29 +14,38 @@ import java.util.List;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 public class EditorAPI
 {
-	public static Byte[] toBytes(int width, int height)
+	public static RawMap toRawMap(int width, int height)
 	{
-		List<Byte> bytes = new ArrayList<Byte>();
+		List<RawCase> cases = new ArrayList<RawCase>();
 		
 		for (int y = 1; y < height; y += 16)
 		{
 			for (int x = 1; x < width; x += 16)
 			{
-				bytes.add((byte) 0);
-				bytes.add((byte) 0);
-				bytes.add((byte) (Byte.MIN_VALUE / 2));
+				RawCase c = RawCase.create(x / 16, y / 16, RawSprite.BLANK, RawSprite.BLANK, RawSprite.BLANK);
+				cases.add(c);
 			}
-			bytes.remove(bytes.lastIndexOf((byte) (Byte.MIN_VALUE / 2)));
-			bytes.add(Byte.MIN_VALUE);
 		}
 		
-		bytes.remove(bytes.lastIndexOf(Byte.MIN_VALUE));
-		
-		return bytes.toArray(new Byte[0]);
+		return RawMap.create(cases);
 	}
 	
+	private static Gson createGson()
+	{
+		GsonBuilder builder = new GsonBuilder();
+		
+		builder.enableComplexMapKeySerialization();
+		builder.serializeNulls();
+		builder.setPrettyPrinting();
+		
+		return builder.create();
+	}
+
 	public static JFileChooser createJFC()
 	{
 		JFileChooser jfc = new JFileChooser();
@@ -51,7 +60,7 @@ public class EditorAPI
 		return jfc;
 	}
 
-	public static void saveAs(byte ... bytes)
+	public static void saveAs(RawMap map)
 	{		
 		JFileChooser jfc = createJFC();
 		File file = null;
@@ -66,16 +75,32 @@ public class EditorAPI
 			file = new File(file.getParentFile(), file.getName() + ".gworld");
 		}
 		
-		save(file, bytes);
+		save(file, map);
 	}
 	
-	public static void save(File file, byte ... bytes)
+	public static void save(File file, RawMap map)
 	{
+		String json = createGson().toJson(map);
+		String crypted = "";
+		
+		for (char c : json.toCharArray())
+		{
+			char ch = c;
+			
+			if (c != '\n')
+			{
+				ch = (char) (c * 2);
+			}
+			
+			crypted += ch;
+		}
+		
 		try
 		{
-			BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
-			bos.write(bytes);
-			bos.close();
+			file.createNewFile();
+			BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+			bw.write(crypted);
+			bw.close();
 		}
 		catch (IOException ex)
 		{
@@ -83,7 +108,7 @@ public class EditorAPI
 		}
 	}
 	
-	public static Editor open()
+	public static Map open()
 	{
 		JFileChooser jfc = createJFC();
 		File file = null;
@@ -98,30 +123,46 @@ public class EditorAPI
 		return open(file);
 	}
 	
-	public static Editor open(File f)
+	public static Map open(File f)
 	{
-		byte[] bytes = null;
+		String json = null;
 		try
 		{
-			BufferedInputStream bis = new BufferedInputStream(new FileInputStream(f));
-			bytes = new byte[(int) f.length()];
-			while (bis.read(bytes) != -1);
-			for (byte b : bytes)
+			BufferedReader br = new BufferedReader(new FileReader(f));
+			String text = "";
+			String ln;
+			while ((ln = br.readLine()) != null)
 			{
-				System.err.println(b);
+				text += ln + "\n";
 			}
-			bis.close();
+			br.close();
+			
+			json = "";
+			
+			for (char c : text.toCharArray())
+			{
+				char ch = c;
+				
+				if (c != '\n')
+				{
+					ch = (char) (c / 2);
+				}
+				
+				json += ch;
+			}
 		}
 		catch (IOException e)
 		{
 			e.printStackTrace();
 		}
 		
-		return open(bytes);
+		RawMap rm = createGson().fromJson(json, RawMap.class);
+		
+		return open(rm);
 	}
 
-	public static Editor open(byte[] bytes)
+	public static Map open(RawMap map)
 	{
-		return new Editor(bytes);
+		return new Map(map);
 	}
 }

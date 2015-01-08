@@ -4,6 +4,7 @@
 package galaxyoyo.unknown.client.main;
 
 import galaxyoyo.unknown.api.editor.EditorAPI;
+import galaxyoyo.unknown.api.editor.RawMap;
 import galaxyoyo.unknown.api.editor.sprites.SpriteRegister;
 import galaxyoyo.unknown.frame.MainFrame;
 
@@ -67,8 +68,6 @@ public class Main
 		LOGGER.addAppender(console);
 		LOGGER.addAppender(file);
 		LOGGER.setLevel(Level.INFO);
-		
-		
 		
 		OptionParser parser = new OptionParser();
 		
@@ -188,18 +187,11 @@ public class Main
 			g.drawLine(0, y, width, y);
 		}
 		
-		Byte[] Bytes = EditorAPI.toBytes(baseWidth, baseHeight);
+		RawMap rm = EditorAPI.toRawMap(baseWidth, baseHeight);
 		
-		byte[] bytes = new byte[Bytes.length];
+		EditorAPI.saveAs(rm);
 		
-		for (int i = 0; i < Bytes.length; ++i)
-		{
-			bytes[i] = Bytes[i];
-		}
-		
-		EditorAPI.saveAs(bytes);
-		
-		EditorAPI.open(bytes);
+		EditorAPI.open(rm);
 		
 		try
 		{
