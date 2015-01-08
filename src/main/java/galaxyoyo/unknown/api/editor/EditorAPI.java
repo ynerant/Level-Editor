@@ -25,7 +25,10 @@ public class EditorAPI
 			for (int x = 1; x < width; x += 16)
 			{
 				bytes.add((byte) 0);
+				bytes.add((byte) 0);
+				bytes.add((byte) (Byte.MIN_VALUE / 2));
 			}
+			bytes.remove(bytes.lastIndexOf((byte) (Byte.MIN_VALUE / 2)));
 			bytes.add(Byte.MIN_VALUE);
 		}
 		

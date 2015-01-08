@@ -24,6 +24,11 @@ public class SpriteRegister
 	@SuppressWarnings("unchecked")
 	public static void refreshAllSprites()
 	{
+		if (nameToCoords != null && !nameToCoords.isEmpty() && !sprites.isEmpty())
+		{
+			return;
+		}
+		
 		try
 		{
 			BufferedReader br = new BufferedReader(new InputStreamReader(SpriteRegister.class.getResourceAsStream("/assets/unknown/textures/sprites/sprites.json")));
@@ -43,9 +48,7 @@ public class SpriteRegister
 					{
 						int x = list.get(0).intValue();
 						int y = list.get(1).intValue();
-						int width = list.get(2).intValue() * 16;
-						int height = list.get(3).intValue() * 16;
-						BufferedImage child = img.getSubimage(x, y, width, height);
+						BufferedImage child = img.getSubimage(x, y, 16, 16);
 						Sprite sprite = new Sprite(child);
 						lSprites.add(sprite);
 					}
