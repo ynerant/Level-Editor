@@ -25,7 +25,7 @@ public class Map
 		
 		for (RawCase rc : raw.getCases())
 		{
-			cases.add(Case.create(rc.getPosX(), rc.getPosY(), SpriteRegister.getCategory(rc.getCoucheOne().getPrimaryIndex()).get(rc.getCoucheOne().getSecondaryIndex()), SpriteRegister.getCategory(rc.getCoucheTwo().getPrimaryIndex()).get(rc.getCoucheTwo().getSecondaryIndex()), SpriteRegister.getCategory(rc.getCoucheThree().getPrimaryIndex()).get(rc.getCoucheThree().getSecondaryIndex())));
+			cases.add(Case.create(rc.getPosX(), rc.getPosY(), SpriteRegister.getCategory(rc.getCoucheOne().getPrimaryIndex()).getSprites().get(rc.getCoucheOne().getSecondaryIndex()), SpriteRegister.getCategory(rc.getCoucheTwo().getPrimaryIndex()).getSprites().get(rc.getCoucheTwo().getSecondaryIndex()), SpriteRegister.getCategory(rc.getCoucheThree().getPrimaryIndex()).getSprites().get(rc.getCoucheThree().getSecondaryIndex())));
 		}
 		
 		frame = new EditorFrame(this);

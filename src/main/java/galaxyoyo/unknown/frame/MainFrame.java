@@ -61,7 +61,7 @@ public class MainFrame extends JFrame
 		this.setSize(800, 700);
 		this.setLocationRelativeTo(null);
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		menuBar.add(fichier);
 		

@@ -1,6 +1,6 @@
 package galaxyoyo.unknown.editor;
 
-import galaxyoyo.unknown.api.editor.sprites.Sprite;
+import galaxyoyo.unknown.api.editor.sprites.Category;
 import galaxyoyo.unknown.api.editor.sprites.SpriteRegister;
 
 import java.awt.Color;
@@ -84,7 +84,7 @@ public class EditorFrame extends JFrame implements ComponentListener, MouseListe
 		couche2.setBackground(Color.white);
 		couche3.setBackground(Color.white);
 		
-		for (Sprite spr : SpriteRegister.getAll())
+		for (Category cat : SpriteRegister.getAllCategories())
 		{
 			
 		}

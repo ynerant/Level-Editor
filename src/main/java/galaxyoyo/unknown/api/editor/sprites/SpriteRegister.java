@@ -19,7 +19,7 @@ import com.google.gson.Gson;
 public class SpriteRegister
 {
 	private static Map<String, List<List<Double>>> nameToCoords;
-	private static Map<String, List<Sprite>> sprites = new HashMap<String, List<Sprite>>();
+	private static Map<String, Category> sprites = new HashMap<String, Category>();
 	
 	@SuppressWarnings("unchecked")
 	public static void refreshAllSprites()
@@ -41,18 +41,17 @@ public class SpriteRegister
 				{
 					InputStream is = SpriteRegister.class.getResourceAsStream("/assets/unknown/textures/sprites/" + key + ".png");
 					BufferedImage img = ImageIO.read(is);
-					List<Sprite> lSprites = new ArrayList<Sprite>();
+					Category cat = Category.create(key, new ArrayList<String>(nameToCoords.keySet()).indexOf(key), new ArrayList<Sprite>());
 					
 					for (List<Double> list : nameToCoords.get(key))
 					{
 						int x = list.get(0).intValue();
 						int y = list.get(1).intValue();
 						BufferedImage child = img.getSubimage(x, y, 16, 16);
-						Sprite sprite = new Sprite(child);
-						lSprites.add(sprite);
+						new Sprite(child, cat);
 					}
 					
-					sprites.put(key, lSprites);
+					sprites.put(key, cat);
 				}
 				catch (Throwable t)
 				{
@@ -67,23 +66,28 @@ public class SpriteRegister
 		}
 	}
 	
-	public static List<Sprite> getCategory(String name)
+	public static Category getCategory(String name)
 	{
 		return sprites.get(name);
 	}
 	
-	public static List<Sprite> getCategory(int index)
+	public static Category getCategory(int index)
 	{
 		return getCategory(new ArrayList<String>(sprites.keySet()).get(index));
 	}
-
-	public static List<Sprite> getAll()
+	
+	public static List<Category> getAllCategories()
+	{
+		return (List<Category>) sprites.values();
+	}
+	
+	public static List<Sprite> getAllSprites()
 	{
 		List<Sprite> list = new ArrayList<Sprite>();
 		
-		for (List<Sprite> l : sprites.values())
+		for (Category c : sprites.values())
 		{
-			list.addAll(l);
+			list.addAll(c.getSprites());
 		}
 		
 		return list;
