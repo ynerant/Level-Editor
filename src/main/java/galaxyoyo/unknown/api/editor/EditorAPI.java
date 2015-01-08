@@ -143,8 +143,6 @@ public class EditorAPI
 			}
 			
 			json = json.substring(0, json.length() - 1);
-
-			System.out.println(text + "\n\n\n" + json);
 		}
 		catch (IOException e)
 		{

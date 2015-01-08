@@ -78,7 +78,7 @@ public class SpriteRegister
 	
 	public static List<Category> getAllCategories()
 	{
-		return (List<Category>) sprites.values();
+		return new ArrayList<Category>(sprites.values());
 	}
 	
 	public static List<Sprite> getAllSprites()

@@ -1,9 +1,5 @@
 package galaxyoyo.unknown.editor;
 
-import galaxyoyo.unknown.api.editor.sprites.Category;
-import galaxyoyo.unknown.api.editor.sprites.SpriteRegister;
-
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
@@ -31,9 +27,9 @@ public class EditorFrame extends JFrame implements ComponentListener, MouseListe
 	private final JPanel tabColl = new JPanel();
 	private final JPanel mapPanel = new JPanel();
 	private final JTabbedPane resources = new JTabbedPane();
-	private final JPanel couche1 = new JPanel();
-	private final JPanel couche2 = new JPanel();
-	private final JPanel couche3 = new JPanel();
+	private final ResourcePanel couche1 = new ResourcePanel();
+	private final ResourcePanel couche2 = new ResourcePanel();
+	private final ResourcePanel couche3 = new ResourcePanel();
 
 	public EditorFrame(Map map)
 	{
@@ -45,10 +41,11 @@ public class EditorFrame extends JFrame implements ComponentListener, MouseListe
 		this.setLocationRelativeTo(null);
 		this.setContentPane(content);
 		this.addComponentListener(this);
-		repaint();
+		this.setVisible(true);
+		this.setVisible(false);
 		
 		tabs.addTab("Carte", new JPanel());
-		tabs.addTab("\u00c9vennements", tabEvents);
+		tabs.addTab("\u00c9vennments", tabEvents);
 		tabs.addTab("Collisions", tabColl);
 		tabs.addMouseListener(this);
 		tabs.addChangeListener(this);
@@ -57,9 +54,17 @@ public class EditorFrame extends JFrame implements ComponentListener, MouseListe
 		
 		content.add(mapPanel);
 		
-		resources.addTab("1", new JScrollPane(couche1, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
-		resources.addTab("2", new JScrollPane(couche2, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
-		resources.addTab("3", new JScrollPane(couche3, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
+		JScrollPane scroll1 = new JScrollPane(couche1, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		JScrollPane scroll2 = new JScrollPane(couche2, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		JScrollPane scroll3 = new JScrollPane(couche3, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		
+		scroll1.getHorizontalScrollBar().setMaximum(0);
+		scroll2.getHorizontalScrollBar().setMaximum(0);
+		scroll3.getHorizontalScrollBar().setMaximum(0);
+		
+		resources.addTab("1", scroll1);
+		resources.addTab("2", scroll2);
+		resources.addTab("3", scroll3);
 		resources.addMouseListener(this);
 		resources.addChangeListener(this);
 		
@@ -67,26 +72,10 @@ public class EditorFrame extends JFrame implements ComponentListener, MouseListe
 		
 		this.componentResized(null);
 		
-		drawResources();
-	}
-
-	private void drawResources()
-	{
-		JScrollPane scroll1 = (JScrollPane) resources.getComponentAt(1);
-		JScrollPane scroll2 = (JScrollPane) resources.getComponentAt(2);
-		JScrollPane scroll3 = (JScrollPane) resources.getComponentAt(3);
-		
-		scroll1.getHorizontalScrollBar().setMaximum(0);
-		scroll2.getHorizontalScrollBar().setMaximum(0);
-		scroll3.getHorizontalScrollBar().setMaximum(0);
-		
-		couche1.setBackground(Color.white);
-		couche2.setBackground(Color.white);
-		couche3.setBackground(Color.white);
-		
-		for (Category cat : SpriteRegister.getAllCategories())
+		for (int i = 0; i < 3; ++i)
 		{
-			
+			ResourcePanel rp = (ResourcePanel) ((JScrollPane) resources.getComponentAt(i)).getViewport().getComponent(0);
+			rp.repaint();
 		}
 	}
 

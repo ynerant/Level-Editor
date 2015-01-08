@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class Sprite
 {
-	public static final Sprite BLANK = new Sprite(new BufferedImage(16, 16, BufferedImage.TYPE_INT_RGB), Category.create("blank", 0, new ArrayList<Sprite>()));
+	public static final Sprite BLANK = new Sprite(new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB), Category.create("blank", 0, new ArrayList<Sprite>()));
 	private Category cat;
 	
 	private final BufferedImage img;
