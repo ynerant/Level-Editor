@@ -1,13 +1,13 @@
 package galaxyoyo.unknown.editor;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
-public class EditorFrame extends JFrame
+public class EditorFrame extends JFrame implements ComponentListener
 {
 	private static final long serialVersionUID = -2705122356101556462L;
 	
@@ -33,26 +33,16 @@ public class EditorFrame extends JFrame
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		this.setLocationRelativeTo(null);
-		this.setLayout(new GridBagLayout());
 		this.setContentPane(content);
+		this.addComponentListener(this);
 		
-		GridBagConstraints c = new GridBagConstraints();
-		
-		c.gridx = 0;
-		c.gridy = 0;
-		c.gridwidth = 3;
-		c.gridheight = 1;
+		revalidate();
 		
 		tabs.addTab("Carte", new JPanel());
 		tabs.addTab("\u00c9vennements", tabEvents);
 		tabs.addTab("Collisions", tabColl);
 		
-		content.add(tabs, c);
-		
-		c.gridx = 0;
-		c.gridy = 1;
-		c.gridwidth = 2;
-		c.gridheight = 3;
+		content.add(tabs);
 		
 		content.add(mapPanel);
 		
@@ -60,11 +50,45 @@ public class EditorFrame extends JFrame
 		resources.addTab("2", couche2);
 		resources.addTab("3", couche3);
 		
-		c.gridx = 2;
-		c.gridy = 1;
-		c.gridwidth = 1;
-		c.gridheight = 3;
-		
 		content.add(resources);
+		
+		revalidate();
+		repaint();
+	}
+
+	@Override
+	public void componentHidden(ComponentEvent event)
+	{
+	}
+
+	@Override
+	public void componentMoved(ComponentEvent event)
+	{
+		componentShown(event);
+	}
+
+	@Override
+	public void componentResized(ComponentEvent event)
+	{
+		componentShown(event);
+	}
+
+	@Override
+	public void componentShown(ComponentEvent event)
+	{
+		revalidate();
+	}
+	
+	@Override
+	public void revalidate()
+	{
+		tabs.setBounds(0, 0, getWidth(), getHeight() / 5);
+		mapPanel.setBounds(0, getWidth() / 5, getWidth() / 4 * 3, getHeight() / 5 * 4);
+		resources.setBounds(getWidth() / 4 * 3, getHeight() / 5, getWidth() / 4, getHeight() / 5 * 4);
+		
+		tabs.revalidate();
+		mapPanel.revalidate();
+		resources.revalidate();
+		super.revalidate();
 	}
 }

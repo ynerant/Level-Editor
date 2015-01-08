@@ -33,7 +33,6 @@ public class SpriteRegister
 		{
 			BufferedReader br = new BufferedReader(new InputStreamReader(SpriteRegister.class.getResourceAsStream("/assets/unknown/textures/sprites/sprites.json")));
 			nameToCoords =  new Gson().fromJson(br, Map.class);
-			System.out.println(nameToCoords);
 			br.close();
 			
 			for (String key : nameToCoords.keySet())
