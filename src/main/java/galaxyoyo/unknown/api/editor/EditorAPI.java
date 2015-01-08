@@ -41,7 +41,6 @@ public class EditorAPI
 		
 		builder.enableComplexMapKeySerialization();
 		builder.serializeNulls();
-		builder.setPrettyPrinting();
 		
 		return builder.create();
 	}
@@ -81,25 +80,21 @@ public class EditorAPI
 	public static void save(File file, RawMap map)
 	{
 		String json = createGson().toJson(map);
-		String crypted = "";
-		
-		for (char c : json.toCharArray())
-		{
-			char ch = c;
-			
-			if (c != '\n')
-			{
-				ch = (char) (c * 2);
-			}
-			
-			crypted += ch;
-		}
 		
 		try
 		{
 			file.createNewFile();
 			BufferedWriter bw = new BufferedWriter(new FileWriter(file));
-			bw.write(crypted);
+			
+			for (char c : json.toCharArray())
+			{
+				char ch = c;
+				
+				ch = (char) ((((int) c * 2) - 4) * 3);
+				
+				bw.append(ch);
+			}
+			
 			bw.close();
 		}
 		catch (IOException ex)
@@ -117,7 +112,6 @@ public class EditorAPI
 		{
 			jfc.showOpenDialog(null);
 			file = jfc.getSelectedFile();
-			System.out.println(file);
 		}
 		
 		return open(file);
@@ -143,13 +137,14 @@ public class EditorAPI
 			{
 				char ch = c;
 				
-				if (c != '\n')
-				{
-					ch = (char) (c / 2);
-				}
+				ch = (char) (((c / 3) + 4) / 2);
 				
 				json += ch;
 			}
+			
+			json = json.substring(0, json.length() - 1);
+
+			System.out.println(text + "\n\n\n" + json);
 		}
 		catch (IOException e)
 		{
