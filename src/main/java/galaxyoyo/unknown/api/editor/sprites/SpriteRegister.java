@@ -76,4 +76,16 @@ public class SpriteRegister
 	{
 		return getCategory(new ArrayList<String>(sprites.keySet()).get(index));
 	}
+
+	public static List<Sprite> getAll()
+	{
+		List<Sprite> list = new ArrayList<Sprite>();
+		
+		for (List<Sprite> l : sprites.values())
+		{
+			list.addAll(l);
+		}
+		
+		return list;
+	}
 }
