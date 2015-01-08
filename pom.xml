@@ -44,7 +44,7 @@
           <configuration>
             <archive>
               <manifest>
-               <mainClass>fully.qualified.MainClass</mainClass>
+               <mainClass>galaxyoyo.unknown.client.main.Main</mainClass>
               </manifest>
             </archive>
             <descriptorRefs>
