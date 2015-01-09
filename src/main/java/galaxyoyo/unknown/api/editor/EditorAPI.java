@@ -27,7 +27,7 @@ public class EditorAPI
 		{
 			for (int x = 1; x < width; x += 16)
 			{
-				RawCase c = RawCase.create(x / 16, y / 16, RawSprite.BLANK, RawSprite.BLANK, RawSprite.BLANK);
+				RawCase c = RawCase.create(x / 16, y / 16, RawSprite.BLANK, RawSprite.BLANK, RawSprite.BLANK, Collision.ANY);
 				cases.add(c);
 			}
 		}
