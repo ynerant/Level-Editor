@@ -69,9 +69,9 @@ public class EditorAPI
 			file = jfc.getSelectedFile();
 		}
 		
-		if (!file.getName().toLowerCase().endsWith(".gworld") && !file.getName().toLowerCase().endsWith(".dat"))
+		if (!file.getName().toLowerCase().endsWith(".gmap") && !file.getName().toLowerCase().endsWith(".dat"))
 		{
-			file = new File(file.getParentFile(), file.getName() + ".gworld");
+			file = new File(file.getParentFile(), file.getName() + ".gmap");
 		}
 		
 		save(file, map);
