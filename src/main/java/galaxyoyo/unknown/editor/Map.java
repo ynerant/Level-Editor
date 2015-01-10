@@ -6,6 +6,7 @@ import galaxyoyo.unknown.api.editor.RawMap;
 import galaxyoyo.unknown.api.editor.sprites.SpriteRegister;
 
 import java.awt.Point;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,11 +18,13 @@ public class Map
 	private int height;
 	private List<Case> cases = new ArrayList<Case>();
 	private java.util.Map<Point, Case> casesMap = new HashMap<Point, Case>();
+	private transient BufferedImage font;
 	
 	public Map(RawMap raw)
 	{
 		this.width = raw.getWidth();
 		this.height = raw.getHeight();
+		this.font = raw.getFont();
 		
 		for (RawCase rc : raw.getCases())
 		{
@@ -56,6 +59,16 @@ public class Map
 		}
 		
 		return casesMap.get(new Point(x, y));
+	}
+
+	public BufferedImage getFont()
+	{
+		return font;
+	}
+
+	public void setFont(BufferedImage font)
+	{
+		this.font = font;
 	}
 
 	private void reorganizeMap()

@@ -1,5 +1,6 @@
 package galaxyoyo.unknown.api.editor;
 
+import java.awt.image.BufferedImage;
 import java.util.List;
 
 public class RawMap
@@ -7,6 +8,7 @@ public class RawMap
 	private List<RawCase> cases;
 	private int width;
 	private int height;
+	private transient BufferedImage font;
 	
 	public List<RawCase> getCases()
 	{
@@ -30,5 +32,15 @@ public class RawMap
 		rm.width = width;
 		rm.height = height;
 		return rm;
+	}
+
+	public BufferedImage getFont()
+	{
+		return font;
+	}
+
+	public void setFont(BufferedImage font)
+	{
+		this.font = font;
 	}
 }

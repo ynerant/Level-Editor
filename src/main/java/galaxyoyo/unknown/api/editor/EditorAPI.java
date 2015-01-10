@@ -2,6 +2,9 @@ package galaxyoyo.unknown.api.editor;
 
 import galaxyoyo.unknown.editor.Map;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -49,7 +52,7 @@ public class EditorAPI
 	{
 		JFileChooser jfc = new JFileChooser();
 		
-		jfc.setFileFilter(new FileNameExtensionFilter("Fichiers monde (*.gworld, *.dat)", "gworld", "dat"));
+		jfc.setFileFilter(new FileNameExtensionFilter("Fichiers monde (*.gmap, *.dat)", "gmap", "dat"));
 		jfc.setFileHidingEnabled(true);
 		jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		File dir = new File("maps");
@@ -156,6 +159,30 @@ public class EditorAPI
 
 	public static Map open(RawMap map)
 	{
+		if (map.getFont() == null)
+		{
+			int baseWidth = map.getWidth();
+			int baseHeight = map.getHeight();
+			int width = baseWidth + ((int) baseWidth / 16) + 1;
+			int height = baseHeight + ((int) baseHeight / 16) + 1;
+			BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+			Graphics2D g = image.createGraphics();
+			g.setColor(Color.white);
+			g.fillRect(0, 0, width, height);
+			g.setColor(Color.black);
+			g.drawLine(0, 0, width, 0);
+			g.drawLine(0, 0, 0, height);
+			for (int x = 17; x <= width; x += 17)
+			{
+				g.drawLine(x, 0, x, height);
+			}
+			
+			for (int y = 17; y <= height; y += 17)
+			{
+				g.drawLine(0, y, width, y);
+			}
+		}
+		
 		return new Map(map);
 	}
 }
