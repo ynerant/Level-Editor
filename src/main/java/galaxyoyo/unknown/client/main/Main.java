@@ -11,10 +11,8 @@ import galaxyoyo.unknown.frame.MainFrame;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
-import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
 import joptsimple.OptionParser;
@@ -193,15 +191,6 @@ public class Main
 		EditorAPI.saveAs(rm);
 		
 		EditorAPI.open(rm);
-		
-		try
-		{
-			ImageIO.write(image, "png", new File("img.png"));
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
 	}
 	
 	/**
