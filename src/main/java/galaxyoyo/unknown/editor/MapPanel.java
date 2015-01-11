@@ -2,9 +2,7 @@ package galaxyoyo.unknown.editor;
 
 import galaxyoyo.unknown.api.editor.Case;
 
-import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
@@ -47,58 +45,35 @@ public class MapPanel extends JPanel
 			if (isEmpty(c.getCoucheOne().getImage()))
 				continue;
 			
-			BufferedImage image;
+	//		BufferedImage image;
 			
 			g.drawImage(c.getCoucheOne().getImage(), x + c.getPosX() * 34 + 2, y + c.getPosY() * 34 + 2, 32, 32, null);
 			if (frame.getSelectedLayerIndex() != 0)
-			{
+		/*	{
 				image = recalculateAplha(c.getCoucheOne().getImage(), 0);
 				g.drawImage(image, x + c.getPosX() * 34 + 2, y + c.getPosY() * 34 + 2, 32, 32, null);
-			}
+			}*/
 			
 			if (isEmpty(c.getCoucheTwo().getImage()) || (frame.getSelectedLayerIndex() != 1 && frame.getSelectedLayerIndex() != 2))
 				continue;
 			
 			g.drawImage(c.getCoucheTwo().getImage(), x + c.getPosX() * 34 + 2, y + c.getPosY() * 34 + 2, 32, 32, null);
-			if (frame.getSelectedLayerIndex() != 1)
+		/*	if (frame.getSelectedLayerIndex() != 1)
 			{
 				image = recalculateAplha(c.getCoucheTwo().getImage(), 1);
 				g.drawImage(image, x + c.getPosX() * 34 + 2, y + c.getPosY() * 34 + 2, 32, 32, null);
-			}
+			}*/
 			
 			if (isEmpty(c.getCoucheThree().getImage()) || frame.getSelectedLayerIndex() != 2)
 				continue;
 			
 			g.drawImage(c.getCoucheThree().getImage(), x + c.getPosX() * 34 + 2, y + c.getPosY() * 34 + 2, 32, 32, null);
-			if (frame.getSelectedLayerIndex() != 2)
+		/*	if (frame.getSelectedLayerIndex() != 2)
 			{
 				image = recalculateAplha(c.getCoucheThree().getImage(), 2);
 				g.drawImage(image, x + c.getPosX() * 34 + 2, y + c.getPosY() * 34 + 2, 32, 32, null);
-			}
+			}*/
 		}
-	}
-
-	private BufferedImage recalculateAplha(BufferedImage image, int couche)
-	{
-		BufferedImage img = new  BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
-		
-		for (int x = 0; x < image.getWidth(); ++x)
-		{
-			for (int y = 0; y < image.getHeight(); ++y)
-			{
-				Color ref = new Color(image.getRGB(x, y));
-				int red = ref.getRed() / 2;
-				int green = ref.getGreen() / 2;
-				int blue = ref.getBlue() / 2;
-				if (image.getRGB(x, y) == 0xFFFFFF)
-					continue;
-				Graphics2D g = img.createGraphics();
-				g.setColor(new Color(red / 3 * couche == 2 ? 1 : 2, green / 3 * couche == 2 ? 1 : 2, blue / 3 * couche == 2 ? 1 : 2, 100));
-				g.drawLine(x, y, x, y);
-			}
-		}
-		
-		return img;
 	}
 
 	private boolean isEmpty(BufferedImage image)
