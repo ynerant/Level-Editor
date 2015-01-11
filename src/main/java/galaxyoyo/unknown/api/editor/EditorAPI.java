@@ -104,14 +104,7 @@ public class EditorAPI
 		try
 		{
 			file.createNewFile();
-	//		BufferedWriter bw = new BufferedWriter(new FileWriter(file));
 			BufferedOutputStream bos = new BufferedOutputStream(new GZIPOutputStream(new FileOutputStream(file)));
-	/*		for (char c : json.toCharArray())
-			{
-				char ch = c;
-				
-				ch = (char) ((((int) c * 2) - 4) * 3);
-			}*/
 			
 			bos.write(json.getBytes("UTF-8"));
 			
@@ -144,8 +137,6 @@ public class EditorAPI
 		String json = null;
 		try
 		{
-			long startTime = System.currentTimeMillis();
-	//		BufferedReader br = new BufferedReader(new FileReader(f));
 			GZIPInputStream gis = new GZIPInputStream(new BufferedInputStream(new FileInputStream(f)));
 			byte[] bytes = new byte[512*1024];
 			int count = 0;
@@ -155,28 +146,14 @@ public class EditorAPI
 				text += new String(bytes, 0, count, "UTF-8");
 			}
 			gis.close();
-			System.out.println("Took : " + (System.currentTimeMillis() - startTime) + " ms");
 			bytes = null;
 			
 			json = text;
-			
-	/*		for (char c : text.toCharArray())
-			{
-				char ch = c;
-				
-				ch = (char) (((c / 3) + 4) / 2);
-				
-				json += ch;
-			}
-			
-			json = json.substring(0, json.length() - 1);*/
 		}
 		catch (IOException e)
 		{
 			e.printStackTrace();
 		}
-		
-		LogManager.getLogger(EditorAPI.class).warn(json);
 		
 		RawMap rm = createGson().fromJson(json, RawMap.class);
 		
