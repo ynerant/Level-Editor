@@ -51,7 +51,65 @@
               <descriptorRef>jar-with-dependencies</descriptorRef>
             </descriptorRefs>
           </configuration>
-          </plugin>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-shade-plugin</artifactId>
+          <version>1.4</version>
+          <executions>
+            <execution>
+              <phase>package</phase>
+              <goals>
+                <goal>shade</goal>
+              </goals>
+            </execution>
+          </executions>
+          <configuration>
+            <shadedArtifactAttached>true</shadedArtifactAttached> <!-- Make the shaded artifact not the main one -->
+            <shadedClassifierName>shaded</shadedClassifierName> <!-- set the suffix to the shaded jar -->
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>com.akathist.maven.plugins.launch4j</groupId>
+          <artifactId>launch4j-maven-plugin</artifactId>
+          <version>1.7.3</version>
+          <executions>
+            <execution>
+              <id>l4j-clui</id>
+              <phase>package</phase>
+              <goals>
+                <goal>launch4j</goal>
+              </goals>
+              <configuration>
+                <headerType>gui</headerType>
+                <jar>${project.build.directory}/${project.artifactId}-${project.version}-shaded.jar</jar>
+                <outfile>${project.build.directory}/${project.artifactId}-${project.version}.${BUILD_NUMBER}.exe</outfile>
+                <downloadUrl>http://java.com/download</downloadUrl>
+                <classPath>
+                  <mainClass>galaxyoyo.unknown.client.main.Main</mainClass>
+                  <preCp>anything</preCp>
+                </classPath>
+                <icon></icon>
+                <jre>
+                  <minVersion>1.8.0</minVersion>
+                  <jdkPreference>preferJre</jdkPreference>
+                </jre>
+                <versionInfo>
+                  <fileVersion>1.0.0.0</fileVersion>
+                  <txtFileVersion>${project.version}</txtFileVersion>
+                  <fileDescription>${project.name}</fileDescription>
+                  <copyright>2015 galaxyoyo</copyright>
+                  <productVersion>1.0.0.0</productVersion>
+                  <txtProductVersion>${project.version}</txtProductVersion>
+                  <productName>${project.name}</productName>
+                  <companyName>galaxyoyo</companyName>
+                  <internalName>galaxyoyo</internalName>
+                  <originalFilename>${project.artifactId}-${project.version}.${BUILD_NUMBER}.exe</originalFilename>
+                </versionInfo>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
     </plugins>
   </build>
 
@@ -78,4 +136,23 @@
     	<version>2.1</version>
     </dependency>
   </dependencies>
+  
+  <repositories>
+    <repository>
+        <id>dsol-xml</id>
+        <name>Simulation @ TU Delft</name>
+        <url>http://simulation.tudelft.nl/maven/</url>
+    </repository>
+    <repository>
+      <id>sonatype-nexus-snapshots</id>
+      <name>Sonatype Nexus Snapshots</name>
+      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+      <releases>
+          <enabled>false</enabled>
+      </releases>
+      <snapshots>
+          <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
 </project>
