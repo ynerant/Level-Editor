@@ -5,6 +5,7 @@ import galaxyoyo.unknown.api.editor.RawMap;
 import galaxyoyo.unknown.api.editor.sprites.Category;
 import galaxyoyo.unknown.api.editor.sprites.Sprite;
 import galaxyoyo.unknown.api.editor.sprites.SpriteRegister;
+import galaxyoyo.unknown.frame.listeners.CollidMapMouseListener;
 import galaxyoyo.unknown.frame.listeners.CreateMapListener;
 import galaxyoyo.unknown.frame.listeners.MapMouseListener;
 import galaxyoyo.unknown.frame.listeners.OpenMapListener;
@@ -48,7 +49,7 @@ public class EditorFrame extends JFrame implements ChangeListener, ActionListene
 	private JMenuItem exit = new JMenuItem("Quitter");
 	private final JTabbedPane tabs = new JTabbedPane();
 	private final JPanel tabEvents = new JPanel();
-	private final JPanel tabColl = new JPanel();
+	private final CollidPanel tabColl = new CollidPanel(this);
 	private final MapPanel mapPanel = new MapPanel(this);
 	private final JTabbedPane resources = new JTabbedPane();
 	private final JPanel couche1 = new JPanel();
@@ -64,6 +65,7 @@ public class EditorFrame extends JFrame implements ChangeListener, ActionListene
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		this.setLocationRelativeTo(null);
+		this.addWindowListener(this);
 		content.setLayout(new BorderLayout());
 		this.setContentPane(content);
 		this.setVisible(true);
@@ -100,9 +102,13 @@ public class EditorFrame extends JFrame implements ChangeListener, ActionListene
 		mapPanel.addMouseListener(new MapMouseListener(mapPanel, this));
 		mapPanel.addMouseMotionListener(new MapMouseListener(mapPanel, this));
 		
+		tabColl.addMouseListener(new CollidMapMouseListener(tabColl, this));
+		tabColl.addMouseMotionListener(new CollidMapMouseListener(tabColl, this));
+		
 		tabs.addTab("Carte", new JScrollPane(mapPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED));
 		tabs.addTab("\u00c9vennments", new JScrollPane(tabEvents));
 		tabs.addTab("Collisions", new JScrollPane(tabColl));
+		tabs.addChangeListener(this);
 		
 		content.add(tabs, BorderLayout.CENTER);
 		
@@ -239,6 +245,15 @@ public class EditorFrame extends JFrame implements ChangeListener, ActionListene
 				resources.setBackgroundAt(1, Color.black);
 				resources.setBackgroundAt(2, Color.white);
 			}
+			
+			repaint();
+		}
+		else if (event.getSource() == tabs)
+		{
+			resources.setEnabled(tabs.getSelectedIndex() == 0);
+			couche1.setEnabled(resources.isEnabled());
+			couche2.setEnabled(resources.isEnabled());
+			couche3.setEnabled(resources.isEnabled());
 			
 			repaint();
 		}
