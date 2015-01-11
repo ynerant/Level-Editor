@@ -19,8 +19,6 @@ import java.util.zip.GZIPOutputStream;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import org.apache.logging.log4j.LogManager;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
