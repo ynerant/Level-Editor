@@ -5,17 +5,21 @@ import galaxyoyo.unknown.editor.Map;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+import org.apache.logging.log4j.LogManager;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -46,6 +50,7 @@ public class EditorAPI
 		
 		builder.enableComplexMapKeySerialization();
 		builder.serializeNulls();
+		builder.setPrettyPrinting();
 		
 		return builder.create();
 	}
@@ -99,18 +104,18 @@ public class EditorAPI
 		try
 		{
 			file.createNewFile();
-			BufferedWriter bw = new BufferedWriter(new FileWriter(file));
-			
-			for (char c : json.toCharArray())
+	//		BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+			BufferedOutputStream bos = new BufferedOutputStream(new GZIPOutputStream(new FileOutputStream(file)));
+	/*		for (char c : json.toCharArray())
 			{
 				char ch = c;
 				
 				ch = (char) ((((int) c * 2) - 4) * 3);
-				
-				bw.append(ch);
-			}
+			}*/
 			
-			bw.close();
+			bos.write(json.getBytes("UTF-8"));
+			
+			bos.close();
 		}
 		catch (IOException ex)
 		{
@@ -139,18 +144,23 @@ public class EditorAPI
 		String json = null;
 		try
 		{
-			BufferedReader br = new BufferedReader(new FileReader(f));
+			long startTime = System.currentTimeMillis();
+	//		BufferedReader br = new BufferedReader(new FileReader(f));
+			GZIPInputStream gis = new GZIPInputStream(new BufferedInputStream(new FileInputStream(f)));
+			byte[] bytes = new byte[512*1024];
+			int count = 0;
 			String text = "";
-			String ln;
-			while ((ln = br.readLine()) != null)
+			while ((count = gis.read(bytes)) != -1)
 			{
-				text += ln + "\n";
+				text += new String(bytes, 0, count, "UTF-8");
 			}
-			br.close();
+			gis.close();
+			System.out.println("Took : " + (System.currentTimeMillis() - startTime) + " ms");
+			bytes = null;
 			
-			json = "";
+			json = text;
 			
-			for (char c : text.toCharArray())
+	/*		for (char c : text.toCharArray())
 			{
 				char ch = c;
 				
@@ -159,12 +169,14 @@ public class EditorAPI
 				json += ch;
 			}
 			
-			json = json.substring(0, json.length() - 1);
+			json = json.substring(0, json.length() - 1);*/
 		}
 		catch (IOException e)
 		{
 			e.printStackTrace();
 		}
+		
+		LogManager.getLogger(EditorAPI.class).warn(json);
 		
 		RawMap rm = createGson().fromJson(json, RawMap.class);
 		
