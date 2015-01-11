@@ -1,22 +1,29 @@
 package galaxyoyo.unknown.api.editor;
 
-import com.google.gson.annotations.Expose;
+import galaxyoyo.unknown.api.editor.sprites.Sprite;
 
 public class RawSprite
 {
-	private int primaryIndex = 0;
-	private int secondaryIndex = 0;
+	private String category = "blank";
+	private int index = 0;
 	
-	@Expose(serialize = false, deserialize = false)
-	public static final RawSprite BLANK = new RawSprite();
+	public static transient final RawSprite BLANK = new RawSprite();
 	
-	public int getPrimaryIndex()
+	public String getCategory()
 	{
-		return primaryIndex;
+		return category;
 	}
 	
-	public int getSecondaryIndex()
+	public int getIndex()
 	{
-		return secondaryIndex;
+		return index;
+	}
+	
+	public static RawSprite create(Sprite spr)
+	{
+		RawSprite raw = new RawSprite();
+		raw.category = spr.getCategory().getName();
+		raw.index = spr.getIndex();
+		return raw;
 	}
 }

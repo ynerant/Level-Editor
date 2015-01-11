@@ -1,25 +1,37 @@
 package galaxyoyo.unknown.editor;
 
+import galaxyoyo.unknown.api.editor.EditorAPI;
+import galaxyoyo.unknown.api.editor.RawMap;
 import galaxyoyo.unknown.api.editor.sprites.Category;
 import galaxyoyo.unknown.api.editor.sprites.Sprite;
 import galaxyoyo.unknown.api.editor.sprites.SpriteRegister;
+import galaxyoyo.unknown.frame.listeners.CreateMapListener;
+import galaxyoyo.unknown.frame.listeners.MapMouseListener;
+import galaxyoyo.unknown.frame.listeners.OpenMapListener;
+import galaxyoyo.unknown.frame.listeners.SpriteMouseListener;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-public class EditorFrame extends JFrame implements ComponentListener, MouseListener, ChangeListener
+public class EditorFrame extends JFrame implements ChangeListener, ActionListener, WindowListener
 {
 	private static final long serialVersionUID = -2705122356101556462L;
 	
@@ -27,14 +39,22 @@ public class EditorFrame extends JFrame implements ComponentListener, MouseListe
 	
 	private final JPanel content = new JPanel();
 	
+	private JMenuBar menuBar = new JMenuBar();
+	private JMenu fichier = new JMenu("Fichier");
+	private JMenuItem nouveau = new JMenuItem("Nouveau");
+	private JMenuItem open = new JMenuItem("Ouvrir");
+	private JMenuItem save = new JMenuItem("Sauvegarder");
+	private JMenuItem saveAs = new JMenuItem("Sauvegarder sous ...");
+	private JMenuItem exit = new JMenuItem("Quitter");
 	private final JTabbedPane tabs = new JTabbedPane();
 	private final JPanel tabEvents = new JPanel();
 	private final JPanel tabColl = new JPanel();
-	private final JPanel mapPanel = new JPanel();
+	private final MapPanel mapPanel = new MapPanel(this);
 	private final JTabbedPane resources = new JTabbedPane();
 	private final JPanel couche1 = new JPanel();
 	private final JPanel couche2 = new JPanel();
 	private final JPanel couche3 = new JPanel();
+	private SpriteComp selectedSprite;
 
 	public EditorFrame(Map map)
 	{
@@ -46,15 +66,43 @@ public class EditorFrame extends JFrame implements ComponentListener, MouseListe
 		this.setLocationRelativeTo(null);
 		content.setLayout(new BorderLayout());
 		this.setContentPane(content);
-		this.addComponentListener(this);
 		this.setVisible(true);
 		this.setVisible(false);
 		
-		tabs.addTab("Carte", mapPanel);
-		tabs.addTab("\u00c9vennments", tabEvents);
-		tabs.addTab("Collisions", tabColl);
-		tabs.addMouseListener(this);
-		tabs.addChangeListener(this);
+		nouveau.setMnemonic(KeyEvent.CTRL_DOWN_MASK + KeyEvent.VK_N);
+		nouveau.addActionListener(new CreateMapListener());
+		fichier.add(nouveau);
+		
+		open.setMnemonic(KeyEvent.CTRL_DOWN_MASK + KeyEvent.VK_O);
+		open.addActionListener(new OpenMapListener());
+		fichier.add(open);
+		
+		fichier.addSeparator();
+		
+		save.setMnemonic(KeyEvent.CTRL_DOWN_MASK + KeyEvent.VK_S);
+		save.addActionListener(this);
+		fichier.add(save);
+		
+		saveAs.setMnemonic(KeyEvent.CTRL_DOWN_MASK + KeyEvent.SHIFT_MASK + KeyEvent.VK_S);
+		saveAs.addActionListener(this);
+		fichier.add(saveAs);
+		
+		fichier.addSeparator();
+		
+		exit.setMnemonic(KeyEvent.CTRL_DOWN_MASK + KeyEvent.VK_Q);
+		exit.addActionListener(this);
+		fichier.add(exit);
+		
+		menuBar.add(fichier);
+		
+		this.setJMenuBar(menuBar);
+		
+		mapPanel.addMouseListener(new MapMouseListener(mapPanel, this));
+		mapPanel.addMouseMotionListener(new MapMouseListener(mapPanel, this));
+		
+		tabs.addTab("Carte", new JScrollPane(mapPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED));
+		tabs.addTab("\u00c9vennments", new JScrollPane(tabEvents));
+		tabs.addTab("Collisions", new JScrollPane(tabColl));
 		
 		content.add(tabs, BorderLayout.CENTER);
 		
@@ -73,37 +121,23 @@ public class EditorFrame extends JFrame implements ComponentListener, MouseListe
 		resources.addTab("", new ImageIcon(getClass().getResource("/assets/unknown/textures/layer 1.png")), scroll1);
 		resources.addTab("", new ImageIcon(getClass().getResource("/assets/unknown/textures/layer 2.png")), scroll2);
 		resources.addTab("", new ImageIcon(getClass().getResource("/assets/unknown/textures/layer 3.png")), scroll3);
-		resources.addMouseListener(this);
 		resources.addChangeListener(this);
+		resources.setBackgroundAt(0, Color.white);
+		resources.setBackgroundAt(1, Color.white);
+		resources.setBackgroundAt(2, Color.white);
 		
 		content.add(resources, BorderLayout.EAST);
 		
-		this.componentResized(null);
 		resize();
 		
 		drawResources();
 		
-		drawMap();
-	}
-
-	private void drawMap()
-	{
-		if (mapPanel.getGraphics() == null)
-		{
-			mapPanel.repaint();
-		}
-		
-		mapPanel.getGraphics().drawImage(map.getFont(), 0, 0, null);
-		mapPanel.revalidate();
-		mapPanel.repaint();
+		revalidate();
 		repaint();
 	}
 
 	private void drawResources()
 	{
-		int x = 0;
-		int y = 0;
-		
 		couche1.removeAll();
 		couche2.removeAll();
 		couche3.removeAll();
@@ -124,22 +158,15 @@ public class EditorFrame extends JFrame implements ComponentListener, MouseListe
 		{
 			for (Sprite spr : cat.getSprites())
 			{
-				SpriteComp sprc1 = new SpriteComp(spr, 1);
-				SpriteComp sprc2 = new SpriteComp(spr, 2);
-				SpriteComp sprc3 = new SpriteComp(spr, 3);
-				sprc1.setLocation(x, y);
-				sprc2.setLocation(x, y);
-				sprc3.setLocation(x, y);
+				SpriteComp sprc1 = new SpriteComp(spr, 0);
+				SpriteComp sprc2 = new SpriteComp(spr, 1);
+				SpriteComp sprc3 = new SpriteComp(spr, 2);
+				sprc1.addMouseListener(new SpriteMouseListener(sprc1, this));
+				sprc2.addMouseListener(new SpriteMouseListener(sprc2, this));
+				sprc3.addMouseListener(new SpriteMouseListener(sprc3, this));
 				couche1.add(sprc1);
 				couche2.add(sprc2);
 				couche3.add(sprc3);
-				
-				x += 48;
-				if (couche1.getWidth() - x < 48)
-				{
-					x = 0;
-					y += 48;
-				}
 			}
 		}
 		
@@ -150,22 +177,6 @@ public class EditorFrame extends JFrame implements ComponentListener, MouseListe
 		couche2.repaint();
 		couche3.repaint();
 	}
-
-	@Override
-	public void componentHidden(ComponentEvent paramComponentEvent)
-	{
-	}
-
-	@Override
-	public void componentMoved(ComponentEvent paramComponentEvent)
-	{
-	}
-
-	@Override
-	public void componentResized(ComponentEvent paramComponentEvent)
-	{
-	}
-	
 	public void resize()
 	{
 
@@ -190,44 +201,120 @@ public class EditorFrame extends JFrame implements ComponentListener, MouseListe
 		((JScrollPane) resources.getSelectedComponent()).getVerticalScrollBar().setValue(cursorPos);
 	}
 
+	public Map getMap()
+	{
+		return map;
+	}
+
+	public SpriteComp getSelectedSprite()
+	{
+		return selectedSprite;
+	}
+
+	public void setSelectedSprite(SpriteComp sprite)
+	{
+		this.selectedSprite = sprite;
+	}
+
 	@Override
-	public void componentShown(ComponentEvent paramComponentEvent)
+	public void stateChanged(ChangeEvent event)
+	{
+		if (event.getSource() == resources)
+		{
+			if (getSelectedLayerIndex() == 0)
+			{
+				resources.setBackgroundAt(0, Color.white);
+				resources.setBackgroundAt(1, Color.white);
+				resources.setBackgroundAt(2, Color.white);
+			}
+			else if (getSelectedLayerIndex() == 1)
+			{
+				resources.setBackgroundAt(0, Color.black);
+				resources.setBackgroundAt(1, Color.white);
+				resources.setBackgroundAt(2, Color.white);
+			}
+			else if (getSelectedLayerIndex() == 2)
+			{
+				resources.setBackgroundAt(0, Color.black);
+				resources.setBackgroundAt(1, Color.black);
+				resources.setBackgroundAt(2, Color.white);
+			}
+			
+			repaint();
+		}
+	}
+
+	public int getSelectedLayerIndex()
+	{
+		return resources.getSelectedIndex();
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent event)
+	{
+		if (event.getSource() == save)
+		{
+			EditorAPI.save(RawMap.create(map));
+		}
+		else if (event.getSource() == saveAs)
+		{
+			EditorAPI.saveAs(RawMap.create(map));
+		}
+		else if (event.getSource() == exit)
+		{
+			int result = JOptionPane.showConfirmDialog(null, "Voulez-vous sauvegarder votre carte avant de quitter ? Toute modification sera perdue", "Confirmation", JOptionPane.YES_NO_CANCEL_OPTION);
+			
+			if (result == 0)
+				save.doClick();
+			
+			if (result != 2)
+				dispose();
+		}
+	}
+
+	@Override
+	public void windowActivated(WindowEvent event)
 	{
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent paramMouseEvent)
+	public void windowClosed(WindowEvent event)
 	{
-		this.componentResized(null);
 	}
 
 	@Override
-	public void mouseEntered(MouseEvent paramMouseEvent)
+	public void windowClosing(WindowEvent event)
 	{
-		this.componentResized(null);
+		int result = JOptionPane.showConfirmDialog(null, "Voulez-vous sauvegarder avant de quitter ?", "Confirmation", JOptionPane.YES_NO_CANCEL_OPTION);
+		
+		if (result == 0)
+		{
+			EditorAPI.save(RawMap.create(map));
+		}
+		
+		if (result != 2)
+		{
+			dispose();
+		}
 	}
 
 	@Override
-	public void mouseExited(MouseEvent paramMouseEvent)
+	public void windowDeactivated(WindowEvent event)
 	{
-		this.componentResized(null);
 	}
 
 	@Override
-	public void mousePressed(MouseEvent paramMouseEvent)
+	public void windowDeiconified(WindowEvent event)
 	{
-		this.componentResized(null);
 	}
 
 	@Override
-	public void mouseReleased(MouseEvent paramMouseEvent)
+	public void windowIconified(WindowEvent event)
 	{
-		this.componentResized(null);
 	}
 
 	@Override
-	public void stateChanged(ChangeEvent paramChangeEvent)
+	public void windowOpened(WindowEvent event)
 	{
-		this.componentResized(null);
 	}
 }

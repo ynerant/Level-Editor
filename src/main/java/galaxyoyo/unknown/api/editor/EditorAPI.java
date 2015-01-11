@@ -22,6 +22,8 @@ import com.google.gson.GsonBuilder;
 
 public class EditorAPI
 {
+	private static File LAST_FILE;
+
 	public static RawMap toRawMap(int width, int height)
 	{
 		List<RawCase> cases = new ArrayList<RawCase>();
@@ -38,7 +40,7 @@ public class EditorAPI
 		return RawMap.create(cases, width, height);
 	}
 	
-	private static Gson createGson()
+	public static Gson createGson()
 	{
 		GsonBuilder builder = new GsonBuilder();
 		
@@ -66,18 +68,28 @@ public class EditorAPI
 	{		
 		JFileChooser jfc = createJFC();
 		File file = null;
-		while (file == null)
-		{
-			jfc.showSaveDialog(null);
-			file = jfc.getSelectedFile();
-		}
+		jfc.showSaveDialog(null);
+		file = jfc.getSelectedFile();
+		
+		if (file == null)
+			return;
 		
 		if (!file.getName().toLowerCase().endsWith(".gmap") && !file.getName().toLowerCase().endsWith(".dat"))
 		{
 			file = new File(file.getParentFile(), file.getName() + ".gmap");
 		}
 		
+		LAST_FILE = file;
+		
 		save(file, map);
+	}
+	
+	public static void save(RawMap map)
+	{
+		if (LAST_FILE != null)
+			save(LAST_FILE, map);
+		else
+			saveAs(map);
 	}
 	
 	public static void save(File file, RawMap map)
@@ -111,11 +123,13 @@ public class EditorAPI
 		JFileChooser jfc = createJFC();
 		File file = null;
 		
-		while (file == null)
-		{
-			jfc.showOpenDialog(null);
-			file = jfc.getSelectedFile();
-		}
+		jfc.showOpenDialog(null);
+		file = jfc.getSelectedFile();
+		
+		if (file == null)
+			return null;
+		
+		LAST_FILE = file;
 		
 		return open(file);
 	}
@@ -181,6 +195,8 @@ public class EditorAPI
 			{
 				g.drawLine(0, y, width, y);
 			}
+			
+			map.setFont(image);
 		}
 		
 		return new Map(map);

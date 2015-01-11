@@ -52,4 +52,10 @@ public class Case
 		c.collision = collision;
 		return c;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return "{Case x=" + x + " y=" + y + " couche1=" + couche1 + " couche2=" + couche2 + " couche3=" + couche3 + " collision=" + collision.name().toUpperCase() + "}\n";
+	}
 }

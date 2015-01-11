@@ -50,4 +50,16 @@ public class RawCase
 		c.collision = collision;;
 		return c;
 	}
+	
+	public static RawCase create(Case c)
+	{
+		RawCase raw = new RawCase();
+		raw.x = c.getPosX();
+		raw.y = c.getPosY();
+		raw.couche1 = RawSprite.create(c.getCoucheOne());
+		raw.couche2 = RawSprite.create(c.getCoucheTwo());
+		raw.couche3 = RawSprite.create(c.getCoucheThree());
+		raw.collision = c.getCollision();
+		return raw;
+	}
 }

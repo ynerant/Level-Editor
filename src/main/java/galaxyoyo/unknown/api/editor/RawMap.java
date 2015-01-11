@@ -1,6 +1,9 @@
 package galaxyoyo.unknown.api.editor;
 
+import galaxyoyo.unknown.editor.Map;
+
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.List;
 
 public class RawMap
@@ -42,5 +45,19 @@ public class RawMap
 	public void setFont(BufferedImage font)
 	{
 		this.font = font;
+	}
+	
+	public static RawMap create(Map map)
+	{
+		RawMap raw = new RawMap();
+		raw.width = map.getWidth();
+		raw.height = map.getHeight();
+		raw.cases = new ArrayList<RawCase>();
+		for (Case c : map.getAllCases())
+		{
+			RawCase rc = RawCase.create(c);
+			raw.cases.add(rc);
+		}
+		return raw;
 	}
 }

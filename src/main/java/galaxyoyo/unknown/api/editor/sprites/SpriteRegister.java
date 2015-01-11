@@ -48,7 +48,7 @@ public class SpriteRegister
 						int x = list.get(0).intValue();
 						int y = list.get(1).intValue();
 						BufferedImage child = img.getSubimage(x, y, 16, 16);
-						new Sprite(child, cat);
+						new Sprite(child, cat, nameToCoords.get(key).indexOf(list));
 					}
 					
 					sprites.put(key, cat);

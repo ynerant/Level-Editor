@@ -12,6 +12,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Locale;
 
 import javax.swing.JOptionPane;
 
@@ -56,6 +57,8 @@ public class Main
 	 */
 	public static void main(String ... args)
 	{
+		Locale.setDefault(Locale.FRANCE);
+		
 		DEV = Main.class.getResource("/META-INF/MANIFEST.MF") == null;
 		
 		Logger LOGGER = (Logger) LogManager.getRootLogger();
@@ -128,7 +131,7 @@ public class Main
 	 * @see #launchFrame()
 	 * @since 0.1-aplha
 	 */
-	private static void launchEditMode()
+	public static void launchEditMode()
 	{
 		System.out.println("Lancement de l'\u00e9diteur de monde ...");
 		int baseWidth;
@@ -139,9 +142,11 @@ public class Main
 		{
 			try
 			{
-				baseWidth = Integer.parseInt(JOptionPane.showInputDialog("Veuillez entrez le nombre de cases longueur de votre carte :")) * 16;
-				if (baseWidth <= 0)
+				baseWidth = Integer.parseInt(JOptionPane.showInputDialog("Veuillez entrez le nombre de cases longueur de votre carte (0 pour annuler) :")) * 16;
+				if (baseWidth < 0)
 					throw new NumberFormatException();
+				if (baseWidth == 0)
+					return;
 				break;
 			}
 			catch (NumberFormatException ex)
@@ -154,9 +159,11 @@ public class Main
 		{
 			try
 			{
-				baseHeight = Integer.parseInt(JOptionPane.showInputDialog("Veuillez entrez le nombre de cases hauteur de votre carte :")) * 16;
-				if (baseHeight <= 0)
+				baseHeight = Integer.parseInt(JOptionPane.showInputDialog("Veuillez entrez le nombre de cases hauteur de votre carte (0 pour annuler) :")) * 16;
+				if (baseHeight < 0)
 					throw new NumberFormatException();
+				if (baseHeight == 0)
+					return;
 				break;
 			}
 			catch (NumberFormatException ex)

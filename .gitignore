@@ -12,5 +12,6 @@
 hs_err_pid*
 /target/
 *.log
-*.png
+img.png
+image.png
 /maps/

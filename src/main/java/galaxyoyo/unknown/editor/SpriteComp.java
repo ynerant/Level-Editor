@@ -14,6 +14,7 @@ public class SpriteComp extends JComponent
 	
 	private final Sprite sprite;
 	private final int couche;
+	private boolean selected;
 	
 	public SpriteComp(Sprite sprite, int couche)
 	{
@@ -38,6 +39,16 @@ public class SpriteComp extends JComponent
 		return couche;
 	}
 	
+	public boolean isSelected()
+	{
+		return selected;
+	}
+
+	public void setSelected(boolean selected)
+	{
+		this.selected = selected;
+	}
+
 	@Override
 	public void paintComponent(Graphics g)
 	{
@@ -46,5 +57,14 @@ public class SpriteComp extends JComponent
 		g.setColor(Color.white);
 		g.fillRect(0, 0, getWidth(), getHeight());
 		g.drawImage(sprite.getImage(), 0, 0, 32, 32, Color.white, null);
+		
+		if (isSelected())
+		{
+			g.setColor(Color.black);
+			g.drawLine(0, 0, getWidth() - 1, 0);
+			g.drawLine(0, 0, 0, getHeight() - 1);
+			g.drawLine(0, getHeight() - 1, getWidth() - 1, getHeight() - 1);
+			g.drawLine(getWidth() - 1, 0, getWidth() - 1, getHeight() - 1);
+		}
 	}
 }
