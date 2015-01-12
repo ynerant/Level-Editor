@@ -9,10 +9,16 @@ import galaxyoyo.unknown.api.editor.sprites.SpriteRegister;
 import galaxyoyo.unknown.frame.MainFrame;
 
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Graphics2D;
+import java.awt.GraphicsEnvironment;
+import java.awt.HeadlessException;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.swing.JOptionPane;
 
@@ -24,7 +30,6 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
 import org.apache.logging.log4j.core.appender.ConsoleAppender;
-import org.apache.logging.log4j.core.appender.FileAppender;
 import org.apache.logging.log4j.core.layout.PatternLayout;
 
 /**
@@ -59,16 +64,15 @@ public class Main
 	{
 		Locale.setDefault(Locale.FRANCE);
 		
-		DEV = Main.class.getResource("/META-INF/MANIFEST.MF") == null;
+		DEV = Main.class.getClassLoader().getResource("/META-INF/MANIFEST.MF") == null;
 		
 		Logger LOGGER = (Logger) LogManager.getRootLogger();
 		ConsoleAppender console = ConsoleAppender.newBuilder().setLayout(PatternLayout.newBuilder().withPattern("[%d{dd/MM/yyyy}] [%d{HH:mm:ss}] [%t] [%c] [%p] %m%n").build()).setName("Console").build();
-		FileAppender file = FileAppender.createAppender("Console.log", "false", "false", "File", "true", "true", "true", "8192", PatternLayout.newBuilder().withPattern("[%d{dd/MM/yyyy}] [%d{HH:mm:ss}] [%t] [%c] [%p] %m%n").build(), null, "false", "false", null);
 		console.start();
-		file.start();
 		LOGGER.addAppender(console);
-		LOGGER.addAppender(file);
 		LOGGER.setLevel(Level.INFO);
+		
+		checkJava();
 		
 		OptionParser parser = new OptionParser();
 		
@@ -114,7 +118,41 @@ public class Main
 		
 		launchFrame();
 	}
-	
+
+	private static void checkJava()
+	{
+		if (GraphicsEnvironment.isHeadless())
+		{
+			HeadlessException ex = new HeadlessException("Impossible de lancer un jeu sans \u00e9cran !");
+			LogManager.getLogger("JAVAX-SWING").fatal("Cette application est un jeu, sans écran, elle aura du mal \u00e0 tourner ...");
+			LogManager.getLogger("JAVAX-SWING").catching(Level.FATAL, ex);
+			System.exit(1);
+		}
+		
+		try
+		{
+			Map.class.getDeclaredMethod("getOrDefault", Object.class, Object.class);
+		}
+		catch (NoSuchMethodException ex)
+		{
+			ex.printStackTrace();
+			JOptionPane.showMessageDialog(null, "<html>Cette application requiert <strong>Java 8</strong>.<br />La page de t\u00e9l\u00e9chargement va maintenant s'ouvrir.</html>");
+			JOptionPane.showMessageDialog(null, "<html>Si vous êtes certain que Java 8 est installé sur votre machine, assurez-vous qu'il n'y a pas de versions obsolètes de Java,<br />ou si vous êtes plus expérimentés si le path vers Java est bien défini vers la bonne version.</html>");
+			try
+			{
+				if (Desktop.isDesktopSupported())
+					Desktop.getDesktop().browse(new URL("http://java.com/download").toURI());
+				else
+					JOptionPane.showMessageDialog(null, "<html>Votre machine ne supporte pas la classe Desktop, impossible d'ouvrir la page.<br />Rendez-vous y manuellement sur <a href=\"http://java.com/download\">http://java.com/download</a> pour installer Java.</html>");
+			}
+			catch (IOException | URISyntaxException e)
+			{
+				e.printStackTrace();
+			}
+			System.exit(1);
+		}
+	}
+
 	/**
 	 * Lance la fen&ecirc;tre principale
 	 * @see #main(String...)
@@ -194,8 +232,6 @@ public class Main
 		
 		RawMap rm = EditorAPI.toRawMap(baseWidth, baseHeight);
 		rm.setFont(image);
-		
-		EditorAPI.saveAs(rm);
 		
 		EditorAPI.open(rm);
 	}

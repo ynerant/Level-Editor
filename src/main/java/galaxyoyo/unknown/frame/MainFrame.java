@@ -7,6 +7,7 @@ import galaxyoyo.unknown.frame.listeners.CreateMapListener;
 import galaxyoyo.unknown.frame.listeners.OpenMapListener;
 
 import java.awt.Dimension;
+import java.awt.event.KeyEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -43,7 +44,6 @@ public class MainFrame extends JFrame
 	
 	private JMenuBar menuBar = new JMenuBar();
 	private JMenu fichier = new JMenu("Fichier");
-	private JMenu editer = new JMenu("\u00c9diter");
 	private JMenu editMaps = new JMenu("Cartes");
 	private JMenuItem createMap = new JMenuItem("Cr\u00e9er");
 	private JMenuItem openMap = new JMenuItem("Ouvrir");
@@ -63,15 +63,16 @@ public class MainFrame extends JFrame
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		menuBar.add(fichier);
+		fichier.setMnemonic(KeyEvent.VK_F + KeyEvent.ALT_DOWN_MASK);
 		
 		createMap.addActionListener(new CreateMapListener());
 		editMaps.add(createMap);
 		openMap.addActionListener(new OpenMapListener());
 		editMaps.add(openMap);
-		editer.add(editMaps);
 		
-		menuBar.add(editer);
+		fichier.add(editMaps);
+		
+		menuBar.add(fichier);
 		
 		this.setJMenuBar(menuBar);
 	}

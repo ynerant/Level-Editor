@@ -1,6 +1,7 @@
 package galaxyoyo.unknown.frame.listeners;
 
 import galaxyoyo.unknown.api.editor.EditorAPI;
+import galaxyoyo.unknown.frame.MainFrame;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,6 +14,7 @@ public class OpenMapListener implements ActionListener
 	@Override
 	public void actionPerformed(ActionEvent event)
 	{
-		EditorAPI.open();
+		if (EditorAPI.open() != null)
+			MainFrame.getInstance().dispose();
 	}
 }

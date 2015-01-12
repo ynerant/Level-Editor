@@ -4,6 +4,7 @@
 package galaxyoyo.unknown.frame.listeners;
 
 import galaxyoyo.unknown.client.main.Main;
+import galaxyoyo.unknown.frame.MainFrame;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,5 +21,6 @@ public class CreateMapListener implements ActionListener
 	public void actionPerformed(ActionEvent event)
 	{
 		Main.main("--edit", Main.isInDebugMode() ? " --debug true" : "");
+		MainFrame.getInstance().dispose();
 	}
 }
