@@ -62,6 +62,8 @@ public class Main
 	 */
 	public static void main(String ... args)
 	{
+		System.setProperty("sun.java2d.noddraw", "true");
+		
 		Locale.setDefault(Locale.FRANCE);
 		
 		DEV = Main.class.getClassLoader().getResource("/META-INF/MANIFEST.MF") == null;
