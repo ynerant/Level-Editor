@@ -89,7 +89,7 @@
                   <mainClass>galaxyoyo.unknown.client.main.Main</mainClass>
                   <preCp>anything</preCp>
                 </classPath>
-                <icon></icon>
+                <icon>icon.ico</icon>
                 <jre>
                   <minVersion>1.8.0</minVersion>
                   <jdkPreference>preferJre</jdkPreference>
