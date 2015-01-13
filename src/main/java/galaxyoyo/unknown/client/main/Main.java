@@ -110,6 +110,8 @@ public class Main
 			}
 		}
 		
+		SpriteRegister.unpack();
+		
 		SpriteRegister.refreshAllSprites();
 		
 		if (set.has(edit))

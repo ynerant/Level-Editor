@@ -20,6 +20,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
 
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
@@ -158,9 +159,9 @@ public class EditorFrame extends JFrame implements ChangeListener, ActionListene
 		scroll2.getHorizontalScrollBar().setMaximum(0);
 		scroll3.getHorizontalScrollBar().setMaximum(0);
 		
-		resources.addTab("", new ImageIcon(getClass().getResource("/assets/unknown/textures/layer 1.png")), scroll1);
-		resources.addTab("", new ImageIcon(getClass().getResource("/assets/unknown/textures/layer 2.png")), scroll2);
-		resources.addTab("", new ImageIcon(getClass().getResource("/assets/unknown/textures/layer 3.png")), scroll3);
+		resources.addTab("", new ImageIcon(new File("assets/unknown/textures/layer 1.png").getAbsolutePath()), scroll1);
+		resources.addTab("", new ImageIcon(new File("assets/unknown/textures/layer 2.png").getAbsolutePath()), scroll2);
+		resources.addTab("", new ImageIcon(new File("assets/unknown/textures/layer 3.png").getAbsolutePath()), scroll3);
 		resources.addChangeListener(this);
 		resources.setBackgroundAt(0, Color.white);
 		resources.setBackgroundAt(1, Color.white);
