@@ -1,5 +1,7 @@
 package galaxyoyo.unknown.api.editor.sprites;
 
+import galaxyoyo.unknown.client.main.Main;
+
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -8,12 +10,16 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URISyntaxException;
+import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 import javax.imageio.ImageIO;
 
@@ -26,16 +32,39 @@ public class SpriteRegister
 	private static Map<String, List<List<Double>>> nameToCoords;
 	private static Map<String, Category> sprites = new HashMap<String, Category>();
 	
-	public static void unpack()
+	public static void unpack() throws IOException, URISyntaxException
 	{
-		try
+		if (Main.isInDevelopmentMode())
 		{
 			File dir = new File(SpriteRegister.class.getResource("/assets").toURI());
 			unpackDir(dir);
 		}
-		catch (URISyntaxException | IOException e)
+		else
 		{
-			e.printStackTrace();
+			@SuppressWarnings("deprecation")
+			String path = URLDecoder.decode(SpriteRegister.class.getProtectionDomain().getCodeSource().getLocation().getPath());
+			path = path.substring(1, path.length());
+			File jarFile = new File(path);
+
+			if(jarFile.isFile())
+			{
+				JarFile jar = new JarFile(jarFile);
+				Enumeration<JarEntry> entries = jar.entries();
+				while (entries.hasMoreElements())
+				{
+					JarEntry je = entries.nextElement();
+					String name = je.getName();
+					if (name.startsWith("assets/"))
+					{
+						File f = new File(name);
+						if (name.endsWith("/"))
+							f.mkdirs();
+						else if (!f.isFile())
+							Files.copy(jar.getInputStream(je), Paths.get(f.toURI()));
+					}
+				}
+				jar.close();
+			}
 		}
 	}
 	

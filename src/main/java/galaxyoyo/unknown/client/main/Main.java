@@ -14,6 +14,7 @@ import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
 import java.awt.HeadlessException;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -66,7 +67,15 @@ public class Main
 		
 		Locale.setDefault(Locale.FRANCE);
 		
-		DEV = Main.class.getClassLoader().getResource("/META-INF/MANIFEST.MF") == null;
+		try
+		{
+			new File(Main.class.getResource("/assets").toURI());
+			DEV = true;
+		}
+		catch (Throwable t)
+		{
+			DEV = false;
+		}
 		
 		Logger LOGGER = (Logger) LogManager.getRootLogger();
 		ConsoleAppender console = ConsoleAppender.newBuilder().setLayout(PatternLayout.newBuilder().withPattern("[%d{dd/MM/yyyy}] [%d{HH:mm:ss}] [%t] [%c] [%p] %m%n").build()).setName("Console").build();
@@ -110,7 +119,14 @@ public class Main
 			}
 		}
 		
-		SpriteRegister.unpack();
+		try
+		{
+			SpriteRegister.unpack();
+		}
+		catch (IOException | URISyntaxException e)
+		{
+			e.printStackTrace();
+		}
 		
 		SpriteRegister.refreshAllSprites();
 		
