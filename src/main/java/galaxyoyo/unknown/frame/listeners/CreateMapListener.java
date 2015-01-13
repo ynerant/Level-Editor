@@ -20,7 +20,7 @@ public class CreateMapListener implements ActionListener
 	@Override
 	public void actionPerformed(ActionEvent event)
 	{
-		Main.main("--edit", Main.isInDebugMode() ? " --debug true" : "");
-		MainFrame.getInstance().dispose();
+		if (Main.launchEditMode())
+			MainFrame.getInstance().dispose();
 	}
 }

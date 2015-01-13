@@ -185,11 +185,12 @@ public class Main
 
 	/**
 	 * Permet de lancer l'&eacute;diteur de carte
+	 * @return 
 	 * @see #main(String...)
 	 * @see #launchFrame()
 	 * @since 0.1-aplha
 	 */
-	public static void launchEditMode()
+	public static boolean launchEditMode()
 	{
 		System.out.println("Lancement de l'\u00e9diteur de monde ...");
 		int baseWidth;
@@ -200,11 +201,15 @@ public class Main
 		{
 			try
 			{
-				baseWidth = Integer.parseInt(JOptionPane.showInputDialog("Veuillez entrez le nombre de cases longueur de votre carte (0 pour annuler) :")) * 16;
+				String baseWidthStr = JOptionPane.showInputDialog(null, "Veuillez entrez le nombre de cases longueur de votre carte (0 pour annuler) :");
+				if (baseWidthStr == null)
+					return false;
+				baseWidth = Integer.parseInt(baseWidthStr) * 16;
+				JOptionPane.showMessageDialog(null, "NOMBRE : " + baseWidth);
 				if (baseWidth < 0)
 					throw new NumberFormatException();
 				if (baseWidth == 0)
-					return;
+					return false;
 				break;
 			}
 			catch (NumberFormatException ex)
@@ -217,11 +222,14 @@ public class Main
 		{
 			try
 			{
-				baseHeight = Integer.parseInt(JOptionPane.showInputDialog("Veuillez entrez le nombre de cases hauteur de votre carte (0 pour annuler) :")) * 16;
+				String baseHeightStr = JOptionPane.showInputDialog("Veuillez entrez le nombre de cases hauteur de votre carte (0 pour annuler) :");
+				if (baseHeightStr == null)
+					return false;
+				baseHeight = Integer.parseInt(baseHeightStr) * 16;
 				if (baseHeight < 0)
 					throw new NumberFormatException();
 				if (baseHeight == 0)
-					return;
+					return false;
 				break;
 			}
 			catch (NumberFormatException ex)
@@ -254,6 +262,8 @@ public class Main
 		rm.setFont(image);
 		
 		EditorAPI.open(rm);
+		
+		return true;
 	}
 	
 	/**
