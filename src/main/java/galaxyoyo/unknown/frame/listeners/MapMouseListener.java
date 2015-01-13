@@ -38,10 +38,7 @@ public class MapMouseListener extends MouseAdapter
 			if ((c = map.getCase((event.getX() - x + 2) / 34, (event.getY() - y + 2) / 34)) != null && event.getX() - x >= 2 && event.getY() - y >= 2)
 			{
 				if (getFrame().getSelectedSprite() != null)
-				{				
-					if (getFrame().getSelectedSprite().getCouche() - 1 > getFrame().getSelectedLayerIndex())
-						return;
-					
+				{
 					Case n;
 					
 					switch (getFrame().getSelectedSprite().getCouche())
