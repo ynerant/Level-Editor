@@ -21,6 +21,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -28,6 +29,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
@@ -51,6 +53,9 @@ public class EditorFrame extends JFrame implements ChangeListener, ActionListene
 	private final JMenuItem saveAs = new JMenuItem("Sauvegarder sous ...");
 	private final JMenuItem exit = new JMenuItem("Quitter");
 	private final JMenu selectionMode = new JMenu("Mode de s\u00e9lection");
+	ButtonGroup group = new ButtonGroup();
+	private final JRadioButtonMenuItem pen = new JRadioButtonMenuItem("Pinceau");
+	private final JRadioButtonMenuItem pot = new JRadioButtonMenuItem("Pot de peinture");
 	private final JTabbedPane tabs = new JTabbedPane();
 	private final JPanel tabEvents = new JPanel();
 	private final CollidPanel tabColl;
@@ -102,6 +107,14 @@ public class EditorFrame extends JFrame implements ChangeListener, ActionListene
 		fichier.add(exit);
 		
 		menuBar.add(fichier);
+		
+		pen.setSelected(true);
+		pen.addActionListener(this);
+		pot.addActionListener(this);
+		group.add(pen);
+		group.add(pot);
+		selectionMode.add(pen);
+		selectionMode.add(pot);
 
 		tools.setMnemonic(KeyEvent.VK_O + KeyEvent.ALT_DOWN_MASK);
 		
@@ -204,6 +217,7 @@ public class EditorFrame extends JFrame implements ChangeListener, ActionListene
 		couche2.repaint();
 		couche3.repaint();
 	}
+	
 	public void resize()
 	{
 
@@ -311,6 +325,11 @@ public class EditorFrame extends JFrame implements ChangeListener, ActionListene
 			if (result != 2)
 				dispose();
 		}
+	}
+	
+	public int getSelectedPaintingMode()
+	{
+		return pen.isSelected() ? 0 : pot.isSelected() ? 1 : -1;
 	}
 
 	@Override
