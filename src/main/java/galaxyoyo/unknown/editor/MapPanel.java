@@ -54,7 +54,7 @@ public class MapPanel extends JPanel
 				g.drawImage(image, x + c.getPosX() * 34 + 2, y + c.getPosY() * 34 + 2, 32, 32, null);
 			}*/
 			
-			if (!isEmpty(c.getCoucheTwo().getImage()) || (frame.getSelectedLayerIndex() != 1 && frame.getSelectedLayerIndex() != 2))
+			if (!isEmpty(c.getCoucheTwo().getImage()) && frame.getSelectedLayerIndex() >= 1)
 			{
 				g.drawImage(c.getCoucheTwo().getImage(), x + c.getPosX() * 34 + 2, y + c.getPosY() * 34 + 2, 32, 32, null);
 			}
@@ -64,7 +64,7 @@ public class MapPanel extends JPanel
 				g.drawImage(image, x + c.getPosX() * 34 + 2, y + c.getPosY() * 34 + 2, 32, 32, null);
 			}*/
 			
-			if (!isEmpty(c.getCoucheThree().getImage()) || frame.getSelectedLayerIndex() != 2)
+			if (!isEmpty(c.getCoucheThree().getImage()) && frame.getSelectedLayerIndex() == 2)
 			{
 				g.drawImage(c.getCoucheThree().getImage(), x + c.getPosX() * 34 + 2, y + c.getPosY() * 34 + 2, 32, 32, null);
 			}
