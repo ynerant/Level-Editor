@@ -3,6 +3,7 @@
  */
 package galaxyoyo.gameengine.frame;
 
+import galaxyoyo.gameengine.frame.listeners.ChangeLAFListener;
 import galaxyoyo.gameengine.frame.listeners.CreateMapListener;
 import galaxyoyo.gameengine.frame.listeners.OpenMapListener;
 
@@ -44,9 +45,14 @@ public class MainFrame extends JFrame
 	
 	private JMenuBar menuBar = new JMenuBar();
 	private JMenu fichier = new JMenu("Fichier");
+	private JMenu display = new JMenu("Affichage");
 	private JMenu editMaps = new JMenu("Cartes");
+	private JMenu changeLAF = new JMenu("Modfier l'apparence");
 	private JMenuItem createMap = new JMenuItem("Cr\u00e9er");
 	private JMenuItem openMap = new JMenuItem("Ouvrir");
+	private JMenuItem systemLAF = new JMenuItem("Apparence syst\u00e8me");
+	private JMenuItem javaLAF = new JMenuItem("Apparence Java");
+	private JMenuItem darkLAF = new JMenuItem("Apparence sombre");
 
 	/**
 	 * Constructeur
@@ -64,6 +70,7 @@ public class MainFrame extends JFrame
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		fichier.setMnemonic(KeyEvent.VK_F + KeyEvent.ALT_DOWN_MASK);
+		display.setMnemonic(KeyEvent.VK_A + KeyEvent.ALT_DOWN_MASK);
 		
 		createMap.addActionListener(new CreateMapListener());
 		editMaps.add(createMap);
@@ -72,7 +79,17 @@ public class MainFrame extends JFrame
 		
 		fichier.add(editMaps);
 		
+		systemLAF.addActionListener(new ChangeLAFListener(systemLAF, this));
+		changeLAF.add(systemLAF);
+		javaLAF.addActionListener(new ChangeLAFListener(javaLAF, this));
+		changeLAF.add(javaLAF);
+		darkLAF.addActionListener(new ChangeLAFListener(darkLAF, this));
+		changeLAF.add(darkLAF);
+		
+		display.add(changeLAF);
+		
 		menuBar.add(fichier);
+		menuBar.add(display);
 		
 		this.setJMenuBar(menuBar);
 	}
