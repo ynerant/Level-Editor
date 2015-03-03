@@ -22,6 +22,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
@@ -66,6 +67,17 @@ public class Main
 		System.setProperty("sun.java2d.noddraw", "true");
 		
 		Locale.setDefault(Locale.FRANCE);
+		
+		try
+		{
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		}
+		catch (Exception e)
+		{
+			new ExceptionInInitializerError("Erreur lors du changement de 'look and feel'").printStackTrace();
+			System.err.print("Caused by ");
+			e.printStackTrace();
+		}
 		
 		try
 		{
