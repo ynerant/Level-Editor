@@ -217,7 +217,6 @@ public class Main
 				if (baseWidthStr == null)
 					return false;
 				baseWidth = Integer.parseInt(baseWidthStr) * 16;
-				JOptionPane.showMessageDialog(null, "NOMBRE : " + baseWidth);
 				if (baseWidth < 0)
 					throw new NumberFormatException();
 				if (baseWidth == 0)
