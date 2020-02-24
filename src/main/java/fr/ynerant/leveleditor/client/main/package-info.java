@@ -2,6 +2,6 @@
  * Ce package comprend uniquement la classe Main, qui lance l'application.
  */
 /**
- * @author galaxyoyo
+ * @author ÿnérant
  */
 package fr.ynerant.leveleditor.client.main;

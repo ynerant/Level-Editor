@@ -1,5 +1,5 @@
 /**
- * @author galaxyoyo
+ * @author ÿnérant
  */
 package fr.ynerant.leveleditor.frame.listeners;
 
@@ -10,7 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * @author galaxyoyo
+ * @author ÿnérant
  */
 public class CreateMapListener implements ActionListener
 {

@@ -1,5 +1,5 @@
 /**
- * @author galaxyoyo
+ * @author ÿnérant
  */
 package fr.ynerant.leveleditor.client.main;
 
@@ -36,7 +36,7 @@ import org.apache.logging.log4j.core.layout.PatternLayout;
 
 /**
  * Class principale qui lance le jeu
- * @author galaxyoyo
+ * @author ÿnérant
  * @see #main(String...)
  */
 public class Main

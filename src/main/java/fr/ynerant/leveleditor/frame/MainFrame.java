@@ -1,5 +1,5 @@
 /**
- * @author galaxyoyo
+ * @author ÿnérant
  */
 package fr.ynerant.leveleditor.frame;
 
@@ -21,7 +21,7 @@ import org.apache.logging.log4j.core.Logger;
 
 /**
  * Fen&ecirc;tre principale du jeu
- * @author galaxyoyo
+ * @author ÿnérant
  */
 public class MainFrame extends JFrame
 {
@@ -59,6 +59,7 @@ public class MainFrame extends JFrame
 	 * Constructeur
 	 * @see Main#launchFrame()
 	 */
+	@SuppressWarnings("JavadocReference")
 	private MainFrame()
 	{
 		super ();
