@@ -1,2 +1,3 @@
-# Alice Game Engine
-_by galaxyoyo_
+# Level Editor
+
+_by ÿnérant_
