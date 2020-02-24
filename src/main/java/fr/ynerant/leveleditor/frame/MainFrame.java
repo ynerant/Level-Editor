@@ -62,7 +62,7 @@ public class MainFrame extends JFrame {
     private MainFrame() {
         super();
         LOGGER.info("Initialisation de la fen\u00eatre");
-        this.setTitle("Alice Game Engine");
+        this.setTitle("Level Editor");
         this.setPreferredSize(new Dimension(1000, 800));
         this.setSize(800, 700);
         this.setLocationRelativeTo(null);
