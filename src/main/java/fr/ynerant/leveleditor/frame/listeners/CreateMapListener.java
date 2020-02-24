@@ -12,15 +12,13 @@ import java.awt.event.ActionListener;
 /**
  * @author ÿnérant
  */
-public class CreateMapListener implements ActionListener
-{
-	/* !CodeTemplates.overridecomment.nonjd!
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-	 */
-	@Override
-	public void actionPerformed(ActionEvent event)
-	{
-		if (Main.launchEditMode())
-			MainFrame.getInstance().dispose();
-	}
+public class CreateMapListener implements ActionListener {
+    /* !CodeTemplates.overridecomment.nonjd!
+     * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+     */
+    @Override
+    public void actionPerformed(ActionEvent event) {
+        if (Main.launchEditMode())
+            MainFrame.getInstance().dispose();
+    }
 }
