@@ -3,7 +3,4 @@
  *
  * @author ÿnérant
  */
-/**
- * @author ÿnérant
- */
 package fr.ynerant.leveleditor.client.main;

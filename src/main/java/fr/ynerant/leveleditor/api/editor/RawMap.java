@@ -24,7 +24,7 @@ public class RawMap {
         RawMap raw = new RawMap();
         raw.width = map.getWidth();
         raw.height = map.getHeight();
-        raw.cases = new ArrayList<RawCase>();
+        raw.cases = new ArrayList<>();
         for (Case c : map.getAllCases()) {
             RawCase rc = RawCase.create(c);
             raw.cases.add(rc);

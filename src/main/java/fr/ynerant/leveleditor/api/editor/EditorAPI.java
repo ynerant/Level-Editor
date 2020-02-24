@@ -19,7 +19,7 @@ public class EditorAPI {
     private static File LAST_FILE;
 
     public static RawMap toRawMap(int width, int height) {
-        List<RawCase> cases = new ArrayList<RawCase>();
+        List<RawCase> cases = new ArrayList<>();
 
         for (int y = 1; y < height; y += 16) {
             for (int x = 1; x < width; x += 16) {
@@ -48,7 +48,7 @@ public class EditorAPI {
         jfc.setFileHidingEnabled(true);
         jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
         File dir = new File("maps");
-        dir.mkdirs();
+        assert dir.mkdirs();
         jfc.setCurrentDirectory(dir);
 
         return jfc;
@@ -56,7 +56,7 @@ public class EditorAPI {
 
     public static void saveAs(RawMap map) {
         JFileChooser jfc = createJFC();
-        File file = null;
+        File file;
         jfc.showSaveDialog(null);
         file = jfc.getSelectedFile();
 
@@ -83,7 +83,7 @@ public class EditorAPI {
         String json = createGson().toJson(map);
 
         try {
-            file.createNewFile();
+            assert file.createNewFile();
             BufferedOutputStream bos = new BufferedOutputStream(new GZIPOutputStream(new FileOutputStream(file)));
 
             bos.write(json.getBytes(StandardCharsets.UTF_8));
@@ -96,7 +96,7 @@ public class EditorAPI {
 
     public static Map open() {
         JFileChooser jfc = createJFC();
-        File file = null;
+        File file;
 
         jfc.showOpenDialog(null);
         file = jfc.getSelectedFile();
@@ -114,15 +114,14 @@ public class EditorAPI {
         try {
             GZIPInputStream gis = new GZIPInputStream(new BufferedInputStream(new FileInputStream(f)));
             byte[] bytes = new byte[512 * 1024];
-            int count = 0;
-            String text = "";
+            int count;
+            StringBuilder text = new StringBuilder();
             while ((count = gis.read(bytes)) != -1) {
-                text += new String(bytes, 0, count, StandardCharsets.UTF_8);
+                text.append(new String(bytes, 0, count, StandardCharsets.UTF_8));
             }
             gis.close();
-            bytes = null;
 
-            json = text;
+            json = text.toString();
         } catch (IOException e) {
             e.printStackTrace();
         }

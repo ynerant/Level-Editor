@@ -28,7 +28,7 @@ public class MapMouseListener extends MouseAdapter {
 
             int x = panel.getWidth() / 2 - map.getFont().getWidth();
             int y = panel.getHeight() / 2 - map.getFont().getHeight();
-            Case c = null;
+            Case c;
 
             if ((c = map.getCase((event.getX() - x + 2) / 34, (event.getY() - y + 2) / 34)) != null && event.getX() - x >= 2 && event.getY() - y >= 2) {
                 if (getFrame().getSelectedSprite() != null) {

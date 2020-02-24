@@ -20,32 +20,23 @@ public class EditorFrame extends JFrame implements ChangeListener, ActionListene
 
     private final Map map;
 
-    private final JPanel content = new JPanel();
-
-    private final JMenuBar menuBar = new JMenuBar();
-    private final JMenu fichier = new JMenu("Fichier");
-    private final JMenu tools = new JMenu("Outils");
-    private final JMenuItem nouveau = new JMenuItem("Nouveau");
-    private final JMenuItem open = new JMenuItem("Ouvrir");
     private final JMenuItem save = new JMenuItem("Sauvegarder");
     private final JMenuItem saveAs = new JMenuItem("Sauvegarder sous ...");
     private final JMenuItem exit = new JMenuItem("Quitter");
-    private final JMenu selectionMode = new JMenu("Mode de s\u00e9lection");
     private final JRadioButtonMenuItem pen = new JRadioButtonMenuItem("Pinceau");
     private final JRadioButtonMenuItem pot = new JRadioButtonMenuItem("Pot de peinture");
     private final JTabbedPane tabs = new JTabbedPane();
-    private final JPanel tabEvents = new JPanel();
     private final CollidPanel tabColl;
     private final MapPanel mapPanel;
     private final JTabbedPane resources = new JTabbedPane();
     private final JPanel couche1 = new JPanel();
     private final JPanel couche2 = new JPanel();
     private final JPanel couche3 = new JPanel();
-    ButtonGroup group = new ButtonGroup();
+    final ButtonGroup group = new ButtonGroup();
     private SpriteComp selectedSprite;
 
     public EditorFrame(Map map) {
-        super("Alice Game Engine");
+        super("Level Editor");
         this.map = map;
         this.setSize(600, 600);
         this.setPreferredSize(getSize());
@@ -53,17 +44,21 @@ public class EditorFrame extends JFrame implements ChangeListener, ActionListene
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setLocationRelativeTo(null);
         this.addWindowListener(this);
+        JPanel content = new JPanel();
         content.setLayout(new BorderLayout());
         this.setContentPane(content);
         this.setVisible(true);
         this.setVisible(false);
 
+        JMenu fichier = new JMenu("Fichier");
         fichier.setMnemonic(KeyEvent.VK_F + KeyEvent.ALT_DOWN_MASK);
 
+        JMenuItem nouveau = new JMenuItem("Nouveau");
         nouveau.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK, true));
         nouveau.addActionListener(new CreateMapListener());
         fichier.add(nouveau);
 
+        JMenuItem open = new JMenuItem("Ouvrir");
         open.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK, true));
         open.addActionListener(new OpenMapListener());
         fichier.add(open);
@@ -84,6 +79,7 @@ public class EditorFrame extends JFrame implements ChangeListener, ActionListene
         exit.addActionListener(this);
         fichier.add(exit);
 
+        JMenuBar menuBar = new JMenuBar();
         menuBar.add(fichier);
 
         pen.setSelected(true);
@@ -91,9 +87,11 @@ public class EditorFrame extends JFrame implements ChangeListener, ActionListene
         pot.addActionListener(this);
         group.add(pen);
         group.add(pot);
+        JMenu selectionMode = new JMenu("Mode de s\u00e9lection");
         selectionMode.add(pen);
         selectionMode.add(pot);
 
+        JMenu tools = new JMenu("Outils");
         tools.setMnemonic(KeyEvent.VK_O + KeyEvent.ALT_DOWN_MASK);
 
         tools.add(selectionMode);
@@ -118,6 +116,7 @@ public class EditorFrame extends JFrame implements ChangeListener, ActionListene
         scrollCollidMap.getVerticalScrollBar().setUnitIncrement(34);
 
         tabs.addTab("Carte", scrollMap);
+        JPanel tabEvents = new JPanel();
         tabs.addTab("\u00c9vennments", new JScrollPane(tabEvents));
         tabs.addTab("Collisions", scrollCollidMap);
         tabs.addChangeListener(this);

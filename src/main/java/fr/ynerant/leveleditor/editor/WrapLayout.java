@@ -6,16 +6,8 @@ import java.awt.*;
 public class WrapLayout extends FlowLayout {
     private static final long serialVersionUID = 8777237960365591646L;
 
-    public WrapLayout() {
-        super();
-    }
-
     public WrapLayout(int align) {
         super(align);
-    }
-
-    public WrapLayout(int align, int hgap, int vgap) {
-        super(align, hgap, vgap);
     }
 
     @Override

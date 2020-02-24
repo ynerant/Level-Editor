@@ -1,6 +1,3 @@
-/**
- * @author ÿnérant
- */
 package fr.ynerant.leveleditor.frame;
 
 import fr.ynerant.leveleditor.client.main.Main;
@@ -22,8 +19,6 @@ import java.awt.event.KeyEvent;
 public class MainFrame extends JFrame {
     /**
      * ID de s&eacute;rie
-     *
-     * @see {@link JFrame}
      */
     private static final long serialVersionUID = -3168760121879418534L;
 
@@ -40,18 +35,7 @@ public class MainFrame extends JFrame {
      *
      * @see LogManager#getLogger(String)
      */
-    private static Logger LOGGER = (Logger) LogManager.getLogger("MainFrame");
-
-    private JMenuBar menuBar = new JMenuBar();
-    private JMenu fichier = new JMenu("Fichier");
-    private JMenu display = new JMenu("Affichage");
-    private JMenu editMaps = new JMenu("Cartes");
-    private JMenu changeLAF = new JMenu("Modfier l'apparence");
-    private JMenuItem createMap = new JMenuItem("Cr\u00e9er");
-    private JMenuItem openMap = new JMenuItem("Ouvrir");
-    private JMenuItem systemLAF = new JMenuItem("Apparence syst\u00e8me");
-    private JMenuItem javaLAF = new JMenuItem("Apparence Java");
-    private JMenuItem darkLAF = new JMenuItem("Apparence sombre");
+    private static final Logger LOGGER = (Logger) LogManager.getLogger("MainFrame");
 
     /**
      * Constructeur
@@ -69,25 +53,35 @@ public class MainFrame extends JFrame {
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        JMenu fichier = new JMenu("Fichier");
         fichier.setMnemonic(KeyEvent.VK_F + KeyEvent.ALT_DOWN_MASK);
+        JMenu display = new JMenu("Affichage");
         display.setMnemonic(KeyEvent.VK_A + KeyEvent.ALT_DOWN_MASK);
 
+        JMenuItem createMap = new JMenuItem("Cr\u00e9er");
         createMap.addActionListener(new CreateMapListener());
+        JMenu editMaps = new JMenu("Cartes");
         editMaps.add(createMap);
+        JMenuItem openMap = new JMenuItem("Ouvrir");
         openMap.addActionListener(new OpenMapListener());
         editMaps.add(openMap);
 
         fichier.add(editMaps);
 
+        JMenuItem systemLAF = new JMenuItem("Apparence syst\u00e8me");
         systemLAF.addActionListener(new ChangeLAFListener(systemLAF, this));
+        JMenu changeLAF = new JMenu("Modfier l'apparence");
         changeLAF.add(systemLAF);
+        JMenuItem javaLAF = new JMenuItem("Apparence Java");
         javaLAF.addActionListener(new ChangeLAFListener(javaLAF, this));
         changeLAF.add(javaLAF);
+        JMenuItem darkLAF = new JMenuItem("Apparence sombre");
         darkLAF.addActionListener(new ChangeLAFListener(darkLAF, this));
         changeLAF.add(darkLAF);
 
         display.add(changeLAF);
 
+        JMenuBar menuBar = new JMenuBar();
         menuBar.add(fichier);
         menuBar.add(display);
 

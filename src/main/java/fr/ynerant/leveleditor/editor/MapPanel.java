@@ -16,10 +16,6 @@ public class MapPanel extends JPanel {
         this.frame = frame;
     }
 
-    public EditorFrame getFrame() {
-        return frame;
-    }
-
     public Map getMap() {
         return frame.getMap();
     }
@@ -66,6 +62,7 @@ public class MapPanel extends JPanel {
         }
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     private boolean isEmpty(BufferedImage image) {
         int allrgba = 0;
 

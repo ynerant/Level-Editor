@@ -14,13 +14,13 @@ public class Map {
     @Deprecated
     private static List<Case> cases;
     private final EditorFrame frame;
-    private int width;
-    private int height;
-    private java.util.Map<Integer, java.util.Map<Integer, Case>> casesMap = new HashMap<Integer, java.util.Map<Integer, Case>>();
-    private transient BufferedImage font;
+    private final int width;
+    private final int height;
+    private final java.util.Map<Integer, java.util.Map<Integer, Case>> casesMap = new HashMap<>();
+    private final transient BufferedImage font;
 
     public Map(RawMap raw) {
-        cases = new ArrayList<Case>();
+        cases = new ArrayList<>();
         this.width = raw.getWidth();
         this.height = raw.getHeight();
         this.font = raw.getFont();
@@ -49,7 +49,7 @@ public class Map {
     }
 
     public Case getCase(int x, int y) {
-        return casesMap.getOrDefault(x, new HashMap<Integer, Case>()).get(y);
+        return casesMap.getOrDefault(x, new HashMap<>()).get(y);
     }
 
     public void setCase(int x, int y, Case c) {
@@ -60,13 +60,9 @@ public class Map {
         return font;
     }
 
-    public void setFont(BufferedImage font) {
-        this.font = font;
-    }
-
     private void reorganizeMap() {
         for (int i = 0; i < width; ++i) {
-            casesMap.put(i, new HashMap<Integer, Case>());
+            casesMap.put(i, new HashMap<>());
         }
 
         for (Case c : cases) {
@@ -75,7 +71,7 @@ public class Map {
     }
 
     public List<Case> getAllCases() {
-        List<Case> list = new ArrayList<Case>();
+        List<Case> list = new ArrayList<>();
 
         for (java.util.Map<Integer, Case> l : casesMap.values()) {
             list.addAll(l.values());

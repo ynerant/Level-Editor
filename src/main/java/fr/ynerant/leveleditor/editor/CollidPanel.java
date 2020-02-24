@@ -17,10 +17,6 @@ public class CollidPanel extends JPanel {
         this.frame = frame;
     }
 
-    public EditorFrame getFrame() {
-        return frame;
-    }
-
     public Map getMap() {
         return frame.getMap();
     }

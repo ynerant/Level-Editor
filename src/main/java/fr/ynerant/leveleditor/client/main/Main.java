@@ -1,6 +1,3 @@
-/**
- * @author ÿnérant
- */
 package fr.ynerant.leveleditor.client.main;
 
 import fr.ynerant.leveleditor.api.editor.EditorAPI;
@@ -33,15 +30,6 @@ import java.util.Map;
  * @see #main(String...)
  */
 public class Main {
-    /**
-     * Variable disant si le jeu est en d&eacute;bogage ou non. S'active en ins&eacute;rant l'argument --debug dans le lancement.
-     *
-     * @see #isInDebugMode()
-     * @see #main(String...)
-     * @since 0.1-aplha
-     */
-    private static boolean DEBUG;
-
     /**
      * Variable disant si le jeu est lanc&eacute; en d&eacute;veloppement ou non.
      *
@@ -87,7 +75,6 @@ public class Main {
         OptionParser parser = new OptionParser();
 
         OptionSpec<String> edit = parser.accepts("edit", "Lancer l'\u00e9diteur de monde").withOptionalArg();
-        OptionSpec<Boolean> debug = parser.accepts("debug").withOptionalArg().ofType(Boolean.class).defaultsTo(true);
         OptionSpec<String> help = parser.accepts("help", "Affiche ce menu d'aide").withOptionalArg().forHelp();
 
         OptionSet set = parser.parse(args);
@@ -99,14 +86,6 @@ public class Main {
                 e.printStackTrace();
             } finally {
                 System.exit(0);
-            }
-        }
-
-        if (set.has(debug)) {
-            DEBUG = set.valueOf(debug);
-
-            if (DEBUG) {
-                LOGGER.setLevel(Level.ALL);
             }
         }
 
@@ -165,7 +144,6 @@ public class Main {
     /**
      * Permet de lancer l'&eacute;diteur de carte
      *
-     * @return
      * @see #main(String...)
      * @see #launchFrame()
      * @since 0.1-aplha
@@ -187,8 +165,7 @@ public class Main {
                 if (baseWidth == 0)
                     return false;
                 break;
-            } catch (NumberFormatException ex) {
-                continue;
+            } catch (NumberFormatException ignored) {
             }
         }
 
@@ -203,8 +180,7 @@ public class Main {
                 if (baseHeight == 0)
                     return false;
                 break;
-            } catch (NumberFormatException ex) {
-                continue;
+            } catch (NumberFormatException ignored) {
             }
         }
 
@@ -233,17 +209,6 @@ public class Main {
 
         return true;
     }
-
-    /**
-     * Accesseur disant si le jeu est en d&eacute;bogage ou non. S'active en ins&eacute;rant l'argument --debug dans le lancement.
-     *
-     * @see #DEBUG
-     * @since 0.1-aplha
-     */
-    public static boolean isInDebugMode() {
-        return DEBUG;
-    }
-
 
     /**
      * Accesseur disant si le jeu est lanc&eacute; en d&eacute;veloppement ou non.

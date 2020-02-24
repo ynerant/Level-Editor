@@ -1,6 +1,3 @@
-/**
- * @author ÿnérant
- */
 package fr.ynerant.leveleditor.frame.listeners;
 
 import fr.ynerant.leveleditor.client.main.Main;

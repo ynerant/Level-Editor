@@ -8,8 +8,8 @@ import java.awt.*;
 public class SpriteComp extends JComponent {
     private static final long serialVersionUID = -6512257366877053285L;
 
-    private Sprite sprite;
-    private int couche;
+    private final Sprite sprite;
+    private final int couche;
     private boolean selected;
 
     public SpriteComp(Sprite sprite, int couche) {
@@ -28,16 +28,8 @@ public class SpriteComp extends JComponent {
         return sprite;
     }
 
-    public void setSprite(Sprite s) {
-        this.sprite = s;
-    }
-
     public int getCouche() {
         return couche;
-    }
-
-    public void setCouche(int couche) {
-        this.couche = couche;
     }
 
     public boolean isSelected() {
