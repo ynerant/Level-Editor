@@ -8,7 +8,7 @@ public class MobCancer extends Mob {
 
     @Override
     public long getSlowness() {
-        return 200;
+        return 100;
     }
 
     @Override
