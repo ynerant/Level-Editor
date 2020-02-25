@@ -66,15 +66,20 @@ public class GameFrame extends JFrame implements WindowListener {
             if (mobs.isEmpty() && round < 4) {
                 ++round;
                 for (int i = 1; i <= RANDOM.nextInt(16) + 1; ++i) {
-                    Mob mob = new Mob();
+                    Mob mob = Mob.getRandomMob();
                     mob.move(RANDOM.nextInt(getMap().getWidth() / 16), RANDOM.nextInt(getMap().getHeight() / 16));
                     mobs.add(mob);
                 }
             }
 
-            for (Mob mob : mobs) {
-                Sprite s = mob.getSprite();
-                g.drawImage(s.getImage(), SPRITE_SIZE * mob.getX(), SPRITE_SIZE * mob.getY(), SPRITE_SIZE, SPRITE_SIZE, null, null);
+            for (Mob mob : new ArrayList<>(mobs)) {
+                mob.tick();
+                if (mob.getX() < 0 || mob.isDead())
+                    mobs.remove(mob);
+                else {
+                    Sprite s = mob.getSprite();
+                    g.drawImage(s.getImage(), SPRITE_SIZE * mob.getX(), SPRITE_SIZE * mob.getY(), SPRITE_SIZE, SPRITE_SIZE, null, null);
+                }
             }
 
             repaint();

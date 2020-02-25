@@ -7,18 +7,30 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-public class Mob {
+public abstract class Mob {
     private static final Random RANDOM = new Random();
-    private static final List<String> MOB_SPRITES = Arrays.asList("mob1", "mob2", "mobcancer");
     private Sprite sprite;
     private int x;
     private int y;
+    private int hp;
+    private long tickRemains;
 
     public Mob() {
-        this.sprite = SpriteRegister.getCategory(MOB_SPRITES.get(RANDOM.nextInt(3))).getSprites().get(0);
+        this.hp = getMaxHP();
+        this.tickRemains = getSlowness();
     }
 
+    public abstract int getMaxHP();
+
+    public abstract long getSlowness();
+
+    public abstract int getReward();
+
+    public abstract String getName();
+
     public Sprite getSprite() {
+        if (sprite == null)
+            sprite = SpriteRegister.getCategory(getName()).getSprites().get(0);
         return sprite;
     }
 
@@ -35,6 +47,36 @@ public class Mob {
         this.y = y;
     }
 
+    public int getHP() {
+        return hp;
+    }
+
+    public boolean isDead() {
+        return hp <= 0;
+    }
+
+    public void setHP(int hp) {
+        this.hp = hp;
+    }
+
+    public boolean hit() {
+        if (!isDead()) {
+            --this.hp;
+            return true;
+        }
+
+        return false;
+    }
+
+    public void tick() {
+        if (tickRemains > 0)
+            --tickRemains;
+        else {
+            tickRemains = getSlowness();
+            move(getX() - 1, getY());
+        }
+    }
+
     @Override
     public String toString() {
         return "Mob{" +
@@ -42,5 +84,16 @@ public class Mob {
                 ", x=" + x +
                 ", y=" + y +
                 '}';
+    }
+
+    public static Mob getRandomMob() {
+        switch (RANDOM.nextInt(3)) {
+            case 1:
+                return new Mob1();
+            case 2:
+                return new Mob2();
+            default:
+                return new MobCancer();
+        }
     }
 }
