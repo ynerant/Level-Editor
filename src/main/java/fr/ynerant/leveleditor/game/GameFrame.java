@@ -1,5 +1,6 @@
 package fr.ynerant.leveleditor.game;
 
+import fr.ynerant.leveleditor.api.editor.Collision;
 import fr.ynerant.leveleditor.api.editor.RawCase;
 import fr.ynerant.leveleditor.api.editor.RawMap;
 import fr.ynerant.leveleditor.api.editor.sprites.Sprite;
@@ -107,12 +108,25 @@ public class GameFrame extends JFrame {
         return map;
     }
 
+    public RawCase getCase(int x, int y) {
+        for (RawCase c : getMap().getCases()) {
+            if (c.getPosX() == x && c.getPosY() == y)
+                return c;
+        }
+
+        return null;
+    }
+
     public void tick() {
         if (mobs.isEmpty() && round < 4) {
             ++round;
             for (int i = 1; i <= RANDOM.nextInt(16) + 1; ++i) {
                 Mob mob = Mob.getRandomMob();
-                mob.move(RANDOM.nextInt(getMap().getWidth() / 16), RANDOM.nextInt(getMap().getHeight() / 16));
+                do {
+                    mob.move(RANDOM.nextInt(getMap().getWidth() / 16), RANDOM.nextInt(getMap().getHeight() / 16));
+                }
+                while (getCase(mob.getX(), mob.getY()).getCollision() != Collision.ANY);
+                getCase(mob.getX(), mob.getY()).setCollision(Collision.PARTIAL);
                 mobs.add(mob);
             }
         }
@@ -123,7 +137,7 @@ public class GameFrame extends JFrame {
         }
 
         for (Mob mob : new ArrayList<>(mobs)) {
-            mob.tick();
+            mob.tick(this);
             if (mob.getX() < 0 || mob.isDead()) {
                 mobs.remove(mob);
                 if (mob.getX() < 0) {
@@ -139,16 +153,15 @@ public class GameFrame extends JFrame {
             }
         }
 
-        if (round == 4 && mobs.isEmpty()) {
-            winLabel.setForeground(Color.green.darker());
-            winLabel.setText("Vous avez gagné !");
-            return;
-        }
-
         waveLabel.setText("Vague " + round);
         nbMobsLabel.setText(mobs.size() + " mob" + (mobs.size() > 1 ? "s" : "") + " restant" + (mobs.size() > 1 ? "s" : ""));
         hpLabel.setText("Points de vie : " + hp);
         rewardLabel.setText("Butin : " + reward);
+
+        if (round == 4 && mobs.isEmpty()) {
+            winLabel.setForeground(Color.green.darker());
+            winLabel.setText("Vous avez gagné !");
+        }
     }
 
     private class Grid extends JComponent implements MouseListener {
@@ -204,6 +217,11 @@ public class GameFrame extends JFrame {
                     null;
             if (tower == null || tower.getPrice() > reward)
                 return;
+
+            RawCase c = getCase(x, y);
+            if (c == null || c.getCollision() != Collision.ANY)
+                return;
+            c.setCollision(Collision.FULL);
 
             reward -= tower.getPrice();
             towers.add(tower);

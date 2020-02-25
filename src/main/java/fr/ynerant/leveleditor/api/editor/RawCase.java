@@ -53,4 +53,8 @@ public class RawCase {
     public Collision getCollision() {
         return collision;
     }
+
+    public void setCollision(Collision collision) {
+        this.collision = collision;
+    }
 }

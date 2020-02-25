@@ -1,5 +1,7 @@
 package fr.ynerant.leveleditor.game;
 
+import fr.ynerant.leveleditor.api.editor.Collision;
+import fr.ynerant.leveleditor.api.editor.RawCase;
 import fr.ynerant.leveleditor.api.editor.sprites.Sprite;
 import fr.ynerant.leveleditor.api.editor.sprites.SpriteRegister;
 
@@ -66,12 +68,19 @@ public abstract class Mob {
         return false;
     }
 
-    public void tick() {
+    public void tick(GameFrame game) {
         if (tickRemains > 0)
             --tickRemains;
         else {
             tickRemains = getSlowness();
-            move(getX() - 1, getY());
+            RawCase c = game.getCase(getX(), getY());
+            RawCase other = game.getCase(getX() - 1, getY());
+            if (other == null || other.getCollision() == Collision.ANY) {
+                c.setCollision(Collision.ANY);
+                if (other != null)
+                    other.setCollision(Collision.PARTIAL);
+                move(getX() - 1, getY());
+            }
         }
     }
 

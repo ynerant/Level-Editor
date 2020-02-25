@@ -25,7 +25,7 @@ public class NullTower extends Tower {
 
     @Override
     public int getPrice() {
-        return 0;
+        return 5;
     }
 
     @Override
