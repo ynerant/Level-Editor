@@ -4,10 +4,12 @@ import fr.ynerant.leveleditor.editor.Map;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class RawMap {
     private List<RawCase> cases;
+    private java.util.Map<Integer, RawCase> cases_map;
     private int width;
     private int height;
     private transient BufferedImage font;
@@ -34,6 +36,16 @@ public class RawMap {
 
     public List<RawCase> getCases() {
         return cases;
+    }
+
+    public RawCase getCase(int x, int y) {
+        if (cases_map == null) {
+            cases_map = new HashMap<>();
+            for (RawCase c : getCases())
+                cases_map.put(c.getPosY() * width + c.getPosX(), c);
+        }
+
+        return cases_map.get(y * getWidth() + x);
     }
 
     public int getWidth() {

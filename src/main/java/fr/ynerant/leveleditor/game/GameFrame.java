@@ -108,25 +108,15 @@ public class GameFrame extends JFrame {
         return map;
     }
 
-    public RawCase getCase(int x, int y) {
-        for (RawCase c : getMap().getCases()) {
-            if (c.getPosX() == x && c.getPosY() == y)
-                return c;
-        }
-
-        return null;
-    }
-
     public void tick() {
         if (mobs.isEmpty() && round < 4) {
             ++round;
             for (int i = 1; i <= RANDOM.nextInt(16) + 1; ++i) {
                 Mob mob = Mob.getRandomMob();
-                do {
+                do
                     mob.move(RANDOM.nextInt(getMap().getWidth() / 16), RANDOM.nextInt(getMap().getHeight() / 16));
-                }
-                while (getCase(mob.getX(), mob.getY()).getCollision() != Collision.ANY);
-                getCase(mob.getX(), mob.getY()).setCollision(Collision.PARTIAL);
+                while (getMap().getCase(mob.getX(), mob.getY()).getCollision() != Collision.ANY);
+                getMap().getCase(mob.getX(), mob.getY()).setCollision(Collision.PARTIAL);
                 mobs.add(mob);
             }
         }
@@ -218,7 +208,7 @@ public class GameFrame extends JFrame {
             if (tower == null || tower.getPrice() > reward)
                 return;
 
-            RawCase c = getCase(x, y);
+            RawCase c = getMap().getCase(x, y);
             if (c == null || c.getCollision() != Collision.ANY)
                 return;
             c.setCollision(Collision.FULL);

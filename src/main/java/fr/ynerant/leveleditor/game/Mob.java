@@ -73,8 +73,8 @@ public abstract class Mob {
             --tickRemains;
         else {
             tickRemains = getSlowness();
-            RawCase c = game.getCase(getX(), getY());
-            RawCase other = game.getCase(getX() - 1, getY());
+            RawCase c = game.getMap().getCase(getX(), getY());
+            RawCase other = game.getMap().getCase(getX() - 1, getY());
             if (other == null || other.getCollision() == Collision.ANY) {
                 c.setCollision(Collision.ANY);
                 if (other != null)
