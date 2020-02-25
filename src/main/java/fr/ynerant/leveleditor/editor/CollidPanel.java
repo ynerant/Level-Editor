@@ -69,7 +69,7 @@ public class CollidPanel extends JPanel {
         }
     }
 
-    private boolean isEmpty(BufferedImage image) {
+    public static boolean isEmpty(BufferedImage image) {
         int allrgba = 0;
 
         for (int x = 0; x < image.getWidth(); ++x) {

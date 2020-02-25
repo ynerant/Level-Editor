@@ -1,6 +1,8 @@
 package fr.ynerant.leveleditor.frame;
 
+import fr.ynerant.leveleditor.api.editor.EditorAPI;
 import fr.ynerant.leveleditor.client.main.Main;
+import fr.ynerant.leveleditor.editor.EditorFrame;
 import fr.ynerant.leveleditor.frame.listeners.ChangeLAFListener;
 import fr.ynerant.leveleditor.frame.listeners.CreateMapListener;
 import fr.ynerant.leveleditor.frame.listeners.OpenMapListener;
@@ -9,6 +11,8 @@ import org.apache.logging.log4j.core.Logger;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
 /**
@@ -86,6 +90,16 @@ public class MainFrame extends JFrame {
         menuBar.add(display);
 
         this.setJMenuBar(menuBar);
+
+        JButton start = new JButton("Commencer la partie !");
+        start.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                if (Main.launchGameMode())
+                    getInstance().dispose();
+            }
+        });
+        this.setContentPane(start);
     }
 
     /**

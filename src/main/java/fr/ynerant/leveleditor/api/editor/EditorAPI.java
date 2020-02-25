@@ -109,7 +109,7 @@ public class EditorAPI {
         return open(file);
     }
 
-    public static Map open(File f) {
+    public static RawMap getRawMap(File f) {
         String json = null;
         try {
             GZIPInputStream gis = new GZIPInputStream(new BufferedInputStream(new FileInputStream(f)));
@@ -126,9 +126,11 @@ public class EditorAPI {
             e.printStackTrace();
         }
 
-        RawMap rm = createGson().fromJson(json, RawMap.class);
+        return createGson().fromJson(json, RawMap.class);
+    }
 
-        return open(rm);
+    public static Map open(File f) {
+        return open(getRawMap(f));
     }
 
     public static Map open(RawMap map) {

@@ -4,6 +4,7 @@ import fr.ynerant.leveleditor.api.editor.EditorAPI;
 import fr.ynerant.leveleditor.api.editor.RawMap;
 import fr.ynerant.leveleditor.api.editor.sprites.SpriteRegister;
 import fr.ynerant.leveleditor.frame.MainFrame;
+import fr.ynerant.leveleditor.game.GameFrame;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
@@ -206,6 +207,21 @@ public class Main {
         rm.setFont(image);
 
         EditorAPI.open(rm);
+
+        return true;
+    }
+
+    public static boolean launchGameMode() {
+        System.out.println("Lancement du jeu ...");
+        JFileChooser jfc = EditorAPI.createJFC();
+        jfc.showOpenDialog(MainFrame.getInstance());
+        if (jfc.getSelectedFile() == null)
+            return false;
+
+        RawMap map = EditorAPI.getRawMap(jfc.getSelectedFile());
+        System.out.println(map);
+
+        new GameFrame(map);
 
         return true;
     }
