@@ -38,6 +38,41 @@ public class GameFrame extends JFrame implements WindowListener {
 
         setVisible(true);
 
+        new Thread(() -> {
+            while (true) {
+                if (mobs.isEmpty() && round < 4) {
+                    ++round;
+                    for (int i = 1; i <= RANDOM.nextInt(16) + 1; ++i) {
+                        Mob mob = Mob.getRandomMob();
+                        mob.move(RANDOM.nextInt(getMap().getWidth() / 16), RANDOM.nextInt(getMap().getHeight() / 16));
+                        mobs.add(mob);
+                    }
+                }
+
+                for (Tower tower : towers) {
+                    for (Mob mob : tower.filterDetectedMobs(mobs))
+                        mob.hit();
+                }
+
+                for (Mob mob : new ArrayList<>(mobs)) {
+                    mob.tick();
+                    if (mob.getX() < 0 || mob.isDead()) {
+                        mobs.remove(mob);
+                        if (mob.getX() < 0)
+                            --hp;
+                        else
+                            reward += mob.getReward();
+                    }
+
+                    try {
+                        Thread.sleep(20L);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
+
         repaint();
     }
 
@@ -66,33 +101,9 @@ public class GameFrame extends JFrame implements WindowListener {
                     g.drawImage(s3.getImage(), SPRITE_SIZE * c.getPosX(), SPRITE_SIZE * c.getPosY(), SPRITE_SIZE, SPRITE_SIZE, null, null);
             }
 
-            if (mobs.isEmpty() && round < 4) {
-                ++round;
-                for (int i = 1; i <= RANDOM.nextInt(16) + 1; ++i) {
-                    Mob mob = Mob.getRandomMob();
-                    mob.move(RANDOM.nextInt(getMap().getWidth() / 16), RANDOM.nextInt(getMap().getHeight() / 16));
-                    mobs.add(mob);
-                }
-            }
-
-            for (Tower tower : towers) {
-                for (Mob mob : tower.filterDetectedMobs(mobs))
-                    mob.hit();
-            }
-
             for (Mob mob : new ArrayList<>(mobs)) {
-                mob.tick();
-                if (mob.getX() < 0 || mob.isDead()) {
-                    mobs.remove(mob);
-                    if (mob.getX() < 0)
-                        --hp;
-                    else
-                        reward += mob.getReward();
-                }
-                else {
-                    Sprite s = mob.getSprite();
-                    g.drawImage(s.getImage(), SPRITE_SIZE * mob.getX(), SPRITE_SIZE * mob.getY(), SPRITE_SIZE, SPRITE_SIZE, null, null);
-                }
+                Sprite s = mob.getSprite();
+                g.drawImage(s.getImage(), SPRITE_SIZE * mob.getX(), SPRITE_SIZE * mob.getY(), SPRITE_SIZE, SPRITE_SIZE, null, null);
             }
 
             repaint();

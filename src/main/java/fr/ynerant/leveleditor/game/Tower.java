@@ -31,7 +31,7 @@ public abstract class Tower {
         }
         else {
             remainingTicks = getPeriod();
-            return filterDetectedMobs(mobs);
+            return _filterDetectedMobs(mobs);
         }
     }
 
