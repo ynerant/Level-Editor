@@ -34,7 +34,8 @@ public class BasicTower extends Tower {
         List<Mob> filtered = new ArrayList<>();
 
         for (Mob mob : mobs) {
-            if (mob.getX() == getX() || mob.getY() == getY())
+            if ((mob.getX() == getX() || mob.getY() == getY())
+                    && Math.abs(mob.getX() - getX()) <= 3 && Math.abs(mob.getY() - getY()) <= 3)
                 filtered.add(mob);
         }
 
