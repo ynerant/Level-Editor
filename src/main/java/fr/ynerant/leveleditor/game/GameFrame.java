@@ -8,6 +8,10 @@ import fr.ynerant.leveleditor.editor.CollidPanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Random;
@@ -71,7 +75,7 @@ public class GameFrame extends JFrame {
         setVisible(true);
 
         new Thread(() -> {
-            while (hp > 0 && round < 4) {
+            while (hp > 0 && (round < 4 || !mobs.isEmpty())) {
                 tick();
 
                 try {
@@ -99,12 +103,6 @@ public class GameFrame extends JFrame {
             }
         }
 
-        if (round == 4 && mobs.isEmpty()) {
-            winLabel.setForeground(Color.green.darker());
-            winLabel.setText("Vous avez gagné !");
-            return;
-        }
-
         for (Tower tower : towers) {
             for (Mob mob : tower.filterDetectedMobs(mobs))
                 mob.hit();
@@ -127,13 +125,23 @@ public class GameFrame extends JFrame {
             }
         }
 
+        if (round == 4 && mobs.isEmpty()) {
+            winLabel.setForeground(Color.green.darker());
+            winLabel.setText("Vous avez gagné !");
+            return;
+        }
+
         waveLabel.setText("Vague " + round);
         nbMobsLabel.setText(mobs.size() + " mob" + (mobs.size() > 1 ? "s" : "") + " restant" + (mobs.size() > 1 ? "s" : ""));
         hpLabel.setText("Points de vie : " + hp);
         rewardLabel.setText("Butin : " + reward);
     }
 
-    private class Grid extends JComponent {
+    private class Grid extends JComponent implements MouseListener {
+        public Grid() {
+            addMouseListener(this);
+        }
+
         @Override
         protected void paintComponent(Graphics _g) {
             Graphics2D g = (Graphics2D) _g;
@@ -159,7 +167,29 @@ public class GameFrame extends JFrame {
                 g.drawImage(s.getImage(), SPRITE_SIZE * mob.getX(), SPRITE_SIZE * mob.getY(), SPRITE_SIZE, SPRITE_SIZE, null, null);
             }
 
+            for (Tower tower : towers) {
+                g.setColor(Color.blue);
+                g.fillRect(SPRITE_SIZE * tower.getX(), SPRITE_SIZE * tower.getY(), SPRITE_SIZE, SPRITE_SIZE);
+            }
+
             repaint();
         }
+
+        @Override
+        public void mouseClicked(MouseEvent event) {}
+
+        @Override
+        public void mousePressed(MouseEvent event) {}
+
+        @Override
+        public void mouseReleased(MouseEvent event) {
+            towers.add(new BasicTower(event.getX() / 32, event.getY() / 32));
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent event) {}
+
+        @Override
+        public void mouseExited(MouseEvent event) {}
     }
 }
