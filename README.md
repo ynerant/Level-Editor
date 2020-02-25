@@ -1,3 +1,8 @@
+---
+title: Projet programmation 2
+author: Yohann D'ANELLO
+---
+
 # The Game
 
 ## Présentation globale
@@ -37,4 +42,35 @@ réalisés. Si le mob n'a plus de point de vie, il disparaît.
 Si un mob doit se déplacer, un chemin est calculé jusqu'au bord de la fenêtre via un parcours en largeur. Un système
 de collisions est en effet géré, empêchant 2 mobs ou tours de se trouver au même endroit. Si un tel chemin existe, alors
 le mob avance d'une case selon ce chemin. Sinon, il reste sur place.
+
+## Implémentation
+
+Le projet est intégralement fait en Java. On ne détaillera pas ici la partie éditeur de niveau, bien qu'elle soit
+conséquente.
+
+Une fois que l'utilisateur a choisi la carte à utilisateur via un menu de sélection, le jeu se lance dans une fenêtre
+distincte, gérée par la classe `fr.ynerant.leveleditor.game.GameFrame`.
+
+Le coeur du jeu est géré dans un Thread en boucle infinie, une boucle attendant 50 ms avant de passer à l'itération suivante.
+Le fonctionnement est détaillé plus haut.
+
+L'affichage du jeu est quant à lui géré dans un `JPanel` dédié, avec la fonction `paintComponent` réécrite.
+Dès que le panel est paint, on demande à ce qu'il soit repaint pour s'assurer que l'affichage est correct.
+
+Dans l'ordre, on dessine les sprites de la carte (couche 1, couche 2 puis couche 3), puis les différents mobs et les tours
+via leurs sprites.
+
+La carte est composée d'une longueur, d'une largeur et de la liste des cases.
+
+Une case est une position et 3 sprites (couche 1, couche 2, couche 3).
+
+Un sprite est une image de taille 16x16, qui contient des informations sur l'endroit où le chercher.
+
+Un Mob est une classe abstraite contenant des informations abstraites (détaillées plus haut). Un type de mob sera donc
+une classe héritant de `Mob`, telles que `Mob1`, `Mob2` et `MobCancer`.
+
+Il en est de même pour les tours, avec `BasicTower`, `NullTower` et `AutoTower`.
+
+L'intérêt de l'héritage par rapport à un type donné à une classe Mob (paramètres donnés dans une enumération `MobType`
+par exemple) est de pouvoir mieux personnaliser les fonctions, par exemple en imaginant des dégâts aléatoires.
 
