@@ -19,7 +19,10 @@ public class GameFrame extends JFrame implements WindowListener {
     private final RawMap map;
 
     private int round = 0;
+    private int hp = 20;
+    private int reward = 20;
     private List<Mob> mobs = new ArrayList<>();
+    private List<Tower> towers = new ArrayList<>();
 
     public GameFrame(RawMap map) {
         super("Jeu");
@@ -72,10 +75,20 @@ public class GameFrame extends JFrame implements WindowListener {
                 }
             }
 
+            for (Tower tower : towers) {
+                for (Mob mob : tower.filterDetectedMobs(mobs))
+                    mob.hit();
+            }
+
             for (Mob mob : new ArrayList<>(mobs)) {
                 mob.tick();
-                if (mob.getX() < 0 || mob.isDead())
+                if (mob.getX() < 0 || mob.isDead()) {
                     mobs.remove(mob);
+                    if (mob.getX() < 0)
+                        --hp;
+                    else
+                        reward += mob.getReward();
+                }
                 else {
                     Sprite s = mob.getSprite();
                     g.drawImage(s.getImage(), SPRITE_SIZE * mob.getX(), SPRITE_SIZE * mob.getY(), SPRITE_SIZE, SPRITE_SIZE, null, null);

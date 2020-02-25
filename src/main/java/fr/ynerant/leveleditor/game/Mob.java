@@ -3,8 +3,6 @@ package fr.ynerant.leveleditor.game;
 import fr.ynerant.leveleditor.api.editor.sprites.Sprite;
 import fr.ynerant.leveleditor.api.editor.sprites.SpriteRegister;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
 
 public abstract class Mob {
