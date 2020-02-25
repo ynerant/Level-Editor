@@ -74,7 +74,6 @@ public abstract class Mob {
         else {
             tickRemains = getSlowness();
             RawCase current = game.getMap().getCase(getX(), getY());
-            current.setCollision(Collision.ANY);
 
             if (current.getPosX() == 0) {
                 move(-1, getY());
@@ -103,10 +102,7 @@ public abstract class Mob {
                     }
                 }
 
-                if (last == null) {
-                    current.setCollision(Collision.PARTIAL);
-                }
-                else {
+                if (last != null) {
                     while (pred.get(last) != current)
                         last = pred.get(last);
                     move(last.getPosX(), last.getPosY());

@@ -127,6 +127,7 @@ public class GameFrame extends JFrame {
         }
 
         for (Mob mob : new ArrayList<>(mobs)) {
+            getMap().getCase(mob.getX(), mob.getY()).setCollision(Collision.ANY);
             mob.tick(this);
             if (mob.getX() < 0 || mob.isDead()) {
                 mobs.remove(mob);
@@ -141,6 +142,8 @@ public class GameFrame extends JFrame {
                 else
                     reward += mob.getReward();
             }
+            else
+                getMap().getCase(mob.getX(), mob.getY()).setCollision(Collision.PARTIAL);
         }
 
         waveLabel.setText("Vague " + round);
@@ -187,6 +190,14 @@ public class GameFrame extends JFrame {
             for (Tower tower : towers) {
                 Sprite s = tower.getSprite();
                 g.drawImage(s.getImage(), SPRITE_SIZE * tower.getX(), SPRITE_SIZE * tower.getY(), SPRITE_SIZE, SPRITE_SIZE, null, null);
+            }
+
+            for (RawCase c : getMap().getCases()) {
+                if (c.getCollision() == Collision.ANY)
+                    continue;
+
+                g.setColor(new Color(0x10000000));
+                g.fillRect(SPRITE_SIZE * c.getPosX(), SPRITE_SIZE * c.getPosY(), SPRITE_SIZE, SPRITE_SIZE);
             }
 
             repaint();
