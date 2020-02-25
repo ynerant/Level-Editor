@@ -26,4 +26,8 @@ public class Category {
         return sprites;
     }
 
+    @Override
+    public String toString() {
+        return name;
+    }
 }

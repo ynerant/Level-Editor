@@ -92,7 +92,7 @@ public class Main {
 
         try {
             SpriteRegister.unpack();
-        } catch (IOException | URISyntaxException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -219,7 +219,6 @@ public class Main {
             return false;
 
         RawMap map = EditorAPI.getRawMap(jfc.getSelectedFile());
-        System.out.println(map);
 
         new GameFrame(map);
 

@@ -19,32 +19,27 @@ public class SpriteRegister {
     private static Map<String, List<List<Double>>> nameToCoords;
     private static final Map<String, Category> sprites = new HashMap<>();
 
-    public static void unpack() throws IOException, URISyntaxException {
-        if (Main.isInDevelopmentMode()) {
-            File dir = new File(SpriteRegister.class.getResource("/assets").toURI());
-            unpackDir(dir);
-        } else {
-            @SuppressWarnings("deprecation")
-            String path = URLDecoder.decode(SpriteRegister.class.getProtectionDomain().getCodeSource().getLocation().getPath());
-            path = path.substring(1);
-            File jarFile = new File(path);
+    public static void unpack() throws IOException {
+        @SuppressWarnings("deprecation")
+        String path = URLDecoder.decode(SpriteRegister.class.getProtectionDomain().getCodeSource().getLocation().getPath());
+        path = path.substring(1);
+        File jarFile = new File(path);
 
-            if (jarFile.isFile()) {
-                JarFile jar = new JarFile(jarFile);
-                Enumeration<JarEntry> entries = jar.entries();
-                while (entries.hasMoreElements()) {
-                    JarEntry je = entries.nextElement();
-                    String name = je.getName();
-                    if (name.startsWith("assets/")) {
-                        File f = new File(name);
-                        if (name.endsWith("/"))
-                            assert f.mkdirs();
-                        else if (!f.isFile())
-                            Files.copy(jar.getInputStream(je), Paths.get(f.toURI()));
-                    }
+        if (jarFile.isFile()) {
+            JarFile jar = new JarFile(jarFile);
+            Enumeration<JarEntry> entries = jar.entries();
+            while (entries.hasMoreElements()) {
+                JarEntry je = entries.nextElement();
+                String name = je.getName();
+                if (name.startsWith("assets/")) {
+                    File f = new File(name);
+                    if (name.endsWith("/"))
+                        assert f.mkdirs();
+                    else if (!f.isFile())
+                        Files.copy(jar.getInputStream(je), Paths.get(f.toURI()));
                 }
-                jar.close();
             }
+            jar.close();
         }
     }
 
@@ -86,7 +81,6 @@ public class SpriteRegister {
 
                 for (String key : nameToCoords.keySet()) {
                     try {
-
                         BufferedInputStream is = new BufferedInputStream(new FileInputStream(new File(f, key + ".png")));
                         BufferedImage img = ImageIO.read(is);
                         Category cat = Category.create(key, new ArrayList<>());

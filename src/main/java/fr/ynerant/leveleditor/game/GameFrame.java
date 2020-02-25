@@ -10,9 +10,16 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Random;
 
 public class GameFrame extends JFrame implements WindowListener {
+    private final Random RANDOM = new Random();
     private final RawMap map;
+
+    private int round = 0;
+    private List<Mob> mobs = new ArrayList<>();
 
     public GameFrame(RawMap map) {
         super("Jeu");
@@ -55,6 +62,22 @@ public class GameFrame extends JFrame implements WindowListener {
                 if (!CollidPanel.isEmpty(s3.getImage()))
                     g.drawImage(s3.getImage(), SPRITE_SIZE * c.getPosX(), SPRITE_SIZE * c.getPosY(), SPRITE_SIZE, SPRITE_SIZE, null, null);
             }
+
+            if (mobs.isEmpty() && round < 4) {
+                ++round;
+                for (int i = 1; i <= RANDOM.nextInt(16) + 1; ++i) {
+                    Mob mob = new Mob();
+                    mob.move(RANDOM.nextInt(getMap().getWidth() / 16), RANDOM.nextInt(getMap().getHeight() / 16));
+                    mobs.add(mob);
+                }
+            }
+
+            for (Mob mob : mobs) {
+                Sprite s = mob.getSprite();
+                g.drawImage(s.getImage(), SPRITE_SIZE * mob.getX(), SPRITE_SIZE * mob.getY(), SPRITE_SIZE, SPRITE_SIZE, null, null);
+            }
+
+            repaint();
         }
     }
 
