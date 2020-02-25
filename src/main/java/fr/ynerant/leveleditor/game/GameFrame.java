@@ -8,8 +8,6 @@ import fr.ynerant.leveleditor.editor.CollidPanel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
@@ -26,6 +24,7 @@ public class GameFrame extends JFrame {
     private List<Mob> mobs = new ArrayList<>();
     private List<Tower> towers = new ArrayList<>();
 
+    private JRadioButton basicTower, nullTower, autoTower;
     private JLabel waveLabel;
     private JLabel nbMobsLabel;
     private JLabel hpLabel;
@@ -47,7 +46,7 @@ public class GameFrame extends JFrame {
         this.setContentPane(root);
 
         JPanel pane = new JPanel();
-        pane.setLayout(new GridLayout(5, 1));
+        pane.setLayout(new GridLayout(8, 1));
         root.add(pane, BorderLayout.SOUTH);
 
         Grid grid = new Grid();
@@ -56,6 +55,21 @@ public class GameFrame extends JFrame {
         grid.setMinimumSize(grid.getSize());
         grid.setMaximumSize(grid.getSize());
         root.add(grid, BorderLayout.CENTER);
+
+        ButtonGroup towerSelect = new ButtonGroup();
+
+        basicTower = new JRadioButton("Tour basique (" + new BasicTower(0, 0).getPrice() + " pièces)");
+        basicTower.setSelected(true);
+        towerSelect.add(basicTower);
+        pane.add(basicTower);
+
+        nullTower = new JRadioButton("Tour nulle (" + new NullTower(0, 0).getPrice() + " pièces)");
+        towerSelect.add(nullTower);
+        pane.add(nullTower);
+
+        autoTower = new JRadioButton("Tour automatique (" + new AutoTower(0, 0).getPrice() + " pièces)");
+        towerSelect.add(autoTower);
+        pane.add(autoTower);
 
         waveLabel = new JLabel();
         pane.add(waveLabel);
@@ -183,7 +197,16 @@ public class GameFrame extends JFrame {
 
         @Override
         public void mouseReleased(MouseEvent event) {
-            towers.add(new BasicTower(event.getX() / 32, event.getY() / 32));
+            int x = event.getX() / 32, y = event.getY() / 32;
+            Tower tower = basicTower.isSelected() ? new BasicTower(x, y) :
+                    nullTower.isSelected() ? new NullTower(x, y) :
+                    autoTower.isSelected() ? new AutoTower(x, y) :
+                    null;
+            if (tower == null || tower.getPrice() > reward)
+                return;
+
+            reward -= tower.getPrice();
+            towers.add(tower);
         }
 
         @Override
