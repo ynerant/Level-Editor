@@ -59,9 +59,9 @@ public abstract class Mob {
         this.hp = hp;
     }
 
-    public boolean hit() {
+    public boolean hit(int damage) {
         if (!isDead()) {
-            --this.hp;
+            this.hp -= damage;
             return true;
         }
 

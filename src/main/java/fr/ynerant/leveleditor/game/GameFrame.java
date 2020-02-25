@@ -123,7 +123,7 @@ public class GameFrame extends JFrame {
 
         for (Tower tower : towers) {
             for (Mob mob : tower.filterDetectedMobs(mobs))
-                mob.hit();
+                mob.hit(tower.getDamagePerShot());
         }
 
         for (Mob mob : new ArrayList<>(mobs)) {
@@ -190,14 +190,6 @@ public class GameFrame extends JFrame {
             for (Tower tower : towers) {
                 Sprite s = tower.getSprite();
                 g.drawImage(s.getImage(), SPRITE_SIZE * tower.getX(), SPRITE_SIZE * tower.getY(), SPRITE_SIZE, SPRITE_SIZE, null, null);
-            }
-
-            for (RawCase c : getMap().getCases()) {
-                if (c.getCollision() == Collision.ANY)
-                    continue;
-
-                g.setColor(new Color(0x10000000));
-                g.fillRect(SPRITE_SIZE * c.getPosX(), SPRITE_SIZE * c.getPosY(), SPRITE_SIZE, SPRITE_SIZE);
             }
 
             repaint();
