@@ -5,7 +5,7 @@ import fr.ynerant.leveleditor.api.editor.RawCase;
 import fr.ynerant.leveleditor.api.editor.sprites.Sprite;
 import fr.ynerant.leveleditor.api.editor.sprites.SpriteRegister;
 
-import java.util.Random;
+import java.util.*;
 
 public abstract class Mob {
     private static final Random RANDOM = new Random();
@@ -73,13 +73,44 @@ public abstract class Mob {
             --tickRemains;
         else {
             tickRemains = getSlowness();
-            RawCase c = game.getMap().getCase(getX(), getY());
-            RawCase other = game.getMap().getCase(getX() - 1, getY());
-            if (other == null || other.getCollision() == Collision.ANY) {
-                c.setCollision(Collision.ANY);
-                if (other != null)
-                    other.setCollision(Collision.PARTIAL);
-                move(getX() - 1, getY());
+            RawCase current = game.getMap().getCase(getX(), getY());
+            current.setCollision(Collision.ANY);
+
+            if (current.getPosX() == 0) {
+                move(-1, getY());
+                return;
+            }
+
+            List<RawCase> visited = new ArrayList<>();
+            Queue<RawCase> queue = new ArrayDeque<>();
+            Map<RawCase, RawCase> pred = new HashMap<>();
+            RawCase last = null;
+            queue.add(current);
+            while (!queue.isEmpty()) {
+                RawCase visiting = queue.poll();
+                visited.add(visiting);
+                for (RawCase neighbour : game.getMap().getNeighbours(visiting)) {
+                    if (visited.contains(neighbour))
+                        continue;
+
+                    pred.put(neighbour, visiting);
+                    queue.add(neighbour);
+
+                    if (neighbour.getPosX() == 0) {
+                        last = neighbour;
+                        queue.clear();
+                        break;
+                    }
+                }
+
+                if (last == null) {
+                    current.setCollision(Collision.PARTIAL);
+                }
+                else {
+                    while (pred.get(last) != current)
+                        last = pred.get(last);
+                    move(last.getPosX(), last.getPosY());
+                }
             }
         }
     }

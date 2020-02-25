@@ -4,8 +4,10 @@ import fr.ynerant.leveleditor.editor.Map;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class RawMap {
     private List<RawCase> cases;
@@ -46,6 +48,15 @@ public class RawMap {
         }
 
         return cases_map.get(y * getWidth() + x);
+    }
+
+    public Collection<RawCase> getNeighbours(RawCase c) {
+        List<RawCase> list = new ArrayList<>();
+        list.add(getCase(c.getPosX() - 1, c.getPosY()));
+        list.add(getCase(c.getPosX(), c.getPosY() - 1));
+        list.add(getCase(c.getPosX() + 1, c.getPosY()));
+        list.add(getCase(c.getPosX(), c.getPosY() + 1));
+        return list.stream().filter(_c -> _c != null && _c.getCollision() == Collision.ANY).collect(Collectors.toList());
     }
 
     public int getWidth() {
