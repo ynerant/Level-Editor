@@ -9,6 +9,11 @@ public class NullTower extends Tower {
     }
 
     @Override
+    public String getName() {
+        return "nulltower";
+    }
+
+    @Override
     public int getDamagePerShot() {
         return Integer.MAX_VALUE;
     }

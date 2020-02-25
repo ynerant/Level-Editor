@@ -2,9 +2,14 @@ package fr.ynerant.leveleditor.game;
 
 import java.util.Collection;
 
-public class SuperTower extends Tower {
-    public SuperTower(int x, int y) {
+public class AutoTower extends Tower {
+    public AutoTower(int x, int y) {
         super(x, y);
+    }
+
+    @Override
+    public String getName() {
+        return "autotower";
     }
 
     @Override

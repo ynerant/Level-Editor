@@ -1,20 +1,31 @@
 package fr.ynerant.leveleditor.game;
 
+import fr.ynerant.leveleditor.api.editor.sprites.Sprite;
+import fr.ynerant.leveleditor.api.editor.sprites.SpriteRegister;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Random;
 
 public abstract class Tower {
+    private Sprite sprite;
     private final int x;
     private final int y;
     private long remainingTicks;
 
     public Tower(int x, int y) {
+        this.sprite = SpriteRegister.getCategory(getName()).getSprites().get(0);
         this.x = x;
         this.y = y;
     }
 
     private static final Random RANDOM = new Random();
+
+    public Sprite getSprite() {
+        return sprite;
+    }
+
+    public abstract String getName();
 
     public abstract int getDamagePerShot();
 

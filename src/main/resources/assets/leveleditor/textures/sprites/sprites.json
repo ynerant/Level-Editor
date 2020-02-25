@@ -327,5 +327,14 @@
   ],
   "mobcancer": [
     [0, 0]
+  ],
+  "simpletower": [
+    [0, 0]
+  ],
+  "nulltower": [
+    [0, 0]
+  ],
+  "autotower": [
+    [0, 0]
   ]
 }

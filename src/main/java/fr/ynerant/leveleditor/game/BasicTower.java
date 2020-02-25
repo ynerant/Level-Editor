@@ -10,6 +10,11 @@ public class BasicTower extends Tower {
     }
 
     @Override
+    public String getName() {
+        return "basictower";
+    }
+
+    @Override
     public int getDamagePerShot() {
         return 1;
     }

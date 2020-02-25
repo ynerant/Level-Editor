@@ -168,8 +168,8 @@ public class GameFrame extends JFrame {
             }
 
             for (Tower tower : towers) {
-                g.setColor(Color.blue);
-                g.fillRect(SPRITE_SIZE * tower.getX(), SPRITE_SIZE * tower.getY(), SPRITE_SIZE, SPRITE_SIZE);
+                Sprite s = tower.getSprite();
+                g.drawImage(s.getImage(), SPRITE_SIZE * tower.getX(), SPRITE_SIZE * tower.getY(), SPRITE_SIZE, SPRITE_SIZE, null, null);
             }
 
             repaint();
