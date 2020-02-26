@@ -41,9 +41,10 @@ public class SpriteRegister {
                     String name = je.getName();
                     if (name.startsWith("assets/")) {
                         File f = new File(name);
-                        if (name.endsWith("/") && !f.isDirectory())
-                            if (!f.mkdirs())
-                                throw new IOException("Unable to create make dir: " + f);
+                        if (name.endsWith("/")) {
+                            if (!f.mkdirs() && !f.isDirectory())
+                                throw new IOException("Unable to make dir: " + f);
+                        }
                         else if (!f.isFile())
                             Files.copy(jar.getInputStream(je), Paths.get(f.toURI()));
                     }
