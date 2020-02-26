@@ -20,26 +20,36 @@ public class SpriteRegister {
     private static final Map<String, Category> sprites = new HashMap<>();
 
     public static void unpack() throws IOException {
-        @SuppressWarnings("deprecation")
-        String path = URLDecoder.decode(SpriteRegister.class.getProtectionDomain().getCodeSource().getLocation().getPath());
-        path = path.substring(1);
-        File jarFile = new File(path);
-
-        if (jarFile.isFile()) {
-            JarFile jar = new JarFile(jarFile);
-            Enumeration<JarEntry> entries = jar.entries();
-            while (entries.hasMoreElements()) {
-                JarEntry je = entries.nextElement();
-                String name = je.getName();
-                if (name.startsWith("assets/")) {
-                    File f = new File(name);
-                    if (name.endsWith("/"))
-                        assert f.mkdirs();
-                    else if (!f.isFile())
-                        Files.copy(jar.getInputStream(je), Paths.get(f.toURI()));
-                }
+        if (Main.isInDevelopmentMode()) {
+            try {
+                File dir = new File(SpriteRegister.class.getResource("/assets").toURI()).getParentFile();
+                unpackDir(dir);
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
             }
-            jar.close();
+        }
+        else {
+            @SuppressWarnings("deprecation")
+            String path = URLDecoder.decode(SpriteRegister.class.getProtectionDomain().getCodeSource().getLocation().getPath());
+            File jarFile = new File(path);
+
+            if (jarFile.isFile()) {
+                JarFile jar = new JarFile(jarFile);
+                Enumeration<JarEntry> entries = jar.entries();
+                while (entries.hasMoreElements()) {
+                    JarEntry je = entries.nextElement();
+                    String name = je.getName();
+                    if (name.startsWith("assets/")) {
+                        File f = new File(name);
+                        if (name.endsWith("/") && !f.isDirectory())
+                            if (!f.mkdirs())
+                                throw new IOException("Unable to create make dir: " + f);
+                        else if (!f.isFile())
+                            Files.copy(jar.getInputStream(je), Paths.get(f.toURI()));
+                    }
+                }
+                jar.close();
+            }
         }
     }
 
