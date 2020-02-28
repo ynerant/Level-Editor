@@ -116,7 +116,8 @@ public class GameFrame extends JFrame {
     public void tick() {
         if (mobs.isEmpty() && round < 4) {
             ++round;
-            for (int i = 1; i <= RANDOM.nextInt(16) + 1; ++i) {
+            int nb_mobs = round * (RANDOM.nextInt(16) + 1);
+            for (int i = 1; i <= nb_mobs; ++i) {
                 Mob mob = Mob.getRandomMob();
                 do
                     mob.move(RANDOM.nextInt(getMap().getWidth() / 16), RANDOM.nextInt(getMap().getHeight() / 16));
