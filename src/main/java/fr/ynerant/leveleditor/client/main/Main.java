@@ -8,11 +8,6 @@ import fr.ynerant.leveleditor.game.GameFrame;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.core.Logger;
-import org.apache.logging.log4j.core.appender.ConsoleAppender;
-import org.apache.logging.log4j.core.layout.PatternLayout;
 
 import javax.swing.*;
 import java.awt.*;
@@ -65,12 +60,6 @@ public class Main {
             DEV = false;
         }
 
-        Logger LOGGER = (Logger) LogManager.getRootLogger();
-        ConsoleAppender console = ConsoleAppender.newBuilder().setLayout(PatternLayout.newBuilder().withPattern("[%d{dd/MM/yyyy}] [%d{HH:mm:ss}] [%t] [%c] [%p] %m%n").build()).setName("Console").build();
-        console.start();
-        LOGGER.addAppender(console);
-        LOGGER.setLevel(Level.INFO);
-
         checkJava();
 
         OptionParser parser = new OptionParser();
@@ -109,8 +98,8 @@ public class Main {
     private static void checkJava() {
         if (GraphicsEnvironment.isHeadless()) {
             HeadlessException ex = new HeadlessException("Impossible de lancer un jeu sans \u00e9cran !");
-            LogManager.getLogger("JAVAX-SWING").fatal("Cette application est un jeu, sans écran, elle aura du mal \u00e0 tourner ...");
-            LogManager.getLogger("JAVAX-SWING").catching(Level.FATAL, ex);
+            System.err.println("Cette application est un jeu, sans écran, elle aura du mal \u00e0 tourner ...");
+            ex.printStackTrace();
             System.exit(1);
         }
 

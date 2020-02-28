@@ -2,7 +2,6 @@ package fr.ynerant.leveleditor.api.editor.sprites;
 
 import com.google.gson.Gson;
 import fr.ynerant.leveleditor.client.main.Main;
-import org.apache.logging.log4j.LogManager;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -105,7 +104,8 @@ public class SpriteRegister {
 
                         sprites.put(key, cat);
                     } catch (Throwable t) {
-                        LogManager.getLogger("SpriteRegister").fatal("Erreur lors de la lecture du sprite '" + key + "'", t);
+                        System.err.println("Erreur lors de la lecture du sprite '" + key + "'");
+                        t.printStackTrace();
                     }
                 }
             } catch (IOException e) {
