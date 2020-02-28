@@ -27,15 +27,17 @@ public class GameFrame extends JFrame {
     private int round = 0;
     private int hp = 5;
     private int reward = 20;
-    private List<Mob> mobs = new ArrayList<>();
-    private List<Tower> towers = new ArrayList<>();
+    private final List<Mob> mobs = new ArrayList<>();
+    private final List<Tower> towers = new ArrayList<>();
 
-    private JRadioButton basicTower, nullTower, autoTower;
-    private JLabel waveLabel;
-    private JLabel nbMobsLabel;
-    private JLabel hpLabel;
-    private JLabel rewardLabel;
-    private JLabel winLabel;
+    private final JRadioButton basicTower;
+    private final JRadioButton nullTower;
+    private final JRadioButton autoTower;
+    private final JLabel waveLabel;
+    private final JLabel nbMobsLabel;
+    private final JLabel hpLabel;
+    private final JLabel rewardLabel;
+    private final JLabel winLabel;
 
     public GameFrame(RawMap map) {
         super("Jeu");

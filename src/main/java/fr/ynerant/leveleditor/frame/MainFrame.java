@@ -1,18 +1,12 @@
 package fr.ynerant.leveleditor.frame;
 
-import fr.ynerant.leveleditor.api.editor.EditorAPI;
 import fr.ynerant.leveleditor.client.main.Main;
-import fr.ynerant.leveleditor.editor.EditorFrame;
 import fr.ynerant.leveleditor.frame.listeners.ChangeLAFListener;
 import fr.ynerant.leveleditor.frame.listeners.CreateMapListener;
 import fr.ynerant.leveleditor.frame.listeners.OpenMapListener;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.core.Logger;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
 /**
@@ -35,13 +29,6 @@ public class MainFrame extends JFrame {
     private static MainFrame INSTANCE;
 
     /**
-     * Logger de la classe
-     *
-     * @see LogManager#getLogger(String)
-     */
-    private static final Logger LOGGER = (Logger) LogManager.getLogger("MainFrame");
-
-    /**
      * Constructeur
      *
      * @see Main#launchFrame()
@@ -49,7 +36,7 @@ public class MainFrame extends JFrame {
     @SuppressWarnings("JavadocReference")
     private MainFrame() {
         super();
-        LOGGER.info("Initialisation de la fen\u00eatre");
+        System.out.println("Initialisation de la fen\u00eatre");
         this.setTitle("Level Editor");
         this.setPreferredSize(new Dimension(1000, 800));
         this.setSize(800, 700);
@@ -92,12 +79,9 @@ public class MainFrame extends JFrame {
         this.setJMenuBar(menuBar);
 
         JButton start = new JButton("Commencer la partie !");
-        start.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                if (Main.launchGameMode())
-                    getInstance().dispose();
-            }
+        start.addActionListener(actionEvent -> {
+            if (Main.launchGameMode())
+                getInstance().dispose();
         });
         this.setContentPane(start);
     }

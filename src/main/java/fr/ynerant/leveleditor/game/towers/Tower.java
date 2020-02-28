@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.Random;
 
 public abstract class Tower {
-    private Sprite sprite;
+    private final Sprite sprite;
     private final int x;
     private final int y;
     private long remainingTicks;
