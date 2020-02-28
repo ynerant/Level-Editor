@@ -6,6 +6,11 @@ import fr.ynerant.leveleditor.api.editor.RawMap;
 import fr.ynerant.leveleditor.api.editor.sprites.Sprite;
 import fr.ynerant.leveleditor.api.editor.sprites.SpriteRegister;
 import fr.ynerant.leveleditor.editor.CollidPanel;
+import fr.ynerant.leveleditor.game.mobs.Mob;
+import fr.ynerant.leveleditor.game.towers.AutoTower;
+import fr.ynerant.leveleditor.game.towers.BasicTower;
+import fr.ynerant.leveleditor.game.towers.NullTower;
+import fr.ynerant.leveleditor.game.towers.Tower;
 
 import javax.swing.*;
 import java.awt.*;

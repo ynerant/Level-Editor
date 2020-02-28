@@ -1,4 +1,6 @@
-package fr.ynerant.leveleditor.game;
+package fr.ynerant.leveleditor.game.towers;
+
+import fr.ynerant.leveleditor.game.mobs.Mob;
 
 import java.util.Collection;
 

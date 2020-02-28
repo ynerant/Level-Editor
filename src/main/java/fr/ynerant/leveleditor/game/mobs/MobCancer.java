@@ -1,4 +1,4 @@
-package fr.ynerant.leveleditor.game;
+package fr.ynerant.leveleditor.game.mobs;
 
 public class MobCancer extends Mob {
     @Override

@@ -1,23 +1,23 @@
-package fr.ynerant.leveleditor.game;
+package fr.ynerant.leveleditor.game.mobs;
 
-public class Mob2 extends Mob {
+public class Mob1 extends Mob {
     @Override
     public int getMaxHP() {
-        return 6;
+        return 2;
     }
 
     @Override
     public long getSlowness() {
-        return 20;
+        return 60;
     }
 
     @Override
     public int getReward() {
-        return 20;
+        return 10;
     }
 
     @Override
     public String getName() {
-        return "mob2";
+        return "mob1";
     }
 }

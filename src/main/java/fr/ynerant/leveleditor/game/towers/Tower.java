@@ -1,7 +1,8 @@
-package fr.ynerant.leveleditor.game;
+package fr.ynerant.leveleditor.game.towers;
 
 import fr.ynerant.leveleditor.api.editor.sprites.Sprite;
 import fr.ynerant.leveleditor.api.editor.sprites.SpriteRegister;
+import fr.ynerant.leveleditor.game.mobs.Mob;
 
 import java.util.ArrayList;
 import java.util.Collection;

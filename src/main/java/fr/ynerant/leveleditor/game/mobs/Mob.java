@@ -1,9 +1,9 @@
-package fr.ynerant.leveleditor.game;
+package fr.ynerant.leveleditor.game.mobs;
 
-import fr.ynerant.leveleditor.api.editor.Collision;
 import fr.ynerant.leveleditor.api.editor.RawCase;
 import fr.ynerant.leveleditor.api.editor.sprites.Sprite;
 import fr.ynerant.leveleditor.api.editor.sprites.SpriteRegister;
+import fr.ynerant.leveleditor.game.GameFrame;
 
 import java.util.*;
 
