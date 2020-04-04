@@ -161,8 +161,6 @@ class GameFrame(val map: RawMap) extends JFrame("Jeu") {
 
 			val accessible = getMap.getCases.filter(c => !Collision.FULL.equals(c.getCollision))
 			if (accessible.exists(c => c.getPosX > 0 && pathFinder.nextPos(c.getPosX, c.getPosY) == null) || !accessible.exists(c => c.getPosX == 0 && !c.getCollision.equals(Collision.FULL))) {
-				println(accessible.exists(c => c.getPosX > 0 && pathFinder.nextPos(c.getPosX, c.getPosY) == null))
-				println(!accessible.exists(c => c.getPosX == 0 && pathFinder.nextPos(c.getPosX, c.getPosY) != null))
 				// We ensure that the end of the game is accessible from everywhere, the tower should not block the game
 				c.setCollision(Collision.ANY)
 				pathFinder.invalidate()

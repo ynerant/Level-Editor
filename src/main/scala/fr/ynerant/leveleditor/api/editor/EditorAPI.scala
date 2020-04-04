@@ -66,7 +66,7 @@ object EditorAPI {
 		implicit val formats: DefaultFormats.type = DefaultFormats
 		val json = Serialization.writePretty(map)
 		try {
-			assert(file.createNewFile)
+			assert(file.exists() || file.createNewFile)
 			val bos = new BufferedOutputStream(new GZIPOutputStream(new FileOutputStream(file)))
 			bos.write(json.getBytes(StandardCharsets.UTF_8))
 			bos.close()

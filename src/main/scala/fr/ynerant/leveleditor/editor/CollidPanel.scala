@@ -31,26 +31,21 @@ class CollidPanel(val frame: EditorFrame) extends JPanel {
 		val height = img.getHeight * 2
 		g.drawImage(getMap.getFont, x, y, width, height, null)
 		getMap.getAllCases.foreach(c => {
-			if (!CollidPanel.isEmpty(c.getCoucheOne.getImage)) {
-				g.drawImage(c.getCoucheOne.getImage, x + c.getPosX * 34 + 2, y + c.getPosY * 34 + 2, 32, 32, null)
-				if (!CollidPanel.isEmpty(c.getCoucheTwo.getImage)) {
-					g.drawImage(c.getCoucheTwo.getImage, x + c.getPosX * 34 + 2, y + c.getPosY * 34 + 2, 32, 32, null)
-					if (!CollidPanel.isEmpty(c.getCoucheThree.getImage))
-						g.drawImage(c.getCoucheThree.getImage, x + c.getPosX * 34 + 2, y + c.getPosY * 34 + 2, 32, 32, null)
-				}
-			}
+			if (!CollidPanel.isEmpty(c.getCoucheOne.getImage)) g.drawImage(c.getCoucheOne.getImage, x + c.getPosX * 34 + 2, y + c.getPosY * 34 + 2, 32, 32, null)
+			if (!CollidPanel.isEmpty(c.getCoucheTwo.getImage)) g.drawImage(c.getCoucheTwo.getImage, x + c.getPosX * 34 + 2, y + c.getPosY * 34 + 2, 32, 32, null)
+			if (!CollidPanel.isEmpty(c.getCoucheThree.getImage)) g.drawImage(c.getCoucheThree.getImage, x + c.getPosX * 34 + 2, y + c.getPosY * 34 + 2, 32, 32, null)
 		})
 
 		getMap.getAllCases.foreach(c => {
-			if (c.getCollision.equals(Collision.ANY)) {
+			if (!c.getCollision.equals(Collision.ANY)) {
 				val alpha = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB)
-				if (c.getCollision eq Collision.FULL) {
+				if (c.getCollision.equals(Collision.FULL)) {
 					val grap = alpha.createGraphics
 					grap.setColor(new Color(0, 0, 0, 100))
 					grap.fillRect(0, 0, 16, 16)
 					grap.dispose()
 				}
-				else if (c.getCollision eq Collision.PARTIAL) {
+				else if (c.getCollision.equals(Collision.PARTIAL)) {
 					val grap = alpha.createGraphics
 					grap.setColor(new Color(255, 0, 255, 70))
 					grap.fillRect(0, 0, 16, 16)

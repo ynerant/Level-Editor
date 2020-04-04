@@ -18,21 +18,8 @@ class MapPanel(val frame: EditorFrame) extends JPanel {
 		g.drawImage(getMap.getFont, x, y, width, height, null)
 		getMap.getAllCases.foreach(c => { //		BufferedImage image;
 			if (!isEmpty(c.getCoucheOne.getImage)) g.drawImage(c.getCoucheOne.getImage, x + c.getPosX * 34 + 2, y + c.getPosY * 34 + 2, 32, 32, null)
-			/*	if (frame.getSelectedLayerIndex() != 0)
-						{
-							image = recalculateAplha(c.getCoucheOne().getImage(), 0);
-							g.drawImage(image, x + c.getPosX() * 34 + 2, y + c.getPosY() * 34 + 2, 32, 32, null);
-						}*/ if (!isEmpty(c.getCoucheTwo.getImage) && frame.getSelectedLayerIndex >= 1) g.drawImage(c.getCoucheTwo.getImage, x + c.getPosX * 34 + 2, y + c.getPosY * 34 + 2, 32, 32, null)
-			/*	if (frame.getSelectedLayerIndex() != 1)
-						{
-							image = recalculateAplha(c.getCoucheTwo().getImage(), 1);
-							g.drawImage(image, x + c.getPosX() * 34 + 2, y + c.getPosY() * 34 + 2, 32, 32, null);
-						}*/ if (!isEmpty(c.getCoucheThree.getImage) && frame.getSelectedLayerIndex == 2) g.drawImage(c.getCoucheThree.getImage, x + c.getPosX * 34 + 2, y + c.getPosY * 34 + 2, 32, 32, null)
-			/*	if (frame.getSelectedLayerIndex() != 2)
-						{
-							image = recalculateAplha(c.getCoucheThree().getImage(), 2);
-							g.drawImage(image, x + c.getPosX() * 34 + 2, y + c.getPosY() * 34 + 2, 32, 32, null);
-						}*/
+			if (!isEmpty(c.getCoucheTwo.getImage) && frame.getSelectedLayerIndex >= 1) g.drawImage(c.getCoucheTwo.getImage, x + c.getPosX * 34 + 2, y + c.getPosY * 34 + 2, 32, 32, null)
+			if (!isEmpty(c.getCoucheThree.getImage) && frame.getSelectedLayerIndex == 2) g.drawImage(c.getCoucheThree.getImage, x + c.getPosX * 34 + 2, y + c.getPosY * 34 + 2, 32, 32, null)
 		})
 	}
 
