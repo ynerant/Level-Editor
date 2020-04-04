@@ -1,12 +1,11 @@
 package fr.ynerant.leveleditor.game.mobs
 
-import fr.ynerant.leveleditor.api.editor.sprites.Sprite
-import fr.ynerant.leveleditor.api.editor.sprites.SpriteRegister
-import fr.ynerant.leveleditor.game.GameFrame
 import java.util
 import java.util.Random
 
 import fr.ynerant.leveleditor.api.editor.RawCase
+import fr.ynerant.leveleditor.api.editor.sprites.{Sprite, SpriteRegister}
+import fr.ynerant.leveleditor.game.GameFrame
 
 
 object Mob {
@@ -38,7 +37,7 @@ abstract class Mob() {
 	def getName: String
 
 	def getSprite: Sprite = {
-		if (sprite == null) sprite = SpriteRegister.getCategory(getName).getSprites.get(0)
+		if (sprite == null) sprite = SpriteRegister.getCategory(getName).getSprites.head
 		sprite
 	}
 
@@ -77,17 +76,17 @@ abstract class Mob() {
 				return
 			}
 
-			val visited = new util.ArrayList[RawCase]
+			var visited = Nil: List[RawCase]
 			val queue = new util.ArrayDeque[RawCase]
-			val pred = new util.HashMap[RawCase, RawCase]
+			var pred = Map(): Map[RawCase, RawCase]
 			var last = null: RawCase
 			queue.add(current)
 			while (!queue.isEmpty) {
 				val visiting = queue.poll
-				visited.add(visiting)
-				game.getMap.getNeighbours(visiting).forEach(neighbour => {
+				visited ::= visiting
+				game.getMap.getNeighbours(visiting).foreach(neighbour => {
 					if (neighbour != null && !visited.contains(neighbour)) {
-						pred.put(neighbour, visiting)
+						pred += (neighbour -> visiting)
 						queue.add(neighbour)
 						if (neighbour.getPosX == 0) {
 							last = neighbour
@@ -97,7 +96,7 @@ abstract class Mob() {
 					}
 				})
 				if (last != null) {
-					while (pred.get(last) != current) last = pred.get(last)
+					while (pred(last) != current) last = pred(last)
 					move(last.getPosX, last.getPosY)
 				}
 			}

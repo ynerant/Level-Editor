@@ -3,22 +3,19 @@ package fr.ynerant.leveleditor.api.editor
 import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io._
-import java.lang.reflect.Type
 import java.nio.charset.StandardCharsets
-import java.util
 import java.util.zip.{GZIPInputStream, GZIPOutputStream}
 
-import com.google.gson.{Gson, GsonBuilder, JsonDeserializationContext, JsonDeserializer, JsonElement, JsonPrimitive, JsonSerializationContext, JsonSerializer}
-import fr.ynerant.leveleditor.api.editor.Collision.Collision
-import fr.ynerant.leveleditor.editor.Map
+import fr.ynerant.leveleditor.editor.GMap
 import javax.swing.JFileChooser
 import javax.swing.filechooser.FileNameExtensionFilter
+import net.liftweb.json._
 
 object EditorAPI {
 	private var LAST_FILE = null: File
 
 	def toRawMap(width: Int, height: Int): RawMap = {
-		val cases = new util.ArrayList[RawCase]
+		var cases = Nil: List[RawCase]
 		var y = 1
 		while ( {
 			y < height
@@ -28,7 +25,7 @@ object EditorAPI {
 				x < width
 			}) {
 				val c = RawCase.create(x / 16, y / 16, RawSprite.BLANK, RawSprite.BLANK, RawSprite.BLANK, Collision.ANY)
-				cases.add(c)
+				cases ::= c
 
 				x += 16
 			}
@@ -36,20 +33,6 @@ object EditorAPI {
 			y += 16
 		}
 		RawMap.create(cases, width, height)
-	}
-
-	def createGson: Gson = {
-		val builder = new GsonBuilder
-		builder.registerTypeAdapter(classOf[Collision.Collision], new JsonDeserializer[Collision.Collision] {
-			override def deserialize(jsonElement: JsonElement, `type`: Type, jsonDeserializationContext: JsonDeserializationContext): Collision = Collision.withName(jsonElement.getAsString)
-		})
-		builder.registerTypeAdapter(classOf[Collision.Collision], new JsonSerializer[Collision.Collision] {
-			override def serialize(t: Collision, `type`: Type, jsonSerializationContext: JsonSerializationContext): JsonElement = new JsonPrimitive(t.toString)
-		})
-		builder.enableComplexMapKeySerialization
-		builder.serializeNulls
-		builder.setPrettyPrinting()
-		builder.create
 	}
 
 	def createJFC: JFileChooser = {
@@ -80,7 +63,8 @@ object EditorAPI {
 	}
 
 	def save(file: File, map: RawMap): Unit = {
-		val json = createGson.toJson(map)
+		implicit val formats: DefaultFormats.type = DefaultFormats
+		val json = Serialization.writePretty(map)
 		try {
 			assert(file.createNewFile)
 			val bos = new BufferedOutputStream(new GZIPOutputStream(new FileOutputStream(file)))
@@ -92,7 +76,7 @@ object EditorAPI {
 		}
 	}
 
-	def open: Map = {
+	def open: GMap = {
 		val jfc = createJFC
 		var file = null: File
 		jfc.showOpenDialog(null)
@@ -119,12 +103,13 @@ object EditorAPI {
 			case e: IOException =>
 				e.printStackTrace()
 		}
-		createGson.fromJson(json, classOf[RawMap])
+		implicit val formats: DefaultFormats.type = DefaultFormats
+		parse(json).extract[RawMap]
 	}
 
-	def open(f: File): Map = open(getRawMap(f))
+	def open(f: File): GMap = open(getRawMap(f))
 
-	def open(map: RawMap): Map = {
+	def open(map: RawMap): GMap = {
 		if (map.getFont == null) {
 			val baseWidth = map.getWidth
 			val baseHeight = map.getHeight
@@ -155,6 +140,6 @@ object EditorAPI {
 			}
 			map.setFont(image)
 		}
-		new Map(map)
+		new GMap(map)
 	}
 }

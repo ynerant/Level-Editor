@@ -1,19 +1,20 @@
 package fr.ynerant.leveleditor.api.editor.sprites
 
-import java.io.{BufferedInputStream, BufferedReader, File, FileInputStream, IOException, InputStreamReader}
+import java.io.{BufferedInputStream, File, FileInputStream, IOException}
 import java.net.{URISyntaxException, URLDecoder}
 import java.nio.file.{Files, Paths}
-import java.util
 import java.util.Objects
 import java.util.jar.JarFile
 
-import com.google.gson.Gson
-import javax.imageio.ImageIO
 import fr.ynerant.leveleditor.client.main.Main
+import javax.imageio.ImageIO
+import net.liftweb.json._
+
+import scala.collection.mutable.ListBuffer
 
 object SpriteRegister {
-	private var nameToCoords = null: util.Map[String, util.List[util.List[Double]]]
-	private val sprites = new util.HashMap[String, Category]
+	private var nameToCoords = Map(): Map[String, List[List[Int]]]
+	private var sprites = Map(): Map[String, Category]
 
 	@throws[IOException]
 	def unpack(): Unit = {
@@ -63,32 +64,32 @@ object SpriteRegister {
 	}
 
 	@SuppressWarnings(Array("unchecked")) def refreshAllSprites(): Unit = {
-		if (nameToCoords != null && !nameToCoords.isEmpty && !sprites.isEmpty) return
+		if (nameToCoords != null && nameToCoords.nonEmpty && sprites.nonEmpty) return
 		val assetsDir = new File("assets")
-		val assets = new util.ArrayList[String]
+		var assets = Nil: List[String]
 		for (dir <- Objects.requireNonNull(assetsDir.listFiles)) {
-			assets.add(dir.getName)
+			assets ::= dir.getName
 		}
 
-		assets.forEach(asset => {
+		assets.foreach(asset => {
 			try {
 				val f = new File(assetsDir.getAbsolutePath + "/" + asset + "/textures/sprites")
 				assert(f.isDirectory || f.mkdirs)
-				val br = new BufferedReader(new InputStreamReader(new FileInputStream(new File(f, "sprites.json"))))
-				nameToCoords = new Gson().fromJson(br, classOf[util.Map[_, _]])
-				br.close()
-				nameToCoords.keySet.forEach(key => {
+				val json = Files.readString(new File(f, "sprites.json").toPath)
+				implicit val formats: DefaultFormats.type = DefaultFormats
+				nameToCoords = parse(json).extract[Map[String, List[List[Int]]]]
+				nameToCoords.keySet.foreach(key => {
 					try {
 						val is = new BufferedInputStream(new FileInputStream(new File(f, key + ".png")))
 						val img = ImageIO.read(is)
-						val cat = Category.create(key, new util.ArrayList[Sprite])
-						nameToCoords.get(key).forEach(list => {
-							val x = list.get(0).intValue
-							val y = list.get(1).intValue
+						val cat = Category.create(key, ListBuffer())
+						nameToCoords(key).foreach(list => {
+							val x = list.head.intValue
+							val y = list(1).intValue
 							val child = img.getSubimage(x, y, 16, 16)
-							new Sprite(child, cat, nameToCoords.get(key).indexOf(list))
+							new Sprite(child, cat, nameToCoords(key).toIndexedSeq.indexOf(list))
 						})
-						sprites.put(key, cat)
+						sprites += (key -> cat)
 					} catch {
 						case t: Throwable =>
 							System.err.println("Erreur lors de la lecture du sprite '" + key + "'")
@@ -102,7 +103,7 @@ object SpriteRegister {
 		})
 	}
 
-	def getCategory(name: String): Category = sprites.get(name)
+	def getCategory(name: String): Category = sprites(name)
 
-	def getAllCategories = new util.ArrayList[Category](sprites.values)
+	def getAllCategories: List[Category] = sprites.values.toList
 }

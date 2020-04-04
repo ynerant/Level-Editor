@@ -1,7 +1,6 @@
 package fr.ynerant.leveleditor.game.towers
 
 import fr.ynerant.leveleditor.game.mobs.Mob
-import java.util
 
 
 class AutoTower(override val x: Int, override val y: Int) extends Tower(x, y) {
@@ -13,5 +12,5 @@ class AutoTower(override val x: Int, override val y: Int) extends Tower(x, y) {
 
 	override def getPrice = 142
 
-	override private[towers] def _filterDetectedMobs(mobs: util.Collection[Mob]) = mobs
+	override private[towers] def _filterDetectedMobs(mobs: Iterable[Mob]) = mobs
 }

@@ -1,11 +1,10 @@
 package fr.ynerant.leveleditor.api.editor
 
-import fr.ynerant.leveleditor.api.editor.Collision.Collision
 import fr.ynerant.leveleditor.api.editor.sprites.Sprite
 
 
 object Case {
-	def create(posX: Int, posY: Int, couche1: Sprite, couche2: Sprite, couche3: Sprite, collision: Collision): Case = {
+	def create(posX: Int, posY: Int, couche1: Sprite, couche2: Sprite, couche3: Sprite, collision: String): Case = {
 		val c = new Case
 		c.x = posX
 		c.y = posY
@@ -23,7 +22,7 @@ class Case {
 	private var couche1 = null: Sprite
 	private var couche2 = null: Sprite
 	private var couche3 = null: Sprite
-	private var collision = null: Collision
+	private var collision = null: String
 
 	def getPosX: Int = x
 
@@ -35,7 +34,7 @@ class Case {
 
 	def getCoucheThree: Sprite = couche3
 
-	def getCollision: Collision = collision
+	def getCollision: String = collision
 
 	override def toString: String = "{Case x=" + x + " y=" + y + " couche1=" + couche1 + " couche2=" + couche2 + " couche3=" + couche3 + " collision=" + collision.toString.toUpperCase + "}\n"
 }

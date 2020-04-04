@@ -1,10 +1,9 @@
 package fr.ynerant.leveleditor.game.towers
 
-import fr.ynerant.leveleditor.api.editor.sprites.Sprite
-import fr.ynerant.leveleditor.api.editor.sprites.SpriteRegister
-import fr.ynerant.leveleditor.game.mobs.Mob
-import java.util
 import java.util.Random
+
+import fr.ynerant.leveleditor.api.editor.sprites.{Sprite, SpriteRegister}
+import fr.ynerant.leveleditor.game.mobs.Mob
 
 
 object Tower {
@@ -12,7 +11,7 @@ object Tower {
 }
 
 abstract class Tower(val x: Int, val y: Int) {
-	final private val sprite = SpriteRegister.getCategory(getName).getSprites.get(0)
+	final private val sprite = SpriteRegister.getCategory(getName).getSprites.head
 	private var remainingTicks = 0L
 
 	def getSprite: Sprite = sprite
@@ -25,16 +24,16 @@ abstract class Tower(val x: Int, val y: Int) {
 
 	def getPrice: Int
 
-	private[towers] def _filterDetectedMobs(mobs: util.Collection[Mob]): util.Collection[Mob]
-
-	def filterDetectedMobs(mobs: util.Collection[Mob]): util.Collection[Mob] = if (remainingTicks > 0) {
+	def filterDetectedMobs(mobs: Iterable[Mob]): Iterable[Mob] = if (remainingTicks > 0) {
 		remainingTicks -= 1
-		new util.ArrayList[Mob]
+		Nil
 	}
 	else {
 		remainingTicks = getPeriod
 		_filterDetectedMobs(mobs)
 	}
+
+	private[towers] def _filterDetectedMobs(mobs: Iterable[Mob]): Iterable[Mob]
 
 	def getX: Int = x
 

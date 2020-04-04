@@ -1,7 +1,6 @@
 package fr.ynerant.leveleditor.frame.listeners
 
-import java.awt.event.MouseAdapter
-import java.awt.event.MouseEvent
+import java.awt.event.{MouseAdapter, MouseEvent}
 
 import fr.ynerant.leveleditor.api.editor.Case
 import fr.ynerant.leveleditor.editor.{EditorFrame, MapPanel}
@@ -37,7 +36,7 @@ class MapMouseListener(val panel: MapPanel, val frame: EditorFrame) extends Mous
 			}
 		}
 		else if (frame.getSelectedPaintingMode == 1) {
-			getFrame.getMap.getAllCases.forEach(c => {
+			getFrame.getMap.getAllCases.foreach(c => {
 				val map = getFrame.getMap
 				if (getFrame.getSelectedSprite != null) {
 					if (getFrame.getSelectedSprite.getCouche - 1 > getFrame.getSelectedLayerIndex) return

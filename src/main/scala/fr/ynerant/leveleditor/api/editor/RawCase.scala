@@ -1,9 +1,7 @@
 package fr.ynerant.leveleditor.api.editor
 
-import fr.ynerant.leveleditor.api.editor.Collision.Collision
-
 object RawCase {
-	def create(posX: Int, posY: Int, couche1: RawSprite, couche2: RawSprite, couche3: RawSprite, collision: Collision): RawCase = {
+	def create(posX: Int, posY: Int, couche1: RawSprite, couche2: RawSprite, couche3: RawSprite, collision: String): RawCase = {
 		new RawCase(posX, posY, couche1, couche2, couche3, collision)
 	}
 
@@ -12,7 +10,7 @@ object RawCase {
 	}
 }
 
-case class RawCase(var x: Int, var y: Int, var couche1: RawSprite, var couche2: RawSprite, var couche3: RawSprite, var collision: Collision) {
+case class RawCase(var x: Int, var y: Int, var couche1: RawSprite, var couche2: RawSprite, var couche3: RawSprite, var collision: String) {
 	def getPosX: Int = x
 
 	def getPosY: Int = y
@@ -23,9 +21,9 @@ case class RawCase(var x: Int, var y: Int, var couche1: RawSprite, var couche2: 
 
 	def getCoucheThree: RawSprite = couche3
 
-	def getCollision: Collision = collision
+	def getCollision: String = collision
 
-	def setCollision(collision: Collision): Unit = {
+	def setCollision(collision: String): Unit = {
 		this.collision = collision
 	}
 }

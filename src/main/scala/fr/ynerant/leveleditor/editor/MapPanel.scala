@@ -1,14 +1,13 @@
 package fr.ynerant.leveleditor.editor
 
-import javax.swing._
 import java.awt._
 import java.awt.image.BufferedImage
+
+import javax.swing._
 
 
 @SerialVersionUID(2629019576253690557L)
 class MapPanel(val frame: EditorFrame) extends JPanel {
-	def getMap: Map = frame.getMap
-
 	override def paintComponent(g: Graphics): Unit = {
 		g.fillRect(0, 0, getWidth, getHeight)
 		val img = getMap.getFont
@@ -17,7 +16,7 @@ class MapPanel(val frame: EditorFrame) extends JPanel {
 		val width = img.getWidth * 2
 		val height = img.getHeight * 2
 		g.drawImage(getMap.getFont, x, y, width, height, null)
-		getMap.getAllCases.forEach(c => { //		BufferedImage image;
+		getMap.getAllCases.foreach(c => { //		BufferedImage image;
 			if (!isEmpty(c.getCoucheOne.getImage)) g.drawImage(c.getCoucheOne.getImage, x + c.getPosX * 34 + 2, y + c.getPosY * 34 + 2, 32, 32, null)
 			/*	if (frame.getSelectedLayerIndex() != 0)
 						{
@@ -36,6 +35,8 @@ class MapPanel(val frame: EditorFrame) extends JPanel {
 						}*/
 		})
 	}
+
+	def getMap: GMap = frame.getMap
 
 	@SuppressWarnings(Array("BooleanMethodIsAlwaysInverted")) private def isEmpty(image: BufferedImage) = {
 		var allrgba = 0

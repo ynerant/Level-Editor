@@ -1,19 +1,16 @@
 package fr.ynerant.leveleditor.client.main
 
+import java.awt._
+import java.awt.image.BufferedImage
+import java.io.{File, IOException}
+import java.net.{URISyntaxException, URL}
+import java.util.Locale
+
 import fr.ynerant.leveleditor.api.editor.EditorAPI
 import fr.ynerant.leveleditor.api.editor.sprites.SpriteRegister
 import fr.ynerant.leveleditor.frame.MainFrame
 import fr.ynerant.leveleditor.game.GameFrame
 import javax.swing._
-import java.awt._
-import java.awt.image.BufferedImage
-import java.io.File
-import java.io.IOException
-import java.net.URISyntaxException
-import java.net.URL
-import java.util.Locale
-
-import fr.ynerant.leveleditor.client.main.Main.DEV
 
 
 /**

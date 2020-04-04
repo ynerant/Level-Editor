@@ -1,20 +1,17 @@
 package fr.ynerant.leveleditor.game
 
-import fr.ynerant.leveleditor.api.editor.{Collision, RawMap}
-import fr.ynerant.leveleditor.api.editor.sprites.SpriteRegister
-import fr.ynerant.leveleditor.game.mobs.Mob
-import fr.ynerant.leveleditor.game.towers.AutoTower
-import fr.ynerant.leveleditor.game.towers.BasicTower
-import fr.ynerant.leveleditor.game.towers.NullTower
-import fr.ynerant.leveleditor.game.towers.Tower
-import javax.swing._
+import java.awt.event.{MouseEvent, MouseListener}
 import java.awt._
-import java.awt.event.MouseEvent
-import java.awt.event.MouseListener
-import java.util
 import java.util.Random
 
+import fr.ynerant.leveleditor.api.editor.sprites.SpriteRegister
+import fr.ynerant.leveleditor.api.editor.{Collision, RawMap}
 import fr.ynerant.leveleditor.editor.CollidPanel
+import fr.ynerant.leveleditor.game.mobs.Mob
+import fr.ynerant.leveleditor.game.towers.{AutoTower, BasicTower, NullTower, Tower}
+import javax.swing._
+
+import scala.collection.mutable.ListBuffer
 
 
 class GameFrame(val map: RawMap) extends JFrame("Jeu") {
@@ -22,8 +19,8 @@ class GameFrame(val map: RawMap) extends JFrame("Jeu") {
 	private var round = 0
 	private var hp = 5
 	private var reward = 20
-	final private val mobs = new util.ArrayList[Mob]
-	final private val towers = new util.ArrayList[Tower]
+	private var mobs = ListBuffer[Mob]()
+	private var towers = ListBuffer[Tower]()
 	final private var basicTower = null: JRadioButton
 	final private var nullTower = null: JRadioButton
 	final private var autoTower = null: JRadioButton
@@ -74,7 +71,7 @@ class GameFrame(val map: RawMap) extends JFrame("Jeu") {
 	setVisible(true)
 	new Thread(() => {
 		while ( {
-			hp > 0 && (round < 4 || !mobs.isEmpty)
+			hp > 0 && (round < 4 || mobs.nonEmpty)
 		}) {
 			tick()
 			try Thread.sleep(50L)
@@ -92,25 +89,25 @@ class GameFrame(val map: RawMap) extends JFrame("Jeu") {
 		if (mobs.isEmpty && round < 4) {
 			round += 1
 			val nb_mobs = round * (RANDOM.nextInt(16) + 1)
-			for (i <- 1 to nb_mobs) {
+			for (_ <- 1 to nb_mobs) {
 				val mob = Mob.getRandomMob
 				do mob.move(RANDOM.nextInt(getMap.getWidth / 16), RANDOM.nextInt(getMap.getHeight / 16)) while ( {
-					getMap.getCase(mob.getX, mob.getY).getCollision != Collision.ANY
+					!getMap.getCase(mob.getX, mob.getY).getCollision.equals(Collision.ANY)
 				})
 				getMap.getCase(mob.getX, mob.getY).setCollision(Collision.PARTIAL)
-				mobs.add(mob)
+				mobs += mob
 			}
 		}
-		towers.forEach(tower => {
-			tower.filterDetectedMobs(mobs).forEach(mob => {
+		towers.foreach(tower => {
+			tower.filterDetectedMobs(mobs).foreach(mob => {
 				mob.hit(tower.getDamagePerShot)
 			})
 		})
-		new util.ArrayList[Mob](mobs).forEach(mob => {
+		mobs.foreach(mob => {
 			getMap.getCase(mob.getX, mob.getY).setCollision(Collision.ANY)
 			mob.tick(this)
 			if (mob.getX < 0 || mob.isDead) {
-				mobs.remove(mob)
+				mobs -= mob
 				if (mob.getX < 0) {
 					hp -= 1
 					if (hp == 0) {
@@ -138,36 +135,6 @@ class GameFrame(val map: RawMap) extends JFrame("Jeu") {
 	class Grid() extends JComponent with MouseListener {
 		addMouseListener(this)
 
-		override protected def paintComponent(_g: Graphics): Unit = {
-			val g = _g.asInstanceOf[Graphics2D]
-			if (getMap.getFont != null) g.drawImage(getMap.getFont, null, null)
-			SpriteRegister.refreshAllSprites()
-			val SPRITE_SIZE = 32
-			getMap.getCases.forEach(c => {
-				val s1 = SpriteRegister.getCategory(c.getCoucheOne.getCategory).getSprites.get(c.getCoucheOne.getIndex)
-				val s2 = SpriteRegister.getCategory(c.getCoucheTwo.getCategory).getSprites.get(c.getCoucheTwo.getIndex)
-				val s3 = SpriteRegister.getCategory(c.getCoucheThree.getCategory).getSprites.get(c.getCoucheThree.getIndex)
-				g.drawImage(s1.getImage, SPRITE_SIZE * c.getPosX, SPRITE_SIZE * c.getPosY, SPRITE_SIZE, SPRITE_SIZE, Color.white, null)
-				if (!CollidPanel.isEmpty(s2.getImage)) g.drawImage(s2.getImage, SPRITE_SIZE * c.getPosX, SPRITE_SIZE * c.getPosY, SPRITE_SIZE, SPRITE_SIZE, null, null)
-				if (!CollidPanel.isEmpty(s3.getImage)) g.drawImage(s3.getImage, SPRITE_SIZE * c.getPosX, SPRITE_SIZE * c.getPosY, SPRITE_SIZE, SPRITE_SIZE, null, null)
-			})
-			new util.ArrayList[Mob](mobs).forEach(mob => {
-				val s = mob.getSprite
-				g.drawImage(s.getImage, SPRITE_SIZE * mob.getX, SPRITE_SIZE * mob.getY, SPRITE_SIZE, SPRITE_SIZE, null, null)
-			})
-			towers.forEach(tower => {
-				val s = tower.getSprite
-				g.drawImage(s.getImage, SPRITE_SIZE * tower.getX, SPRITE_SIZE * tower.getY, SPRITE_SIZE, SPRITE_SIZE, null, null)
-			})
-			repaint()
-		}
-
-		override def mouseClicked(event: MouseEvent): Unit = {
-		}
-
-		override def mousePressed(event: MouseEvent): Unit = {
-		}
-
 		override def mouseReleased(event: MouseEvent): Unit = {
 			val x = event.getX / 32
 			val y = event.getY / 32
@@ -177,10 +144,41 @@ class GameFrame(val map: RawMap) extends JFrame("Jeu") {
 			else null
 			if (tower == null || tower.getPrice > reward) return
 			val c = getMap.getCase(x, y)
-			if (c == null || (c.getCollision ne Collision.ANY)) return
+			println(x + ", " + y + ", " + tower + ", " + c)
+			if (c == null || !c.getCollision.equals(Collision.ANY)) return
 			c.setCollision(Collision.FULL)
 			reward -= tower.getPrice
-			towers.add(tower)
+			towers += tower
+		}
+
+		override def mouseClicked(event: MouseEvent): Unit = {
+		}
+
+		override def mousePressed(event: MouseEvent): Unit = {
+		}
+
+		override protected def paintComponent(_g: Graphics): Unit = {
+			val g = _g.asInstanceOf[Graphics2D]
+			if (getMap.getFont != null) g.drawImage(getMap.getFont, null, null)
+			SpriteRegister.refreshAllSprites()
+			val SPRITE_SIZE = 32
+			getMap.getCases.foreach(c => {
+				val s1 = SpriteRegister.getCategory(c.getCoucheOne.getCategory).getSprites(c.getCoucheOne.getIndex)
+				val s2 = SpriteRegister.getCategory(c.getCoucheTwo.getCategory).getSprites(c.getCoucheTwo.getIndex)
+				val s3 = SpriteRegister.getCategory(c.getCoucheThree.getCategory).getSprites(c.getCoucheThree.getIndex)
+				g.drawImage(s1.getImage, SPRITE_SIZE * c.getPosX, SPRITE_SIZE * c.getPosY, SPRITE_SIZE, SPRITE_SIZE, Color.white, null)
+				if (!CollidPanel.isEmpty(s2.getImage)) g.drawImage(s2.getImage, SPRITE_SIZE * c.getPosX, SPRITE_SIZE * c.getPosY, SPRITE_SIZE, SPRITE_SIZE, null, null)
+				if (!CollidPanel.isEmpty(s3.getImage)) g.drawImage(s3.getImage, SPRITE_SIZE * c.getPosX, SPRITE_SIZE * c.getPosY, SPRITE_SIZE, SPRITE_SIZE, null, null)
+			})
+			mobs.foreach(mob => {
+				val s = mob.getSprite
+				g.drawImage(s.getImage, SPRITE_SIZE * mob.getX, SPRITE_SIZE * mob.getY, SPRITE_SIZE, SPRITE_SIZE, null, null)
+			})
+			towers.foreach(tower => {
+				val s = tower.getSprite
+				g.drawImage(s.getImage, SPRITE_SIZE * tower.getX, SPRITE_SIZE * tower.getY, SPRITE_SIZE, SPRITE_SIZE, null, null)
+			})
+			repaint()
 		}
 
 		override def mouseEntered(event: MouseEvent): Unit = {

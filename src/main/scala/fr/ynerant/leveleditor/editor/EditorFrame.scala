@@ -1,19 +1,18 @@
 package fr.ynerant.leveleditor.editor
 
-import fr.ynerant.leveleditor.api.editor.sprites.SpriteRegister
-import fr.ynerant.leveleditor.frame.listeners._
-import javax.swing._
-import javax.swing.event.ChangeEvent
-import javax.swing.event.ChangeListener
 import java.awt._
 import java.awt.event._
 import java.io.File
 
+import fr.ynerant.leveleditor.api.editor.sprites.SpriteRegister
 import fr.ynerant.leveleditor.api.editor.{EditorAPI, RawMap}
+import fr.ynerant.leveleditor.frame.listeners._
+import javax.swing._
+import javax.swing.event.{ChangeEvent, ChangeListener}
 
 
 @SerialVersionUID(-2705122356101556462L)
-class EditorFrame(val map: Map) extends JFrame("Level Editor") with ChangeListener with ActionListener with WindowListener {
+class EditorFrame(val map: GMap) extends JFrame("Level Editor") with ChangeListener with ActionListener with WindowListener {
 	final private val save = new JMenuItem("Sauvegarder")
 	final private val saveAs = new JMenuItem("Sauvegarder sous ...")
 	final private val exit = new JMenuItem("Quitter")
@@ -126,8 +125,8 @@ class EditorFrame(val map: Map) extends JFrame("Level Editor") with ChangeListen
 			couche2.repaint()
 			couche3.repaint()
 		}
-		SpriteRegister.getAllCategories.forEach(cat => {
-			cat.getSprites.forEach(spr => {
+		SpriteRegister.getAllCategories.foreach(cat => {
+			cat.getSprites.foreach(spr => {
 				val sprc1 = new SpriteComp(spr, 0)
 				val sprc2 = new SpriteComp(spr, 1)
 				val sprc3 = new SpriteComp(spr, 2)
@@ -170,7 +169,7 @@ class EditorFrame(val map: Map) extends JFrame("Level Editor") with ChangeListen
 		resources.getSelectedComponent.asInstanceOf[JScrollPane].getVerticalScrollBar.setValue(cursorPos)
 	}
 
-	def getMap: Map = map
+	def getMap: GMap = map
 
 	def getSelectedSprite: SpriteComp = selectedSprite
 

@@ -2,15 +2,13 @@ package fr.ynerant.leveleditor.api.editor.sprites
 
 import java.awt._
 import java.awt.image.BufferedImage
-import java.util
-import java.util.ArrayList
 
+import scala.collection.mutable.ListBuffer
 
 object Sprite {
-	val BLANK = new Sprite(new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB), Category.create("blank", new util.ArrayList[Sprite]), 0)
+	val BLANK = new Sprite(new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB), Category.create("blank", ListBuffer()), 0)
 
-	val g: Graphics2D
-	= BLANK.getImage.createGraphics
+	val g: Graphics2D = BLANK.getImage.createGraphics
 	g.setComposite(AlphaComposite.Clear)
 	g.setColor(new Color(0, true))
 	g.fillRect(0, 0, 16, 16)
@@ -18,7 +16,7 @@ object Sprite {
 }
 
 class Sprite(val img: BufferedImage, val cat: Category, val index: Int) {
-	if (!this.cat.getSprites.contains(this)) this.cat.getSprites.add(this)
+	if (!this.cat.getSprites.contains(this)) this.cat.addSprite(this)
 
 	def getImage: BufferedImage = this.img
 
