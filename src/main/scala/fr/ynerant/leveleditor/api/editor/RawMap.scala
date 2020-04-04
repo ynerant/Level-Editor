@@ -24,11 +24,11 @@ case class RawMap(var cases: List[RawCase], var width: Int, var height: Int) {
 
 	def getNeighbours(c: RawCase): Iterable[RawCase] = {
 		var list = Nil: List[RawCase]
-		list ::= getCase(c.getPosX, c.getPosY + 1)
-		list ::= getCase(c.getPosX + 1, c.getPosY)
 		list ::= getCase(c.getPosX, c.getPosY - 1)
+		list ::= getCase(c.getPosX + 1, c.getPosY)
+		list ::= getCase(c.getPosX, c.getPosY + 1)
 		list ::= getCase(c.getPosX - 1, c.getPosY)
-		list.filter((_c: RawCase) => _c != null && _c.getCollision.equals(Collision.ANY))
+		list.filter((_c: RawCase) => _c != null)
 	}
 
 	def getCase(x: Int, y: Int): RawCase = {

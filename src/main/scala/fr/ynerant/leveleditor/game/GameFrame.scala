@@ -1,7 +1,7 @@
 package fr.ynerant.leveleditor.game
 
-import java.awt.event.{MouseEvent, MouseListener}
 import java.awt._
+import java.awt.event.{MouseEvent, MouseListener}
 import java.util.Random
 
 import fr.ynerant.leveleditor.api.editor.sprites.SpriteRegister
@@ -21,6 +21,7 @@ class GameFrame(val map: RawMap) extends JFrame("Jeu") {
 	private var reward = 20
 	private var mobs = ListBuffer[Mob]()
 	private var towers = ListBuffer[Tower]()
+	private val pathFinder = PathFinder(this)
 	final private var basicTower = null: JRadioButton
 	final private var nullTower = null: JRadioButton
 	final private var autoTower = null: JRadioButton
@@ -70,10 +71,16 @@ class GameFrame(val map: RawMap) extends JFrame("Jeu") {
 	pane.add(winLabel)
 	setVisible(true)
 	new Thread(() => {
-		while ( {
-			hp > 0 && (round < 4 || mobs.nonEmpty)
-		}) {
-			tick()
+		pathFinder.calculatePath()
+
+		while (hp > 0 && (round < 4 || mobs.nonEmpty)) {
+			try
+				tick()
+			catch {
+				case e: Throwable =>
+					e.printStackTrace()
+			}
+
 			try Thread.sleep(50L)
 			catch {
 				case e: InterruptedException =>
@@ -85,10 +92,12 @@ class GameFrame(val map: RawMap) extends JFrame("Jeu") {
 
 	def getMap: RawMap = map
 
+	def getPathFinder: PathFinder = pathFinder
+
 	def tick(): Unit = {
 		if (mobs.isEmpty && round < 4) {
 			round += 1
-			val nb_mobs = round * (RANDOM.nextInt(16) + 1)
+			val nb_mobs = round * (RANDOM.nextInt(8) + 1)
 			for (_ <- 1 to nb_mobs) {
 				val mob = Mob.getRandomMob
 				do mob.move(RANDOM.nextInt(getMap.getWidth / 16), RANDOM.nextInt(getMap.getHeight / 16)) while ( {
@@ -144,11 +153,23 @@ class GameFrame(val map: RawMap) extends JFrame("Jeu") {
 			else null
 			if (tower == null || tower.getPrice > reward) return
 			val c = getMap.getCase(x, y)
-			println(x + ", " + y + ", " + tower + ", " + c)
 			if (c == null || !c.getCollision.equals(Collision.ANY)) return
 			c.setCollision(Collision.FULL)
-			reward -= tower.getPrice
-			towers += tower
+
+			pathFinder.invalidate()
+
+			val accessible = getMap.getCases.filter(c => !Collision.FULL.equals(c.getCollision))
+			if (accessible.exists(c => c.getPosX > 0 && pathFinder.nextPos(c.getPosX, c.getPosY) == null) || !accessible.exists(c => c.getPosX == 0 && !c.getCollision.equals(Collision.FULL))) {
+				println(accessible.exists(c => c.getPosX > 0 && pathFinder.nextPos(c.getPosX, c.getPosY) == null))
+				println(!accessible.exists(c => c.getPosX == 0 && pathFinder.nextPos(c.getPosX, c.getPosY) != null))
+				// We ensure that the end of the game is accessible from everywhere, the tower should not block the game
+				c.setCollision(Collision.ANY)
+				pathFinder.invalidate()
+			}
+			else {
+				reward -= tower.getPrice
+				towers += tower
+			}
 		}
 
 		override def mouseClicked(event: MouseEvent): Unit = {

@@ -1,6 +1,5 @@
 package fr.ynerant.leveleditor.game.mobs
 
-import java.util
 import java.util.Random
 
 import fr.ynerant.leveleditor.api.editor.RawCase
@@ -76,30 +75,8 @@ abstract class Mob() {
 				return
 			}
 
-			var visited = Nil: List[RawCase]
-			val queue = new util.ArrayDeque[RawCase]
-			var pred = Map(): Map[RawCase, RawCase]
-			var last = null: RawCase
-			queue.add(current)
-			while (!queue.isEmpty) {
-				val visiting = queue.poll
-				visited ::= visiting
-				game.getMap.getNeighbours(visiting).foreach(neighbour => {
-					if (neighbour != null && !visited.contains(neighbour)) {
-						pred += (neighbour -> visiting)
-						queue.add(neighbour)
-						if (neighbour.getPosX == 0) {
-							last = neighbour
-							queue.clear()
-							return
-						}
-					}
-				})
-				if (last != null) {
-					while (pred(last) != current) last = pred(last)
-					move(last.getPosX, last.getPosY)
-				}
-			}
+			val newCase: RawCase = game.getPathFinder.nextPos(getX, getY)
+			move(newCase.getPosX, newCase.getPosY)
 		}
 	}
 
