@@ -36,11 +36,11 @@ class GMap(val raw: RawMap) {
 
 	def getHeight: Int = height
 
-	def getCase(x: Int, y: Int): Case = casesMap.getOrElse(x, Map())(y)
+	def getCase(x: Int, y: Int): Case = casesMap.getOrElse(x, Map()).getOrElse(y, null)
 
 	def getAllCases: List[Case] = {
-		val list = Nil: List[Case]
-		casesMap.values.foreach(l => list.appendedAll(l.values))
+		var list = Nil: List[Case]
+		casesMap.values.foreach(l => list = list.appendedAll(l.values))
 		list
 	}
 

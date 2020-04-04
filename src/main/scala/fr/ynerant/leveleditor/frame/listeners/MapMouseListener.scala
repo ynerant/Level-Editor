@@ -29,7 +29,6 @@ class MapMouseListener(val panel: MapPanel, val frame: EditorFrame) extends Mous
 
 					case _ =>
 						n = c
-
 				}
 				map.setCase(n.getPosX, n.getPosY, n)
 				panel.repaint()
