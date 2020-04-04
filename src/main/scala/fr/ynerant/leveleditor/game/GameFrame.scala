@@ -149,6 +149,7 @@ class GameFrame(val map: RawMap) extends JFrame("Jeu") {
 			val y = event.getY / 32
 			val tower = if (basicTower.isSelected) new BasicTower(x, y)
 			else if (nullTower.isSelected) new NullTower(x, y)
+
 			else if (autoTower.isSelected) new AutoTower(x, y)
 			else null
 			if (tower == null || tower.getPrice > reward) return

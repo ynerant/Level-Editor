@@ -38,7 +38,9 @@ object SpriteRegister {
 					val name = je.getName
 					if (name.startsWith("assets/")) {
 						val f = new File(name)
-						if (name.endsWith("/")) if (!f.mkdirs && !f.isDirectory) throw new IOException("Unable to make dir: " + f)
+						if (name.endsWith("/")) {
+							if (!f.mkdirs && !f.isDirectory) throw new IOException("Unable to make dir: " + f)
+						}
 						else if (!f.isFile) Files.copy(jar.getInputStream(je), Paths.get(f.toURI))
 					}
 				}

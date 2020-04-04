@@ -19,6 +19,9 @@ img.png
 image.png
 /maps/
 /assets/
+lib/
 out/
+project/
+target/
 
 TheGame.jar
