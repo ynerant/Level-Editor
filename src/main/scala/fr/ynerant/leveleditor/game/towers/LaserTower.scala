@@ -6,7 +6,7 @@ import fr.ynerant.leveleditor.game.GameFrame
 class LaserTower(override val x: Int, override val y: Int) extends Tower(x, y) {
 	override def getName = "lasertower"
 
-	override def getDamagePerShot = 3
+	override def getDamagePerShot = if (isUpgraded) 8 else 3
 
 	override def getPeriod = 40
 

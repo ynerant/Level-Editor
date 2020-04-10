@@ -157,7 +157,7 @@ Cette tour tire des rayons laser dans les quatre directions et chaque mob reçoi
 
 * Période : 40
 * Prix : 80
-* Dégâts : 3
+* Dégâts : 3 (8 si améliorée)
 
 ## Implémentation
 
