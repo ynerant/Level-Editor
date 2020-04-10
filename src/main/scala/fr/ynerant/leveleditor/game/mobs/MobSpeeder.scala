@@ -12,6 +12,6 @@ class MobSpeeder extends Mob {
 	override def getName = "mobspeeder"
 
 	override def _tick(game: GameFrame): Unit = {
-		game.getMobs.filter(mob => Math.pow(mob.getX - getX, 2) + Math.pow(mob.getY - getY, 2) <= 9).foreach(mob => mob.speedup(3))
+		game.getMobs.filter(mob => Math.pow(mob.getX - getX, 2) + Math.pow(mob.getY - getY, 2) <= 9 && mob != this).foreach(mob => mob.speedup(3))
 	}
 }

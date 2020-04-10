@@ -12,6 +12,6 @@ class MobHealer extends Mob {
 	override def getName = "mobhealer"
 
 	override def _tick(game: GameFrame): Unit = {
-		game.getMobs.filter(mob => Math.pow(mob.getX - getX, 2) + Math.pow(mob.getY - getY, 2) <= 9).foreach(mob => mob.heal(1))
+		game.getMobs.filter(mob => Math.pow(mob.getX - getX, 2) + Math.pow(mob.getY - getY, 2) <= 9).foreach(mob => mob.heal(2))
 	}
 }

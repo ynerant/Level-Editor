@@ -3,7 +3,7 @@ package fr.ynerant.leveleditor.game.mobs
 import fr.ynerant.leveleditor.game.GameFrame
 
 class MobBreaker extends Mob {
-	override def getMaxHP = 40
+	override def getMaxHP = 110
 
 	override def _getSlowness = 120
 
