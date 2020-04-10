@@ -8,7 +8,7 @@ import fr.ynerant.leveleditor.api.editor.sprites.SpriteRegister
 import fr.ynerant.leveleditor.api.editor.{Collision, RawMap}
 import fr.ynerant.leveleditor.editor.CollidPanel
 import fr.ynerant.leveleditor.game.mobs.Mob
-import fr.ynerant.leveleditor.game.towers.{AutoTower, BasicTower, NullTower, Tower}
+import fr.ynerant.leveleditor.game.towers._
 import javax.swing._
 
 import scala.collection.mutable.ListBuffer
@@ -23,8 +23,11 @@ class GameFrame(val map: RawMap) extends JFrame("Jeu") {
 	private var towers = ListBuffer[Tower]()
 	private val pathFinder = PathFinder(this)
 	final private var basicTower = null: JRadioButton
-	final private var nullTower = null: JRadioButton
-	final private var autoTower = null: JRadioButton
+	final private var wallTower = null: JRadioButton
+	final private var freezerTower = null: JRadioButton
+	final private var explodeTower = null: JRadioButton
+	final private var upgradeTower = null: JRadioButton
+	final private var laserTower = null: JRadioButton
 	final private var waveLabel = null: JLabel
 	final private var nbMobsLabel = null: JLabel
 	final private var hpLabel = null: JLabel
@@ -53,12 +56,21 @@ class GameFrame(val map: RawMap) extends JFrame("Jeu") {
 	basicTower.setSelected(true)
 	towerSelect.add(basicTower)
 	pane.add(basicTower)
-	nullTower = new JRadioButton("Tour nulle (" + new NullTower(0, 0).getPrice + " pièces)")
-	towerSelect.add(nullTower)
-	pane.add(nullTower)
-	autoTower = new JRadioButton("Tour automatique (" + new AutoTower(0, 0).getPrice + " pièces)")
-	towerSelect.add(autoTower)
-	pane.add(autoTower)
+	wallTower = new JRadioButton("Tour-mur (" + new WallTower(0, 0).getPrice + " pièces)")
+	towerSelect.add(wallTower)
+	pane.add(wallTower)
+	freezerTower = new JRadioButton("Tour froide (" + new FreezerTower(0, 0).getPrice + " pièces)")
+	towerSelect.add(freezerTower)
+	pane.add(freezerTower)
+	explodeTower = new JRadioButton("Tour explosive (" + new ExploderTower(0, 0).getPrice + " pièces)")
+	towerSelect.add(explodeTower)
+	pane.add(explodeTower)
+	upgradeTower = new JRadioButton("Tour d'amélioration (" + new UpgradeTower(0, 0).getPrice + " pièces)")
+	towerSelect.add(upgradeTower)
+	pane.add(upgradeTower)
+	laserTower = new JRadioButton("Tour laser (" + new LaserTower(0, 0).getPrice + " pièces)")
+	towerSelect.add(laserTower)
+	pane.add(laserTower)
 	waveLabel = new JLabel
 	pane.add(waveLabel)
 	nbMobsLabel = new JLabel
@@ -92,6 +104,12 @@ class GameFrame(val map: RawMap) extends JFrame("Jeu") {
 
 	def getMap: RawMap = map
 
+	def getMobs: ListBuffer[Mob] = mobs
+
+	def getTowers: ListBuffer[Tower] = towers
+
+	def breakTower(tower: Tower): Unit = towers -= tower
+
 	def getPathFinder: PathFinder = pathFinder
 
 	def tick(): Unit = {
@@ -107,11 +125,7 @@ class GameFrame(val map: RawMap) extends JFrame("Jeu") {
 				mobs += mob
 			}
 		}
-		towers.foreach(tower => {
-			tower.filterDetectedMobs(mobs).foreach(mob => {
-				mob.hit(tower.getDamagePerShot)
-			})
-		})
+		towers.foreach(tower => tower.shot(this))
 		mobs.foreach(mob => {
 			getMap.getCase(mob.getX, mob.getY).setCollision(Collision.ANY)
 			mob.tick(this)
@@ -148,9 +162,11 @@ class GameFrame(val map: RawMap) extends JFrame("Jeu") {
 			val x = event.getX / 32
 			val y = event.getY / 32
 			val tower = if (basicTower.isSelected) new BasicTower(x, y)
-			else if (nullTower.isSelected) new NullTower(x, y)
-
-			else if (autoTower.isSelected) new AutoTower(x, y)
+			else if (wallTower.isSelected) new WallTower(x, y)
+			else if (freezerTower.isSelected) new FreezerTower(x, y)
+			else if (explodeTower.isSelected) new ExploderTower(x, y)
+			else if (upgradeTower.isSelected) new UpgradeTower(x, y)
+			else if (laserTower.isSelected) new LaserTower(x, y)
 			else null
 			if (tower == null || tower.getPrice > reward) return
 			val c = getMap.getCase(x, y)

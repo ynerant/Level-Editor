@@ -1,35 +1,48 @@
 package fr.ynerant.leveleditor.game.mobs
 
-import java.util.Random
-
 import fr.ynerant.leveleditor.api.editor.RawCase
 import fr.ynerant.leveleditor.api.editor.sprites.{Sprite, SpriteRegister}
 import fr.ynerant.leveleditor.game.GameFrame
 
+import scala.util.Random
 
 object Mob {
 	private val RANDOM = new Random
 
-	def getRandomMob: Mob = RANDOM.nextInt(3) match {
-		case 1 =>
+	def getRandomMob: Mob = RANDOM.nextInt(6) match {
+		case 0 =>
 			new Mob1
-		case 2 =>
+		case 1 =>
 			new Mob2
-		case _ =>
-			new MobCancer
+		case 2 =>
+			new MobStrong
+		case 3 =>
+			new MobHealer
+		case 4 =>
+			new MobBreaker
+		case 5 =>
+			new MobSpeeder
 	}
 }
 
 abstract class Mob() {
 	private var hp = getMaxHP
-	private var tickRemains = getSlowness
+	private var tickRemains = 0L
 	private var sprite = null: Sprite
 	private var x = 0
 	private var y = 0
+	private var freezeTime = 0
+	private var speedMultiplier = 1
+
+	tickRemains = getSlowness
 
 	def getMaxHP: Int
 
-	def getSlowness: Long
+	def _getSlowness: Long
+
+	def getSlowness: Long = {
+		(_getSlowness * Random.between(0.95, 1.05) * (if (freezeTime > 0) 2 else 1) / speedMultiplier).toLong
+	}
 
 	def getReward: Int
 
@@ -49,6 +62,18 @@ abstract class Mob() {
 		this.y = y
 	}
 
+	def freeze(time: Int): Unit = {
+		if (freezeTime == 0)
+			tickRemains *= 2
+		freezeTime = time
+	}
+
+	def speedup(multiplier: Int): Unit = speedMultiplier = multiplier
+
+	def heal(hp: Int): Unit = {
+		this.hp = Math.min(hp + 1, getMaxHP)
+	}
+
 	def getHP: Int = hp
 
 	def isDead: Boolean = hp <= 0
@@ -65,7 +90,13 @@ abstract class Mob() {
 		false
 	}
 
+	/**
+	 * Called each game tick
+	 */
 	def tick(game: GameFrame): Unit = {
+		if (freezeTime > 0)
+			freezeTime -= 1
+
 		if (tickRemains > 0) tickRemains -= 1
 		else {
 			tickRemains = getSlowness
@@ -75,10 +106,17 @@ abstract class Mob() {
 				return
 			}
 
+			_tick(game)
+
 			val newCase: RawCase = game.getPathFinder.nextPos(getX, getY)
 			move(newCase.getPosX, newCase.getPosY)
 		}
 	}
+
+	/**
+	 * Custom mobs override this function to do some custom stuff
+	 */
+	def _tick(game: GameFrame): Unit = ()
 
 	override def toString: String = "Mob{" + "sprite=" + sprite + ", x=" + x + ", y=" + y + '}'
 }

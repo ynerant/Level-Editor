@@ -69,7 +69,7 @@ Un sprite est une image de taille 16x16, qui contient des informations sur l'end
 Un Mob est une classe abstraite contenant des informations abstraites (détaillées plus haut). Un type de mob sera donc
 une classe héritant de `Mob`, telles que `Mob1`, `Mob2` et `MobCancer`.
 
-Il en est de même pour les tours, avec `BasicTower`, `NullTower` et `AutoTower`.
+Il en est de même pour les tours, avec `BasicTower`, `WallTower` et `AutoTower`.
 
 L'intérêt de l'héritage par rapport à un type donné à une classe Mob (paramètres donnés dans une enumération `MobType`
 par exemple) est de pouvoir mieux personnaliser les fonctions, par exemple en imaginant des dégâts aléatoires.

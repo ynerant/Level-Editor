@@ -3,8 +3,7 @@ package fr.ynerant.leveleditor.game.towers
 import java.util.Random
 
 import fr.ynerant.leveleditor.api.editor.sprites.{Sprite, SpriteRegister}
-import fr.ynerant.leveleditor.game.mobs.Mob
-
+import fr.ynerant.leveleditor.game.GameFrame
 
 object Tower {
 	private val RANDOM = new Random
@@ -13,6 +12,7 @@ object Tower {
 abstract class Tower(val x: Int, val y: Int) {
 	final private val sprite = SpriteRegister.getCategory(getName).getSprites.head
 	private var remainingTicks = 0L
+	private var upgraded = false
 
 	def getSprite: Sprite = sprite
 
@@ -24,16 +24,18 @@ abstract class Tower(val x: Int, val y: Int) {
 
 	def getPrice: Int
 
-	def filterDetectedMobs(mobs: Iterable[Mob]): Iterable[Mob] = if (remainingTicks > 0) {
+	def upgrade: Unit = upgraded = true
+
+	def isUpgraded: Boolean = upgraded
+
+	def shot(game: GameFrame): Unit = if (remainingTicks > 0)
 		remainingTicks -= 1
-		Nil
-	}
 	else {
 		remainingTicks = getPeriod
-		_filterDetectedMobs(mobs)
+		_shot(game)
 	}
 
-	private[towers] def _filterDetectedMobs(mobs: Iterable[Mob]): Iterable[Mob]
+	private[towers] def _shot(game: GameFrame): Unit
 
 	def getX: Int = x
 
