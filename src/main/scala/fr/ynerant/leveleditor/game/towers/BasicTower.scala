@@ -4,7 +4,6 @@ import fr.ynerant.leveleditor.game.GameFrame
 
 import scala.util.Random
 
-
 class BasicTower(override val x: Int, override val y: Int) extends Tower(x, y) {
 	override def getName = "basictower"
 

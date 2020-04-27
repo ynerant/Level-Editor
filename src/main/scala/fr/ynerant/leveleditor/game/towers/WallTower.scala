@@ -2,7 +2,6 @@ package fr.ynerant.leveleditor.game.towers
 
 import fr.ynerant.leveleditor.game.GameFrame
 
-
 class WallTower(override val x: Int, override val y: Int) extends Tower(x, y) {
 	override def getName = "walltower"
 

@@ -21,7 +21,7 @@ case class RawCase(var x: Int, var y: Int, var couche1: RawSprite, var couche2: 
 
 	def getCoucheThree: RawSprite = couche3
 
-	def getCollision: String = collision
+	def getCollision: String = collision // FULL, PARTIAL or ANY
 
 	def setCollision(collision: String): Unit = {
 		this.collision = collision
