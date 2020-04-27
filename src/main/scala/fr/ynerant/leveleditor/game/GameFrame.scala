@@ -2,7 +2,6 @@ package fr.ynerant.leveleditor.game
 
 import java.awt._
 import java.awt.event.{MouseEvent, MouseListener}
-import java.util.Random
 
 import fr.ynerant.leveleditor.api.editor.sprites.SpriteRegister
 import fr.ynerant.leveleditor.api.editor.{Collision, RawMap}
@@ -12,10 +11,10 @@ import fr.ynerant.leveleditor.game.towers._
 import javax.swing._
 
 import scala.collection.mutable.ListBuffer
+import scala.util.Random
 
 
 class GameFrame(val map: RawMap) extends JFrame("Jeu") {
-	final private val RANDOM = new Random
 	private var round = 0
 	private var hp = 5
 	private var reward = 20
@@ -115,10 +114,10 @@ class GameFrame(val map: RawMap) extends JFrame("Jeu") {
 	def tick(): Unit = {
 		if (mobs.isEmpty && round < 4) {
 			round += 1
-			val nb_mobs = round * (RANDOM.nextInt(8) + 1)
+			val nb_mobs = round * (Random.nextInt(8) + 1)
 			for (_ <- 1 to nb_mobs) {
 				val mob = Mob.getRandomMob
-				do mob.move(RANDOM.nextInt(getMap.getWidth / 16), RANDOM.nextInt(getMap.getHeight / 16)) while ( {
+				do mob.move(Random.nextInt(getMap.getWidth / 16), Random.nextInt(getMap.getHeight / 16)) while ( {
 					!getMap.getCase(mob.getX, mob.getY).getCollision.equals(Collision.ANY)
 				})
 				getMap.getCase(mob.getX, mob.getY).setCollision(Collision.PARTIAL)

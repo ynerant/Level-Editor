@@ -1,13 +1,7 @@
 package fr.ynerant.leveleditor.game.towers
 
-import java.util.Random
-
 import fr.ynerant.leveleditor.api.editor.sprites.{Sprite, SpriteRegister}
 import fr.ynerant.leveleditor.game.GameFrame
-
-object Tower {
-	private val RANDOM = new Random
-}
 
 abstract class Tower(val x: Int, val y: Int) {
 	final private val sprite = SpriteRegister.getCategory(getName).getSprites.head
