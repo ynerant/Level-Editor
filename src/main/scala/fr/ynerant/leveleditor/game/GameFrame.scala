@@ -33,7 +33,7 @@ class GameFrame(val map: RawMap) extends JFrame("Jeu") {
 	final private var rewardLabel = null: JLabel
 	final private var winLabel = null: JLabel
 
-	this.setSize(600, 600)
+	this.setSize(1000, 1000)
 	this.setPreferredSize(getSize)
 	this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE)
 	this.setExtendedState(Frame.MAXIMIZED_BOTH)

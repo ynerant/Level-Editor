@@ -28,7 +28,7 @@ class EditorFrame(val map: GMap) extends JFrame("Level Editor") with ChangeListe
 	final private[editor] val group = new ButtonGroup
 	private var selectedSprite = null: SpriteComp
 
-	this.setSize(600, 600)
+	this.setSize(1000, 1000)
 	this.setPreferredSize(getSize)
 	this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE)
 	this.setExtendedState(Frame.MAXIMIZED_BOTH)
