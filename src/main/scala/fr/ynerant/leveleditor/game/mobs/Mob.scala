@@ -28,13 +28,15 @@ object Mob {
 abstract class Mob() {
 	private var hp = getMaxHP
 	private var tickRemains = 0L
+	private var initialTicks = 0L
 	private var sprite = null: Sprite
 	private var x = 0
 	private var y = 0
 	private var freezeTime = 0
 	private var speedMultiplier = 1
 
-	tickRemains = getSlowness
+	initialTicks = getSlowness
+	tickRemains = initialTicks
 
 	def getMaxHP: Int
 
@@ -43,6 +45,8 @@ abstract class Mob() {
 	def getSlowness: Long = {
 		(_getSlowness * Random.between(0.95, 1.05) * (if (freezeTime > 0) 2 else 1) / speedMultiplier).toLong
 	}
+
+	def progress: Float = tickRemains.toFloat / initialTicks.toFloat
 
 	def getReward: Int
 
@@ -63,8 +67,10 @@ abstract class Mob() {
 	}
 
 	def freeze(time: Int): Unit = {
-		if (freezeTime == 0)
+		if (freezeTime == 0) {
+			initialTicks += tickRemains
 			tickRemains *= 2
+		}
 		freezeTime = time
 	}
 
@@ -99,7 +105,8 @@ abstract class Mob() {
 
 		if (tickRemains > 0) tickRemains -= 1
 		else {
-			tickRemains = getSlowness
+			initialTicks = getSlowness
+			tickRemains = initialTicks
 			val current = game.getMap.getCase(getX, getY)
 			if (current.getPosX == 0) {
 				move(-1, getY)

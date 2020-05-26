@@ -207,7 +207,23 @@ class GameFrame(val map: RawMap) extends JFrame("Jeu") {
 			})
 			mobs.foreach(mob => {
 				val s = mob.getSprite
-				g.drawImage(s.getImage, SPRITE_SIZE * mob.getX, SPRITE_SIZE * mob.getY, SPRITE_SIZE, SPRITE_SIZE, null, null)
+				val nextCase = getPathFinder.nextPos(mob.getX, mob.getY)
+				var nextX = 0
+				var nextY = 0
+				if (nextCase != null) {
+					nextX = nextCase.getPosX
+					nextY = nextCase.getPosY
+				}
+				else {
+					nextX = mob.getX - 1
+					nextY = mob.getY
+				}
+
+				val progress = mob.progress
+				val newX = progress * mob.getX + (1 - progress) * nextX
+				val newY = progress * mob.getY + (1 - progress) * nextY
+
+				g.drawImage(s.getImage, (SPRITE_SIZE * newX).toInt, (SPRITE_SIZE * newY).toInt, SPRITE_SIZE, SPRITE_SIZE, null, null)
 			})
 			towers.foreach(tower => {
 				val s = tower.getSprite
