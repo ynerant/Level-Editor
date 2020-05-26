@@ -325,16 +325,34 @@
   "mob2": [
     [0, 0]
   ],
-  "mobcancer": [
+  "mobstrong": [
+    [0, 0]
+  ],
+  "mobhealer": [
+    [0, 0]
+  ],
+  "mobbreaker": [
+    [0, 0]
+  ],
+  "mobspeeder": [
     [0, 0]
   ],
   "basictower": [
     [0, 0]
   ],
-  "nulltower": [
+  "walltower": [
     [0, 0]
   ],
-  "autotower": [
+  "freezertower": [
+    [0, 0]
+  ],
+  "explodertower": [
+    [0, 0]
+  ],
+  "upgradetower": [
+    [0, 0]
+  ],
+  "lasertower": [
     [0, 0]
   ]
 }
