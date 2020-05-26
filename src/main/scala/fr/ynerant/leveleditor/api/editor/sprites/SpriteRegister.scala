@@ -11,6 +11,7 @@ import javax.imageio.ImageIO
 import net.liftweb.json._
 
 import scala.collection.mutable.ListBuffer
+import scala.io.Source
 
 object SpriteRegister {
 	private var nameToCoords = Map(): Map[String, List[List[Int]]]
@@ -77,7 +78,7 @@ object SpriteRegister {
 			try {
 				val f = new File(assetsDir.getAbsolutePath + "/" + asset + "/textures/sprites")
 				assert(f.isDirectory || f.mkdirs)
-				val json = Files.readString(new File(f, "sprites.json").toPath)
+				val json = Source.fromFile(new File(f, "sprites.json")).mkString
 				implicit val formats: DefaultFormats.type = DefaultFormats
 				nameToCoords = parse(json).extract[Map[String, List[List[Int]]]]
 				nameToCoords.keySet.foreach(key => {
