@@ -161,7 +161,7 @@ Cette tour tire des rayons laser dans les quatre directions et chaque mob reçoi
 
 ## Implémentation
 
-Le projet est intégralement fait en Java. On ne détaillera pas ici la partie éditeur de niveau, bien qu'elle soit
+Le projet est intégralement fait en Scala. On ne détaillera pas ici la partie éditeur de niveau, bien qu'elle soit
 conséquente.
 
 Une fois que l'utilisateur a choisi la carte à utilisateur via un menu de sélection, le jeu se lance dans une fenêtre
@@ -190,3 +190,15 @@ Il en est de même pour les tours, qui hérite de `Tower`.
 L'intérêt de l'héritage par rapport à un type donné à une classe Mob (paramètres donnés dans une enumération `MobType`
 par exemple) est de pouvoir mieux personnaliser les fonctions, par exemple en intégrant les dégâts aléatoires.
 
+### Déplacement dynamique
+
+Le déplacement des mobs apparaît continu. Il n'est en rien dans le fond : la carte est discrétisée, et les mobs se
+situent sur des coordonnées entières. La position affichée d'un mob est calculée selon sa case de départ, sa case
+d'arrivée et le temps qu'il lui reste à attendre avant de pouvoir se déplacer. La vitesse varie alors selon les mobs.
+
+### Déplacement en diagonale
+
+Les mobs peuvent se déplacer en diagonale. Cela est comptabilisé comme un déplacement de coût 1 : la topologie de la
+carte est alors un plan muni de la norme infinie. Ce n'est plus un simple parcours en largeur : à distance égale de
+l'objectif, on préférera se déplacer de manière horizontale plutôt qu'en diagonale, de manière à avoir un déplacement
+plus naturel.
