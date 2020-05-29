@@ -28,6 +28,10 @@ case class RawMap(var cases: List[RawCase], var width: Int, var height: Int) {
 		list ::= getCase(c.getPosX + 1, c.getPosY)
 		list ::= getCase(c.getPosX, c.getPosY + 1)
 		list ::= getCase(c.getPosX - 1, c.getPosY)
+		list ::= getCase(c.getPosX - 1, c.getPosY + 1)
+		list ::= getCase(c.getPosX - 1, c.getPosY - 1)
+		list ::= getCase(c.getPosX + 1, c.getPosY + 1)
+		list ::= getCase(c.getPosX + 1, c.getPosY - 1)
 		list.filter((_c: RawCase) => _c != null)
 	}
 
